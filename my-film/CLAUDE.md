@@ -107,8 +107,20 @@ gradients.
   controls pace). If it is missing (fresh cloud machine), reinstall it from
   `github.com/supertone-oss-archive/supertonic` and download the model with
   `HF_HUB_DISABLE_XET=1 hf download supertone-oss-archive/supertonic-3 --revision
-  aafc6e32416a594460b32413efc49d7fe4ce6d46 --local-dir assets`. Later the channel moves to a
-  paid voice (ElevenLabs or Typecast, on a paid plan with commercial rights).
+  aafc6e32416a594460b32413efc49d7fe4ce6d46 --local-dir assets`.
+- The channel may rotate between approved voices. Keep one voice for a whole Short, and the
+  same voice across a series. Shorts can be in English or Korean (write numbers out in words
+  for Korean, e.g. "천구백사십사년").
+- Chatterbox (free, MIT, adds an inaudible AI watermark) has an emotion dial (`exaggeration`)
+  and a multilingual model with Korean (`chatterbox.mtl_tts`, `language_id="ko"`). It lives in
+  `/home/user/tools/chatterbox` (`pip install chatterbox-tts "setuptools<81"`). On this
+  CPU-only machine the multilingual model needs `torch.load` patched to
+  `map_location="cpu"`; download with `HF_HUB_DISABLE_XET=1`.
+- ElevenLabs: the API key is a network secret on the `short_films` cloud environment (never in
+  code or chat). Voice IDs: Brian `nPczCjzI2devNBz1zQrb`, Adam `pNInz6obpgDQGcFmaJgB`, Daniel
+  `onwK4e9ZLuTAKqWW03F9`. `eleven_v3` takes emotion tags like `[dramatic]`, `[excited]`,
+  `[whispers]`; `eleven_multilingual_v2` with `style` around 0.6 for energy. Monetised videos
+  need a paid plan (Starter or above). Typecast is the other paid option, not set up yet.
 - The voice file goes in `public/voice/<film-name>.wav` (or .mp3). Timings for captions and
   shots come from the voice file (word timestamps), never guessed.
 - The voice is the loudest thing in the mix; sound effects sit underneath it.
