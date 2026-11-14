@@ -109,7 +109,15 @@ gradients.
   `HF_HUB_DISABLE_XET=1 hf download supertone-oss-archive/supertonic-3 --revision
   aafc6e32416a594460b32413efc49d7fe4ce6d46 --local-dir assets`.
 - The channel may rotate between approved voices. Keep one voice for a whole Short, and the
-  same voice across a series. Shorts can be in English or Korean (write numbers out in words
+  same voice across a series.
+- Approved voices (chosen by the user from the voice test):
+  - English: ElevenLabs Brian (`eleven_v3` with emotion tags, or `eleven_multilingual_v2`),
+    ElevenLabs Adam, ElevenLabs Daniel, Chatterbox (medium or intense), Supertonic M1, M5
+    (speed about 1.25).
+  - Korean: ElevenLabs Brian (`eleven_v3` or `eleven_multilingual_v2`), Chatterbox
+    (multilingual model), Supertonic M1 (speed about 1.15).
+  - Not to be used: ElevenLabs Adam in Korean, Supertonic F1, Supertonic M3. Other Supertonic
+    voices (M2, M4, F2–F5) are untested; ask before using them. Shorts can be in English or Korean (write numbers out in words
   for Korean, e.g. "천구백사십사년").
 - Chatterbox (free, MIT, adds an inaudible AI watermark) has an emotion dial (`exaggeration`)
   and a multilingual model with Korean (`chatterbox.mtl_tts`, `language_id="ko"`). It lives in
