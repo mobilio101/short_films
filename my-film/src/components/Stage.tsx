@@ -4,10 +4,10 @@ import { noise2D } from "@remotion/noise";
 import { BAR, C, FLOOR_Y, H, W } from "./theme";
 
 /** Thin black bars top and bottom. Always render last. */
-export const Letterbox: React.FC = () => (
+export const Letterbox: React.FC<{ height?: number }> = ({ height = BAR }) => (
   <AbsoluteFill style={{ pointerEvents: "none" }}>
-    <div style={{ position: "absolute", top: 0, left: 0, width: W, height: BAR, background: "#000" }} />
-    <div style={{ position: "absolute", bottom: 0, left: 0, width: W, height: BAR, background: "#000" }} />
+    <div style={{ position: "absolute", top: 0, left: 0, width: W, height, background: "#000" }} />
+    <div style={{ position: "absolute", bottom: 0, left: 0, width: W, height, background: "#000" }} />
   </AbsoluteFill>
 );
 
@@ -60,7 +60,8 @@ export const WobblyShape: React.FC<{
   stroke?: string;
   amount?: number;
   closed?: boolean;
-}> = ({ points, fill, seed, stroke = C.line, amount = 1.6, closed = true }) => {
+  strokeWidth?: number;
+}> = ({ points, fill, seed, stroke = C.line, amount = 1.6, closed = true, strokeWidth = 2.2 }) => {
   const frame = useCurrentFrame();
   const pts = closed ? subdivide(points) : points;
   const d =
@@ -71,7 +72,7 @@ export const WobblyShape: React.FC<{
         return `${i === 0 ? "M" : "L"}${(p[0] + dx).toFixed(1)},${(p[1] + dy).toFixed(1)}`;
       })
       .join(" ") + (closed ? " Z" : "");
-  return <path d={d} fill={fill} stroke={stroke} strokeWidth={2.2} strokeLinejoin="round" />;
+  return <path d={d} fill={fill} stroke={stroke} strokeWidth={strokeWidth} strokeLinejoin="round" />;
 };
 
 export const rect = (x: number, y: number, w: number, h: number): Pt[] => [
@@ -89,7 +90,7 @@ export const Layer: React.FC<{ children: React.ReactNode; style?: React.CSSPrope
 );
 
 /** The thin grey floor line. */
-export const Floor: React.FC = () => {
+export const Floor: React.FC<{ color?: string; width?: number }> = ({ color = C.line, width = 2 }) => {
   const frame = useCurrentFrame();
   const pts: Pt[] = [];
   for (let x = -40; x <= W + 40; x += 40) pts.push([x, FLOOR_Y + noise2D("floor", x * 0.01, frame * 0.05) * 1.2]);
@@ -97,8 +98,8 @@ export const Floor: React.FC = () => {
     <path
       d={pts.map((p, i) => `${i ? "L" : "M"}${p[0]},${p[1].toFixed(1)}`).join(" ")}
       fill="none"
-      stroke={C.line}
-      strokeWidth={2}
+      stroke={color}
+      strokeWidth={width}
       opacity={0.8}
     />
   );

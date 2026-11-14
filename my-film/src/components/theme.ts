@@ -1,3 +1,4 @@
+import React from "react";
 import { loadFont } from "@remotion/google-fonts/ComicNeue";
 
 export const { fontFamily: COMIC } = loadFont("normal", {
@@ -31,3 +32,24 @@ export const smooth = (t: number) => {
 };
 /** 0 -> 1 between frames a and b, eased. */
 export const ramp = (frame: number, a: number, b: number) => smooth((frame - a) / (b - a));
+
+/** On-screen text style. Films use the channel default; style experiments can override it. */
+export type Ui = {
+  font: string;
+  white: string;
+  accent: string;
+  titleBg: string;
+  /** Multiplies all text sizes (some fonts run large). */
+  textScale: number;
+  letterSpacing: number;
+};
+export const DEFAULT_UI: Ui = {
+  font: COMIC,
+  white: C.white,
+  accent: C.accent,
+  titleBg: "#000",
+  textScale: 1,
+  letterSpacing: 0,
+};
+export const UiContext = React.createContext<Ui>(DEFAULT_UI);
+export const useUi = () => React.useContext(UiContext);

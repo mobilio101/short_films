@@ -166,6 +166,126 @@ const sounds = {
   },
 };
 
+// ---------------------------------------------------------------------------
+// 8-bit ("chip") versions for pixel-art films: square waves, a 4-bit-style
+// noise channel and stepped pitches, like an old games console.
+// ---------------------------------------------------------------------------
+const sq = (ph, duty = 0.5) => ((ph / (2 * Math.PI)) % 1 < duty ? 1 : -1);
+const crush = (v, levels = 16) => Math.round(v * levels) / levels;
+let lfsr = 1;
+const chipNoise = () => {
+  const bit = (lfsr ^ (lfsr >> 1)) & 1;
+  lfsr = (lfsr >> 1) | (bit << 14);
+  return lfsr & 1 ? 1 : -1;
+};
+/** Noise channel held at a "rate" in Hz, like a console's noise register. */
+const noiseAt = (rate) => {
+  let held = 0, acc = 0;
+  return () => {
+    acc += rate / SR;
+    if (acc >= 1) { acc -= 1; held = chipNoise(); }
+    return held;
+  };
+};
+/** Play a list of [freq, seconds] notes on a square wave. */
+const arp = (notes, duty, decay) => {
+  const total = notes.reduce((a, n) => a + n[1], 0);
+  const d = buf(total + decay);
+  let ph = 0, i = 0;
+  let t0 = 0;
+  for (const [f, len] of notes) {
+    const n = Math.round(len * SR);
+    for (let k = 0; k < n && i < d.length; k++, i++) {
+      ph += (2 * Math.PI * f) / SR;
+      d[i] = sq(ph, duty) * (1 - (k / n) * 0.3);
+    }
+    t0 += len;
+  }
+  for (; i < d.length; i++) {
+    ph += (2 * Math.PI * notes[notes.length - 1][0]) / SR;
+    d[i] = sq(ph, duty) * Math.exp(-(i / SR - t0) / (decay / 3));
+  }
+  return d.map((v) => crush(v * 0.8));
+};
+
+Object.assign(sounds, {
+  chip_step() {
+    const d = buf(0.05), n = noiseAt(3000);
+    d.forEach((_, i) => (d[i] = crush(n() * env(i / SR, 0.001, 0.012))));
+    return [d, 0.5];
+  },
+  chip_click() {
+    return [arp([[1760, 0.015], [880, 0.015]], 0.25, 0.01), 0.5];
+  },
+  chip_hum() {
+    const d = buf(2);
+    let ph = 0;
+    d.forEach((_, i) => { ph += (2 * Math.PI * 110) / SR; d[i] = crush(sq(ph, 0.125)); });
+    return [d, 0.12];
+  },
+  chip_roomtone() {
+    // slow two-note bass drone on a triangle-ish stepped wave
+    const d = buf(12);
+    let ph = 0;
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const f = Math.floor(t / 1.5) % 2 ? 55 : 49;
+      ph += (2 * Math.PI * f) / SR;
+      const tri = 2 * Math.abs(2 * ((ph / (2 * Math.PI)) % 1) - 1) - 1;
+      d[i] = crush(tri, 8) * 0.6;
+    });
+    return [d, 0.4];
+  },
+  chip_whoosh() {
+    const d = buf(0.35);
+    let acc = 0, held = 0;
+    d.forEach((_, i) => {
+      const x = i / d.length;
+      acc += (800 + 9000 * Math.sin(Math.PI * x)) / SR;
+      if (acc >= 1) { acc -= 1; held = chipNoise(); }
+      d[i] = crush(held * Math.sin(Math.PI * x));
+    });
+    return [d, 0.6];
+  },
+  chip_rumble() {
+    // ominous descending minor arpeggio, low pulse wave
+    const notes = [196, 185, 174.6, 164.8, 155.6, 146.8, 138.6, 130.8].map((f) => [f / 2, 0.16]);
+    return [arp(notes, 0.5, 0.4), 0.8];
+  },
+  chip_pop() {
+    // classic "got it" two-step blip
+    return [arp([[988, 0.05], [1319, 0.09]], 0.25, 0.05), 0.6];
+  },
+  chip_impact() {
+    const d = buf(0.7), n = noiseAt(1800);
+    let ph = 0;
+    d.forEach((_, i) => {
+      const t = i / SR;
+      ph += (2 * Math.PI * (160 * Math.exp(-t * 8) + 40)) / SR;
+      d[i] = crush(0.7 * n() * env(t, 0.001, 0.18) + 0.6 * sq(ph) * env(t, 0.001, 0.12));
+    });
+    return [d, 0.9];
+  },
+  chip_type() {
+    return [arp([[1568, 0.02]], 0.125, 0.01), 0.4];
+  },
+  chip_shimmer() {
+    return [arp([[523, 0.06], [659, 0.06], [784, 0.06], [1047, 0.06], [1319, 0.12]], 0.25, 0.3), 0.45];
+  },
+  // Old film projector: a fast mechanical tick (24 per second) over a motor whirr, 2 s loop.
+  projector() {
+    const d = buf(2), f = svf(), g = svf();
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const tick = (t * 24) % 1;
+      const click = g(white(), 2400, 2).band * Math.exp(-tick / 0.006);
+      const motor = f(white(), 400).low * 1.5 + 0.15 * Math.sin(2 * Math.PI * 96 * t);
+      d[i] = click * 0.8 + motor * 0.5;
+    });
+    return [d, 0.5];
+  },
+});
+
 console.log(`Writing sound effects to ${OUT}`);
 for (const [name, make] of Object.entries(sounds)) {
   const [data, gain] = make();

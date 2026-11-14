@@ -2,6 +2,19 @@ import React from "react";
 import { useCurrentFrame } from "remotion";
 import { C } from "./theme";
 
+export type Skin = {
+  body: string;
+  outline: string;
+  outlineWidth: number;
+  face: string;
+  glow?: string;
+  /** Extra CSS filter on the whole character (texture, drop shadow...). */
+  filter?: string;
+};
+
+export const HERO_SKIN: Skin = { body: C.hero, outline: "none", outlineWidth: 0, face: C.face };
+export const SHADOW_SKIN: Skin = { body: C.shadow, outline: C.accent, outlineWidth: 2.5, face: C.accent, glow: C.accent };
+
 export type Pose = {
   /** Walk cycle phase in radians; advance ~2π every 30 frames while walking. */
   walkPhase?: number;
@@ -34,7 +47,7 @@ const LIMB = 15;
  * glowing accent outline, slit eyes. Origin = point between the feet on the floor.
  */
 export const Character: React.FC<
-  Pose & { x: number; y: number; scale?: number; variant?: "hero" | "shadow"; seed?: number }
+  Pose & { x: number; y: number; scale?: number; variant?: "hero" | "shadow"; seed?: number; skin?: Skin }
 > = ({
   x,
   y,
@@ -50,10 +63,13 @@ export const Character: React.FC<
   look = 10,
   held,
   seed = 0,
+  skin,
 }) => {
   const frame = useCurrentFrame();
   const isShadow = variant === "shadow";
-  const body = isShadow ? C.shadow : C.hero;
+  const sk = skin ?? (isShadow ? SHADOW_SKIN : HERO_SKIN);
+  const body = sk.body;
+  const ow = sk.outlineWidth;
 
   const breathe = 1 + 0.018 * Math.sin((frame + seed * 13) / 14);
   const bob = walk * Math.abs(Math.sin(walkPhase)) * 7;
@@ -98,7 +114,7 @@ export const Character: React.FC<
   const eyeScale = blinkT < 4 ? 0.15 : 1;
 
   const limbPaths = [...legs, ...arms];
-  const outline = isShadow ? C.accent : "none";
+  const outline = sk.outline;
 
   // Brows: inner end moves up when worried, down when angry.
   const browY = -26 - browRaise * 10;
@@ -116,12 +132,16 @@ export const Character: React.FC<
   return (
     <g
       transform={`translate(${x},${y}) scale(${scale / Math.sqrt(squash)},${scale * squash})`}
-      style={isShadow ? { filter: `drop-shadow(0 0 10px ${C.accent}) drop-shadow(0 0 24px ${C.accent}88)` } : undefined}
+      style={{
+        filter:
+          [sk.glow ? `drop-shadow(0 0 10px ${sk.glow}) drop-shadow(0 0 24px ${sk.glow}88)` : "", sk.filter ?? ""].join(" ").trim() ||
+          undefined,
+      }}
     >
       {/* limbs: accent outline underneath for the shadow */}
-      {isShadow &&
+      {ow > 0 &&
         limbPaths.map((d, i) => (
-          <path key={`o${i}`} d={d} stroke={outline} strokeWidth={LIMB + 5} strokeLinecap="round" fill="none" />
+          <path key={`o${i}`} d={d} stroke={outline} strokeWidth={LIMB + ow * 2} strokeLinecap="round" fill="none" />
         ))}
       {limbPaths.slice(0, 2).map((d, i) => (
         <path key={`l${i}`} d={d} stroke={body} strokeWidth={LIMB} strokeLinecap="round" fill="none" />
@@ -135,26 +155,26 @@ export const Character: React.FC<
         rx={40}
         fill={body}
         stroke={outline}
-        strokeWidth={isShadow ? 2.5 : 0}
+        strokeWidth={ow}
       />
       {/* head */}
-      <circle cx={0} cy={headY} r={HEAD_R} fill={body} stroke={outline} strokeWidth={isShadow ? 2.5 : 0} />
+      <circle cx={0} cy={headY} r={HEAD_R} fill={body} stroke={outline} strokeWidth={ow} />
       {/* face */}
       <g transform={`translate(0,${headY})`}>
         {isShadow ? (
           <>
-            <ellipse cx={eyeL} cy={-4} rx={16} ry={3.2 * eyeScale + 0.5} fill={C.accent} transform={`rotate(14 ${eyeL} -4)`} />
-            <ellipse cx={eyeR} cy={-4} rx={16} ry={3.2 * eyeScale + 0.5} fill={C.accent} transform={`rotate(-14 ${eyeR} -4)`} />
+            <ellipse cx={eyeL} cy={-4} rx={16} ry={3.2 * eyeScale + 0.5} fill={sk.face} transform={`rotate(14 ${eyeL} -4)`} />
+            <ellipse cx={eyeR} cy={-4} rx={16} ry={3.2 * eyeScale + 0.5} fill={sk.face} transform={`rotate(-14 ${eyeR} -4)`} />
           </>
         ) : (
           <>
-            <ellipse cx={eyeL} cy={-2} rx={7} ry={7 * eyeScale} fill={C.face} />
-            <ellipse cx={eyeR} cy={-2} rx={7} ry={7 * eyeScale} fill={C.face} />
-            <path d={browLine(eyeL, 1)} stroke={C.face} strokeWidth={5.5} strokeLinecap="round" />
-            <path d={browLine(eyeR, -1)} stroke={C.face} strokeWidth={5.5} strokeLinecap="round" />
+            <ellipse cx={eyeL} cy={-2} rx={7} ry={7 * eyeScale} fill={sk.face} />
+            <ellipse cx={eyeR} cy={-2} rx={7} ry={7 * eyeScale} fill={sk.face} />
+            <path d={browLine(eyeL, 1)} stroke={sk.face} strokeWidth={5.5} strokeLinecap="round" />
+            <path d={browLine(eyeR, -1)} stroke={sk.face} strokeWidth={5.5} strokeLinecap="round" />
             <path
               d={`M${look - 18},34 Q${look},${34 + mouth * 13} ${look + 18},34`}
-              stroke={C.face}
+              stroke={sk.face}
               strokeWidth={5}
               strokeLinecap="round"
               fill="none"
