@@ -1,5 +1,8 @@
 # ADRIFT. Story plan (draft, not animated yet)
 
+> On hold: written for the old 2–3 minute, no-voiceover format. Needs rewriting as a
+> 60-second voiceover Short before it can be made.
+
 True story of José Salvador Alvarenga, who drifted across the Pacific from Mexico to the
 Marshall Islands (17 November 2012 to 30 January 2014, about 14 months, widely reported as
 438 days). Length about 2:33 including the 12-second title card.
