@@ -5,9 +5,11 @@ import { loadFont as loadPatrick } from "@remotion/google-fonts/PatrickHand";
 import { loadFont as loadAudiowide } from "@remotion/google-fonts/Audiowide";
 import { loadFont as loadCabin } from "@remotion/google-fonts/CabinSketch";
 import { loadFont as loadLimelight } from "@remotion/google-fonts/Limelight";
+import { loadFont as loadBungee } from "@remotion/google-fonts/Bungee";
 import { HERO_SKIN, SHADOW_SKIN } from "../../components/Character";
 import { C, DEFAULT_UI, FLOOR_Y, H, W } from "../../components/theme";
 import { FilmStyle } from "./StyledTest";
+import { BULB_Y, LAMP_X, WINDOW, getState } from "./timeline";
 
 const PATRICK = loadPatrick("normal", { weights: ["400"], subsets: ["latin"] }).fontFamily;
 const AUDIOWIDE = loadAudiowide("normal", { weights: ["400"], subsets: ["latin"] }).fontFamily;
@@ -220,4 +222,128 @@ export const VINTAGE: FilmStyle = {
   Overlay: FilmDamage,
   flashColor: "#FFFFFF",
   sound: { kit: "default", projector: true },
+};
+
+// ---------------------------------------------------------------------------
+// 5. Memphis: 1980s Memphis design at night. Flat bold colours, thick black
+//    outlines, hard pink offset shadows, flat rings of light instead of soft
+//    glows, and geometric confetti (squiggles, triangles, zigzags, dots).
+// ---------------------------------------------------------------------------
+const BUNGEE = loadBungee("normal", { weights: ["400"], subsets: ["latin"] }).fontFamily;
+const M = { pink: "#FF5FA2", teal: "#2EC4B6", yellow: "#FFD23F", lilac: "#9B8CFF", cream: "#FFF6E9", ink: "#0A0A0A", night: "#17134A" };
+
+type Confetti = { kind: string; x: number; y: number; size: number; color: string; rot: number; seed: number };
+const CONFETTI: Confetti[] = (() => {
+  const kinds = ["squiggle", "triangle", "dot", "ring", "zigzag", "grid", "half", "cross"];
+  const colors = [M.pink, M.teal, M.yellow, M.lilac];
+  // hand-placed around the edges and upper wall, away from where the action happens
+  const spots: [number, number][] = [
+    [70, 260], [240, 720], [640, 250], [1000, 215], [1180, 190], [1500, 250],
+    [1700, 170], [1840, 420], [1620, 610], [1480, 770], [1860, 740], [60, 470],
+  ];
+  return spots.map(([x, y], i) => ({
+    kind: kinds[i % kinds.length],
+    x,
+    y,
+    size: 34 + ((i * 37) % 30),
+    color: colors[(i * 3) % colors.length],
+    rot: (i * 47) % 360,
+    seed: i,
+  }));
+})();
+
+const ConfettiShape: React.FC<{ c: Confetti; frame: number }> = ({ c, frame }) => {
+  const dx = Math.sin(frame / 40 + c.seed) * 6;
+  const dy = Math.cos(frame / 33 + c.seed * 2) * 6;
+  const rot = c.rot + Math.sin(frame / 50 + c.seed) * 12;
+  const s = c.size;
+  let el: React.ReactNode;
+  switch (c.kind) {
+    case "squiggle":
+      el = <path d={`M${-s},0 q${s / 4},${-s / 2} ${s / 2},0 t${s / 2},0 t${s / 2},0 t${s / 2},0`} stroke={c.color} strokeWidth={9} fill="none" strokeLinecap="round" />;
+      break;
+    case "triangle":
+      el = <path d={`M0,${-s * 0.6} L${s * 0.6},${s * 0.45} L${-s * 0.6},${s * 0.45} Z`} fill={c.color} stroke={M.ink} strokeWidth={4} />;
+      break;
+    case "dot":
+      el = <circle r={s * 0.35} fill={c.color} stroke={M.ink} strokeWidth={4} />;
+      break;
+    case "ring":
+      el = <circle r={s * 0.45} fill="none" stroke={c.color} strokeWidth={10} />;
+      break;
+    case "zigzag":
+      el = <path d={`M${-s},0 l${s / 3},${-s / 3} l${s / 3},${s / 3} l${s / 3},${-s / 3} l${s / 3},${s / 3} l${s / 3},${-s / 3} l${s / 3},${s / 3}`} stroke={c.color} strokeWidth={8} fill="none" strokeLinejoin="round" />;
+      break;
+    case "grid":
+      el = (
+        <g>
+          {[0, 1, 2].flatMap((i) => [0, 1, 2].map((j) => <circle key={`${i}${j}`} cx={(i - 1) * s * 0.4} cy={(j - 1) * s * 0.4} r={4.5} fill={c.color} />))}
+        </g>
+      );
+      break;
+    case "half":
+      el = <path d={`M${-s * 0.5},0 A${s * 0.5},${s * 0.5} 0 0 1 ${s * 0.5},0 Z`} fill={c.color} stroke={M.ink} strokeWidth={4} />;
+      break;
+    default:
+      el = <path d={`M${-s * 0.4},0 H${s * 0.4} M0,${-s * 0.4} V${s * 0.4}`} stroke={c.color} strokeWidth={10} strokeLinecap="round" />;
+  }
+  return <g transform={`translate(${c.x + dx},${c.y + dy}) rotate(${rot})`}>{el}</g>;
+};
+
+const MemphisBackdrop: React.FC<{ frame: number }> = ({ frame }) => {
+  const st = getState(frame, 30);
+  // Flat concentric rings of light: solid colour bands, no soft gradients.
+  const rings = (cx: number, cy: number, radii: number[], colors: string[], on: number, key: string) => (
+    <g opacity={on}>
+      {radii.map((r, i) => (
+        <circle key={`${key}${i}`} cx={cx} cy={cy} r={r * (0.97 + 0.03 * Math.sin(frame / 10 + i))} fill={colors[i]} />
+      ))}
+    </g>
+  );
+  return (
+    <svg width={W} height={H} style={{ position: "absolute", inset: 0 }}>
+      {rings(WINDOW.moonX, WINDOW.moonY, [230, 165, 105], ["#1F1A5A", "#28226E", "#332C85"], 1, "m")}
+      {rings(LAMP_X, BULB_Y + 30, [560, 440, 330, 230, 140], ["#2A2270", "#43297E", "#713487", "#B8578A", "#F2957F"], st.lampOn, "l")}
+      {/* dotted halo around the bulb */}
+      {Array.from({ length: 18 }, (_, i) => {
+        const a = (i / 18) * Math.PI * 2 + frame * 0.01;
+        return <circle key={`h${i}`} cx={LAMP_X + Math.cos(a) * 150} cy={BULB_Y + 30 + Math.sin(a) * 150} r={5} fill={M.yellow} opacity={st.lampOn * 0.9} />;
+      })}
+      {CONFETTI.map((c) => <ConfettiShape key={c.seed} c={c} frame={frame} />)}
+      {/* floor: black and white checker strip, then terrazzo flecks */}
+      {Array.from({ length: Math.ceil(W / 28) + 1 }, (_, i) => (
+        <rect key={`ck${i}`} x={i * 28} y={FLOOR_Y + 3} width={28} height={22} fill={i % 2 ? M.cream : M.ink} />
+      ))}
+      <rect x={0} y={FLOOR_Y + 25} width={W} height={H - FLOOR_Y - 25} fill="#221C5C" />
+      {Array.from({ length: 70 }, (_, i) => (
+        <rect
+          key={`tz${i}`}
+          x={(i * 271) % W}
+          y={FLOOR_Y + 40 + ((i * 97) % (H - FLOOR_Y - 60))}
+          width={6 + (i % 4) * 3}
+          height={4 + (i % 3) * 2}
+          fill={[M.pink, M.teal, M.yellow, M.cream][i % 4]}
+          transform={`rotate(${(i * 53) % 180} ${(i * 271) % W} ${FLOOR_Y + 40 + ((i * 97) % (H - FLOOR_Y - 60))})`}
+        />
+      ))}
+    </svg>
+  );
+};
+
+export const MEMPHIS: FilmStyle = {
+  ui: { font: BUNGEE, white: M.cream, accent: M.pink, titleBg: M.night, textScale: 0.8, letterSpacing: 1 },
+  bg: M.night,
+  floor: { color: M.cream, width: 5 },
+  prop: { stroke: M.ink, strokeWidth: 5, wobble: 0, dark: M.teal, metal: M.pink, bar: M.yellow, glass: "#2B2580", shade: M.yellow },
+  moon: M.cream,
+  lamp: M.yellow,
+  bulb: M.cream,
+  glow: 0,
+  heroSkin: { body: "#FFB627", outline: M.ink, outlineWidth: 5, face: M.ink },
+  shadowSkin: { body: M.ink, outline: M.pink, outlineWidth: 5, face: M.yellow },
+  heroLit: false,
+  worldFilter: () => `drop-shadow(10px 10px 0 ${M.pink})`,
+  Backdrop: MemphisBackdrop,
+  flashColor: M.yellow,
+  sound: { kit: "default" },
 };

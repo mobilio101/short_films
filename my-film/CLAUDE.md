@@ -101,13 +101,15 @@ shares are for general feel only: never copy their characters, we design our own
 5. Fade to black.
 
 ## Style experiments (not the channel style)
-The 10-second test exists in five alternative looks, all sharing one choreography
+The 10-second test exists in six alternative looks, all sharing one choreography
 (`src/films/test/timeline.ts`) and soundtrack (`TestSound.tsx`):
 `Test-Pixel` (384×216 hand-placed pixels, dithered light, 8-bit sounds `chip_*`),
 `Test-Paper` (torn construction paper, cut-out drop shadows, stop-motion on twos),
 `Test-Neon` (glowing tube outlines, retro grid floor, scanlines),
 `Test-Chalk` (chalk on slate, lines boil every 3 frames),
-`Test-Vintage` (1930s black-and-white reel: grain, flicker, scratches, projector rattle).
+`Test-Vintage` (1930s black-and-white reel: grain, flicker, scratches, projector rattle),
+`Test-Memphis` (1980s Memphis design at night: flat bold colours, thick black outlines, pink offset
+shadows, flat sunset rings of light, floating geometric confetti, checker floor).
 Style settings live in `src/films/test/styles.tsx` (`FilmStyle`). These are experiments: films
 use the channel style above unless the user picks one of these.
 
