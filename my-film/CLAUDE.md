@@ -101,6 +101,14 @@ gradients.
   seconds (75 to 85 for 30 s, 110 to 125 for 45 s).
 - The script is one flowing paragraph, written to be spoken: short sentences, no scene
   directions, nothing the narrator can't say out loud.
+- Voice engine for now: Supertonic 3 (free, runs locally; code MIT, model OpenRAIL-M). It lives
+  outside the repo in `/home/user/tools/supertonic` (model in `assets/`, run
+  `py/example_onnx.py` with the venv in `.venv`; 10 preset voices M1–M5, F1–F5; `--speed`
+  controls pace). If it is missing (fresh cloud machine), reinstall it from
+  `github.com/supertone-oss-archive/supertonic` and download the model with
+  `HF_HUB_DISABLE_XET=1 hf download supertone-oss-archive/supertonic-3 --revision
+  aafc6e32416a594460b32413efc49d7fe4ce6d46 --local-dir assets`. Later the channel moves to a
+  paid voice (ElevenLabs or Typecast, on a paid plan with commercial rights).
 - The voice file goes in `public/voice/<film-name>.wav` (or .mp3). Timings for captions and
   shots come from the voice file (word timestamps), never guessed.
 - The voice is the loudest thing in the mix; sound effects sit underneath it.
