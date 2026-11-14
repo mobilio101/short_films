@@ -20,7 +20,7 @@ Cast: **José** (amber, fishing cap; a beard grows through the film as his lasti
 | 8 | 1:28–1:50 | The long drift: the counter races (DAY 120, 200, 300, 400); the beard grows; storms and stars come and go. The shadow sits in the boat with him, at its biggest. Hard cut: a hand-drawn chart with a dotted line crawling from Mexico across the Pacific. Back on the boat, José looks at the moon, remembers the promise, and his brows set; the shadow starts to shrink. | Shadow: "Just stop." Narrator: "Across the entire Pacific Ocean." | Wind, thunder, rumble fading |
 | 9 | 1:50–2:10 | Dawn, DAY 438. A speck on the horizon becomes palm trees. José squints, sits up, then dives off the boat and swims for the shore (flash), crawls up the sand and collapses. | Narrator: "Ebon Atoll, Marshall Islands. January 30, 2014." | Waves on a reef, a splash, gulls |
 | 10 | 2:10–2:21 | Two islanders find him and help him to his feet. The shadow fades away completely. A final DAY 438 pop. | None | Waves, footsteps |
-| 11 | 2:21–2:33 | Title card. "ADRIFT." types on, then the silver underline. | Cream: "He kept his promise to Ezequiel's mother." Pink: "438 days." | Type ticks, shimmer |
+| 11 | 2:21–2:33 | Title card. "ADRIFT." types on, then the hot pink underline. | Cream: "He kept his promise to Ezequiel's mother." Pink: "438 days." | Type ticks, shimmer |
 
 Left out on purpose: the later lawsuit and unproven accusations (channel rules), ships passing
 him (not confirmed), and his drinking urine (unpleasant, not needed).
