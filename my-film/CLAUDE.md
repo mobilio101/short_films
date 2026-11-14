@@ -78,6 +78,21 @@ shares are for general feel only: never copy their characters, we design our own
   Hard cuts to close-ups of objects (phone screen, alarm clock, weights, etc.).
 - Shot length: calm shots hold 4 to 8 seconds; montage shots about 1 second each.
 
+## Sound effects
+- Every sound is generated in code by `scripts/make-sfx.mjs` (oscillators, noise and filters,
+  pure maths). This keeps everything 100% our own and safe to use on YouTube with no
+  copyright claims.
+- Never use downloaded, sampled or library sounds. That includes the meme sounds listed in the
+  Remotion skills (remotion.media/*.wav), sound sites, AI-generated audio and music from anywhere.
+- To add a new sound: add a function to `scripts/make-sfx.mjs`, run `npm run sfx`, and use the
+  WAV from `public/sfx/` with `<Audio>` from `@remotion/media` inside a `<Sequence from={...}>`.
+- Current library: `step`, `click`, `hum` (loop), `roomtone` (bed), `whoosh`, `rumble` (shadow
+  appears), `pop` (rep count), `impact` (big hit), `type` (title letters), `shimmer` (underline).
+- Sync sounds to the picture: footsteps on each foot landing, a pop on every rep, an impact on
+  every big hit with the flash, a type tick per title letter, a soft room tone under every scene.
+- Mix: room tone quiet (about 0.3), effects clear but never harsh. Keep peaks below about -1 dB
+  (check with `ffmpeg -i out/film.mp4 -af volumedetect -f null -`).
+
 ## Title card (last 12 seconds = last 360 frames)
 1. The film's one word types on letter by letter in big white Comic Neue letters.
 2. A wavy violet underline draws in under it.
