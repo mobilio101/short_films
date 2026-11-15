@@ -28,6 +28,21 @@ designer, brand or show.
   reported version. Leave out unproven accusations.
 - Death, injury and cruelty are shown by suggestion (a cut away, an empty space, a dropped
   object, a held silence), never graphically.
+- Dramatise, never just list facts in order. Every script must have:
+  - **A hook in the first 1–2 seconds** that opens a question the viewer needs answered: the
+    most impossible fact first, the middle of the action, an open loop, or what is at stake.
+    Never open with a date or background.
+  - **The four ingredients** (Kindra Hall, *Stories That Stick*): an identifiable character to
+    follow (a named person, not "an inventor"); real emotion (doubt, fear, embarrassment, relief,
+    pride); one significant moment to zoom into (the clang, the knock, the signal); and specific,
+    concrete details (sounds, objects, numbers).
+  - **Tension and re-hooks**: something to lose, a problem that gets worse, and a new small
+    question every few seconds ("Then… nothing."). Delay the payoff.
+  - **A payoff and a loop**: the reveal or twist near the end, and a last line that leads
+    straight back into the hook so the Short replays.
+- Dramatise only the delivery, never the facts: emotions and stakes must come from what the
+  sources say happened. No invented dialogue, events, numbers or motives.
+
 
 ## Format
 - YouTube Shorts / TikTok: vertical 1080×1920, 30 fps.

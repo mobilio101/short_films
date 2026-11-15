@@ -26,7 +26,10 @@ on, and say which version you will use. Never invent quotes, numbers or events. 
 version of the story is a myth, say so; the real version is often the better twist.
 
 **Step 3: Voiceover script.** Based on my choice, write a high-energy, cinematic voiceover
-script that:
+script that dramatises the story (see "Story" in `CLAUDE.md`): a hook that opens a question in
+the first 1–2 seconds (never a date or background), a named character to follow, real emotion,
+one significant moment, concrete details, rising tension with a re-hook every few seconds, and a
+payoff or twist with a last line that loops back to the hook. The script must also:
 - starts with a powerful hook in the first 2 seconds;
 - uses fast pacing, emotional intensity and curiosity-driven storytelling;
 - has no graphic or disturbing details;

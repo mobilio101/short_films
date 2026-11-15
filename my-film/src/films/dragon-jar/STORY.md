@@ -26,17 +26,26 @@ traditionally, but one study argues for AD 134, so the script gives no year for 
 given as anything from about 500 to 850 km, so the script says "hundreds of kilometers". Some scholars
 doubt parts of the story; the script says "first known", not "first ever".
 
-## Voiceover script (148 words)
+## Voiceover script (v2, dramatised, about 150 words)
 
-In the year one hundred thirty-two, an inventor presented China's emperor with a bronze jar. Eight
-dragons circled it, each holding a ball in its mouth. Beneath each dragon sat a toad, mouth wide open.
-Its job? To catch earthquakes. One day, without warning, a single ball dropped. Clang. Straight into the
-toad facing northwest. But nobody in the capital felt a thing. The ground was perfectly still. The court
-doubted it. A jar that feels earthquakes no one can feel? Days later, a messenger arrived. A powerful
-earthquake had struck in the northwest, hundreds of kilometers away. Exactly where the dragon had
-pointed. The inventor was Zhang Heng, and his jar is the world's first known earthquake detector. But
-here's the strangest part. The original was lost. No one knows exactly what was inside. And almost two
-thousand years later, scientists are still trying to rebuild it.
+Nobody felt the earthquake. Except a bronze jar.
+China, the second century. In the emperor's palace stands a strange machine. Eight bronze dragons,
+each holding a ball. Eight toads beneath them, mouths open, waiting. Its inventor, Zhang Heng, has made
+a bold promise: it will feel earthquakes no one else can.
+Then, one quiet day… clang. A single ball drops, into the toad facing northwest.
+Everyone freezes. Then… nothing. Not a tremor. The ground is perfectly still.
+The court doubts him. His great machine, it seems, has just failed in front of everyone.
+One day passes. Then another.
+Then a messenger rides in from the northwest. A massive earthquake has struck, hundreds of kilometers
+away. Exactly where the dragon pointed.
+And the strangest part? The jar was lost. No one knows what was inside. Two thousand years later,
+scientists still can't be sure how it worked.
+So how did a jar feel what no one could?
+
+Story structure: hook (impossible claim) → character and promise (stakes) → significant moment (the
+clang in silence) → doubt and apparent failure (emotion) → the wait (tension) → the messenger
+(vindication) → twist (lost, still unexplained) → closing question that loops into the hook.
+The v1 script (chronological) is replaced; the shot plan below will be re-timed to v2.
 
 ## Shot plan (times are estimates until the voice file sets them)
 
