@@ -40,8 +40,12 @@ designer, brand or show.
     question every few seconds ("Then… nothing."). Delay the payoff.
   - **A payoff and a loop**: the reveal or twist near the end, and a last line that leads
     straight back into the hook so the Short replays.
-- Dramatise only the delivery, never the facts: emotions and stakes must come from what the
-  sources say happened. No invented dialogue, events, numbers or motives.
+- Make it an emotional roller coaster: hope, shock, doubt, humiliation, the lowest point, then
+  a big rise (vindication, rescue, reveal), a payoff line and a twist.
+- Dramatic licence is allowed (the user's choice): reactions, mockery, whispers, short
+  dramatised lines from crowds ("A fraud!"), atmosphere, and a sharpened version of what
+  happened to the character. Keep the core facts true: who, when, where, the key numbers, what
+  the invention or event was, and how it ended.
 
 
 ## Format

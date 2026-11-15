@@ -403,6 +403,107 @@ Object.assign(sounds, {
   },
 });
 
+// ---------------------------------------------------------------------------
+// Dragon Jar Short: bronze, palace, crowd, horse, night.
+// ---------------------------------------------------------------------------
+Object.assign(sounds, {
+  // Big bronze gong: inharmonic partials with slow beating, 3 s.
+  gong() {
+    const d = buf(3);
+    const parts = [[110, 1], [167, 0.7], [231, 0.55], [298, 0.4], [415, 0.3], [523, 0.2]];
+    d.forEach((_, i) => {
+      const t = i / SR;
+      let v = 0;
+      parts.forEach(([f, a], k) => (v += a * Math.sin(2 * Math.PI * f * (1 + 0.002 * Math.sin(2 * Math.PI * (0.7 + k * 0.3) * t)) * t) * Math.exp(-t / (1.6 - k * 0.15))));
+      d[i] = Math.tanh(1.2 * v) * Math.min(1, t / 0.01);
+    });
+    return [d, 0.8];
+  },
+  // Metal ball hitting a bronze toad: sharp strike plus bright ringing, 1.6 s.
+  clang() {
+    const d = buf(1.6), f = svf();
+    const parts = [[1180, 1], [2290, 0.6], [3410, 0.45], [4870, 0.3]];
+    d.forEach((_, i) => {
+      const t = i / SR;
+      let v = 0;
+      parts.forEach(([fr, a], k) => (v += a * Math.sin(2 * Math.PI * fr * t) * Math.exp(-t / (0.5 - k * 0.08))));
+      d[i] = v * 0.7 + f(white(), 5000, 1).high * env(t, 0.0003, 0.008);
+    });
+    return [d, 1];
+  },
+  // Toad croak blip: low buzzy pulse train with a pitch bend.
+  croak() {
+    const d = buf(0.25);
+    let ph = 0;
+    d.forEach((_, i) => {
+      const t = i / SR;
+      ph += (2 * Math.PI * (140 - 40 * t / 0.25)) / SR;
+      const pulse = Math.sin(2 * Math.PI * 28 * t) > 0 ? 1 : 0.3;
+      d[i] = Math.tanh(3 * Math.sin(ph)) * pulse * env(t, 0.01, 0.08);
+    });
+    return [d, 0.5];
+  },
+  // Crowd laughter: many "ha" bursts (formant-shaped pulses) from different voices, 2.4 s.
+  laugh() {
+    const len = 2.4, d = buf(len);
+    for (let v = 0; v < 9; v++) {
+      const f0 = 110 + rnd() * 160, formant = 600 + rnd() * 500, rate = 4.5 + rnd() * 2.5;
+      const start = rnd() * 0.4, stop = len - rnd() * 0.5;
+      const fl = svf();
+      let ph = 0;
+      for (let i = Math.floor(start * SR); i < Math.floor(stop * SR); i++) {
+        const t = i / SR;
+        ph += (2 * Math.PI * f0 * (1 + 0.04 * Math.sin(2 * Math.PI * rate * t))) / SR;
+        const gate = Math.max(0, Math.sin(2 * Math.PI * rate * (t - start))) ** 2;
+        const src = (ph / (2 * Math.PI)) % 1 < 0.15 ? 1 : -0.15; // glottal-ish pulses
+        d[i] += fl(src + 0.3 * white(), formant, 2.5).band * gate * 0.5;
+      }
+    }
+    d.forEach((v, i) => {
+      const x = i / d.length;
+      d[i] = v * Math.min(1, x * 6) * Math.min(1, (1 - x) * 3);
+    });
+    return [d, 0.6];
+  },
+  // Galloping hooves: a four-beat thud pattern, 1.6 s.
+  hooves() {
+    const d = buf(1.6), f = svf();
+    const beats = [];
+    for (let c = 0; c < 4; c++) [0, 0.09, 0.2, 0.27].forEach((o) => beats.push(c * 0.4 + o));
+    let ph = 0;
+    d.forEach((_, i) => {
+      const t = i / SR;
+      let v = 0;
+      beats.forEach((b) => {
+        const dt = t - b;
+        if (dt >= 0 && dt < 0.12) v += Math.sin(2 * Math.PI * (90 + 60 * Math.exp(-dt * 40)) * dt) * Math.exp(-dt / 0.03) + 0.4 * white() * Math.exp(-dt / 0.008);
+      });
+      d[i] = f(v, 1500).low;
+    });
+    return [d, 0.7];
+  },
+  // Night crickets: chirp trains, 2 s.
+  cricket() {
+    const d = buf(2);
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const chirp = (t % 0.5) < 0.12 ? Math.max(0, Math.sin(2 * Math.PI * 30 * t)) : 0;
+      d[i] = Math.sin(2 * Math.PI * 4400 * t) * chirp * 0.6;
+    });
+    return [d, 0.25];
+  },
+  // Clock tick-tock, 2 s.
+  tick() {
+    const d = buf(2), f = svf();
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const k = t % 0.5;
+      d[i] = f(white(), k < 0.25 ? 3200 : 2400, 4).band * Math.exp(-(k % 0.25) / 0.004);
+    });
+    return [d, 0.5];
+  },
+});
+
 console.log(`Writing sound effects to ${OUT}`);
 for (const [name, make] of Object.entries(sounds)) {
   const [data, gain] = make();

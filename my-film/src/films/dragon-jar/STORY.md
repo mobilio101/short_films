@@ -26,26 +26,29 @@ traditionally, but one study argues for AD 134, so the script gives no year for 
 given as anything from about 500 to 850 km, so the script says "hundreds of kilometers". Some scholars
 doubt parts of the story; the script says "first known", not "first ever".
 
-## Voiceover script (v2, dramatised, about 150 words)
+## Voiceover script (v4, emotional roller coaster)
 
 Nobody felt the earthquake. Except a bronze jar.
-China, the second century. In the emperor's palace stands a strange machine. Eight bronze dragons,
-each holding a ball. Eight toads beneath them, mouths open, waiting. Its inventor, Zhang Heng, has made
-a bold promise: it will feel earthquakes no one else can.
-Then, one quiet day… clang. A single ball drops, into the toad facing northwest.
-Everyone freezes. Then… nothing. Not a tremor. The ground is perfectly still.
-The court doubts him. His great machine, it seems, has just failed in front of everyone.
+China, the second century. Zhang Heng stands before the emperor's court with a machine no one has ever
+seen. Eight bronze dragons. Eight balls. Eight toads, mouths open, waiting. He makes a bold promise: it
+will feel earthquakes no one else can.
+Then, one silent day… clang. A single ball drops.
+Everyone freezes. They wait. Nothing. Not a tremor.
+Then the laughing starts. A toy! A fraud! The scholars mock him. His enemies at court smell blood. And
+Zhang Heng is thrown out of the palace, his name a joke.
 One day passes. Then another.
-Then a messenger rides in from the northwest. A massive earthquake has struck, hundreds of kilometers
-away. Exactly where the dragon pointed.
-And the strangest part? The jar was lost. No one knows what was inside. Two thousand years later,
-scientists still can't be sure how it worked.
+Then hooves thunder at the gates. A messenger, covered in dust. A massive earthquake has struck the
+northwest, hundreds of kilometers away. Exactly where the dragon pointed.
+The laughing stops.
+And the strangest part? The jar was lost. Two thousand years later, no one knows how it worked.
 So how did a jar feel what no one could?
 
-Story structure: hook (impossible claim) → character and promise (stakes) → significant moment (the
-clang in silence) → doubt and apparent failure (emotion) → the wait (tension) → the messenger
-(vindication) → twist (lost, still unexplained) → closing question that loops into the hook.
-The v1 script (chronological) is replaced; the shot plan below will be re-timed to v2.
+Emotional curve: hook → wonder and a bold promise (up) → the clang (shock) → nothing (doubt, down) →
+mockery and expulsion (humiliation, lower) → the wait (lowest) → the messenger (vindication, way up) →
+"The laughing stops." (payoff) → lost and unexplained (twist) → question loops to the hook.
+Dramatic licence (agreed with the user): the mockery, "A toy! A fraud!" and being thrown out of the
+palace are dramatised. On record: the capital's scholars blamed the device when no quake was felt, and
+Zhang Heng's enemies at court (palace eunuchs) pushed him out of the capital around AD 136.
 
 ## Shot plan (times are estimates until the voice file sets them)
 
