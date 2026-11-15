@@ -122,11 +122,12 @@ selected by `ACTIVE_PALETTE`); the other palettes there are retired experiments.
 - Flat body colour with a thick black outline. The main character is red; other people are
   white or beige-grey so the main character always stands out. Two groups (two crews, two
   armies) are white and beige-grey, or told apart by their hats.
-- Most emotion comes from the eyebrows (angle, height and how fast they move); the mouth line
-  supports it. Eyes only change for blinks.
+- Emotion comes from the eyebrows (angle, height and how fast they move), the big eyes and the
+  mouth together, plus the whole body (see below).
 - Characters always breathe and idle subtly; they are never frozen.
-- To show who someone is, add one simple flat shape: a hat, hair, a beard, a scarf, a cap, a
-  headscarf, a helmet. Keep it the same for the whole film.
+- To show who someone is, add one simple flat shape: hair, a beard, a scarf, a tie, a headset,
+  glasses, a chest patch (a hat only if it sits behind the drop tip). Keep it the same for the
+  whole film.
 - The main character can be anyone the story needs, of any age or gender, with the same base
   design and their identifying shape.
 - Characters ACT. Every emotional beat is shown in the whole body, not just the brows:
