@@ -191,12 +191,17 @@ gradients.
 - Shared pieces live in `src/components/`: `Character` (with `Skin` for the look), `Stage`
   (`Letterbox`, `Glow`, `Floor`, `WobblyShape`, `Layer`), `Hud` (`DayCounter`, `Narrator`,
   `ShadowLine`, `RepPop`, `SpeedLines`), `TitleCard`, and `theme` (`UiContext` for text style).
-- The Memphis look is set up in `src/films/test/styles.tsx` as `MEMPHIS` (palette `M`, skins,
-  pink offset shadow) with `MemphisBackdrop` (flat light rings, confetti, checker floor). When
-  building the first real film, move these into `src/components/memphis.tsx` so every film uses
-  them, make the Memphis text style the default in `theme.ts` (currently Comic Neue), and turn
-  the light rings and confetti into reusable components that take positions as props.
-  `DayCounter` shows "DAY N"; give it a label prop for other units (WEEK, YEAR, MILE).
+- The Memphis look for Shorts lives in `src/components/memphis.tsx`: palette `M`, `BUNGEE`
+  font, `MEMPHIS_UI`, `skin(color)` for characters, `OFFSET` (pink offset shadow filter),
+  `LightRings` with colour ramps `WARM`, `MOON`, `GOLD`, `Confetti`, `CheckerFloor`, `Label`
+  (pop-up tag), `Captions` (word-by-word, synced to `Word[]` timings), and the canvas and safe
+  area (`SW`, `SH`, `SAFE`). `Character` takes `hat` and `chest` shapes for identifying details.
+- `src/films/ghost-army/` is the reference Short: `words.ts` holds word timings from the voice,
+  `cue("phrase")` turns a phrase into its start frame, and every cut and sound is placed with it.
+  Copy this pattern for new Shorts.
+- Voice: `scripts/voice-elevenlabs.py` makes narration plus character timings with ElevenLabs.
+  If the voice runs long, speed it up with ffmpeg `atempo` (up to about 1.15) and divide the
+  timings by the same factor.
 - Each film lives in its own folder under `src/films/<film-name>/` and is registered as a
   `<Composition>` in `src/Root.tsx` at 1080×1920, 30 fps. The `Test-*` compositions are a
   10-second experiment in six styles (pixel, paper, neon, chalk, vintage, Memphis); only
@@ -205,8 +210,8 @@ gradients.
   scenes). Word timestamps for captions: use the `remotion-captions` skill.
 
 ## Workflow
-- Before animating, write a short shot list (shot, frames, what happens, text, sounds) and
-  check it covers the whole story in 2 to 3 minutes.
+- Before animating, write the plan (facts, script, shot list) in `STORY.md` and wait for "go".
+- Generate the voice first, then time every shot, caption and sound to its word timings.
 - Before showing a film, render it, check sample frames for visual mistakes, and check the
   sound levels.
 - The user is not a developer: explain anything they need to do in simple steps, and share

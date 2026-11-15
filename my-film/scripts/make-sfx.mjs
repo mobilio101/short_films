@@ -286,6 +286,123 @@ Object.assign(sounds, {
   },
 });
 
+// ---------------------------------------------------------------------------
+// Ghost Army Short: inflatables, machines, paperwork and a crowd.
+// ---------------------------------------------------------------------------
+Object.assign(sounds, {
+  // Air rushing into a balloon: band-passed noise that swells, 0.9 s.
+  hiss() {
+    const len = 0.9, d = buf(len), f = svf();
+    d.forEach((_, i) => {
+      const t = i / SR, x = t / len;
+      d[i] = f(white(), 2500 + 2500 * x, 1.2).band * Math.sin(Math.PI * Math.min(1, x * 1.1)) ** 0.7;
+    });
+    return [d, 0.5];
+  },
+  // Hand pump: two quick "chuff"s.
+  pump() {
+    const d = buf(0.5), f = svf();
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const e = env(t, 0.01, 0.06) + env(Math.max(0, t - 0.25), 0.01, 0.06) * (t > 0.25 ? 1 : 0);
+      d[i] = f(white(), 900, 1).band * e;
+    });
+    return [d, 0.6];
+  },
+  // Rubber boing: a pitch that wobbles down, like poking a balloon.
+  boing() {
+    const d = buf(0.6);
+    let ph = 0;
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const fr = 180 + 120 * Math.exp(-t * 6) * Math.sin(2 * Math.PI * 9 * t) + 60 * Math.exp(-t * 4);
+      ph += (2 * Math.PI * fr) / SR;
+      d[i] = (Math.sin(ph) + 0.3 * Math.sin(2 * ph)) * env(t, 0.005, 0.18);
+    });
+    return [d, 0.7];
+  },
+  // Engine roar from a loudspeaker: a rough low growl with a tinny band, 1.6 s.
+  engine() {
+    const len = 1.6, d = buf(len), f = svf(), g = svf();
+    let ph = 0;
+    d.forEach((_, i) => {
+      const t = i / SR, x = t / len;
+      ph += (2 * Math.PI * (55 + 8 * Math.sin(2 * Math.PI * 7 * t))) / SR;
+      const growl = Math.tanh(3 * (Math.sin(ph) + 0.5 * Math.sin(2.01 * ph) + 0.3 * f(white(), 400).low));
+      d[i] = g(growl, 1400, 0.8).band * Math.min(1, x * 8) * Math.min(1, (1 - x) * 4);
+    });
+    return [d, 0.8];
+  },
+  // Radio static with two short beeps, 1.0 s.
+  static() {
+    const d = buf(1.0), f = svf();
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const crackle = f(white(), 3000, 0.7).band * (0.5 + 0.5 * Math.sin(2 * Math.PI * 13 * t) ** 2);
+      const beep = (t > 0.15 && t < 0.25) || (t > 0.32 && t < 0.42) ? 0.6 * Math.sin(2 * Math.PI * 1100 * t) : 0;
+      d[i] = 0.6 * crackle + beep;
+    });
+    return [d, 0.45];
+  },
+  // Pen scribbling on paper: noisy strokes, 0.8 s.
+  scribble() {
+    const d = buf(0.8), f = svf();
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const strokes = Math.abs(Math.sin(2 * Math.PI * 6.5 * t)) ** 3;
+      d[i] = f(white(), 3500, 1.5).band * strokes;
+    });
+    return [d, 0.45];
+  },
+  // Drawer slam: wooden thud plus a rattle.
+  slam() {
+    const d = buf(0.5), f = svf(), g = svf();
+    let ph = 0;
+    d.forEach((_, i) => {
+      const t = i / SR;
+      ph += (2 * Math.PI * (120 * Math.exp(-t * 10) + 70)) / SR;
+      d[i] = Math.sin(ph) * env(t, 0.002, 0.07) + 0.4 * f(white(), 1800, 2).band * env(t, 0.001, 0.12) + 0.2 * g(white(), 5000, 3).band * env(Math.max(0, t - 0.05), 0.001, 0.05);
+    });
+    return [d, 0.8];
+  },
+  // Rubber stamp on paper: a short, firm thump.
+  stamp() {
+    const d = buf(0.3), f = svf();
+    let ph = 0;
+    d.forEach((_, i) => {
+      const t = i / SR;
+      ph += (2 * Math.PI * (160 * Math.exp(-t * 20) + 60)) / SR;
+      d[i] = Math.sin(ph) * env(t, 0.001, 0.05) + 0.5 * f(white(), 1200, 1).band * env(t, 0.0005, 0.02);
+    });
+    return [d, 0.85];
+  },
+  // Applause: many random claps (short noise bursts) that swell and fade, 2.2 s.
+  applause() {
+    const len = 2.2, d = buf(len), f = svf();
+    const claps = [];
+    for (let k = 0; k < 260; k++) claps.push([rnd() * len, 0.4 + rnd() * 0.6, 1500 + rnd() * 2000]);
+    claps.forEach(([at, amp]) => {
+      const s0 = Math.floor(at * SR);
+      for (let j = 0; j < 0.03 * SR && s0 + j < d.length; j++) d[s0 + j] += white() * amp * Math.exp(-j / (0.006 * SR));
+    });
+    d.forEach((v, i) => {
+      const x = i / d.length;
+      d[i] = f(v, 2500, 0.7).band * Math.min(1, x * 4) * Math.min(1, (1 - x) * 2.5);
+    });
+    return [d, 0.55];
+  },
+  // Oars dipping into water: two soft splashes.
+  paddle() {
+    const d = buf(1.2), f = svf();
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const e = env(t, 0.03, 0.12) + 0.8 * env(Math.max(0, t - 0.6), 0.03, 0.12) * (t > 0.6 ? 1 : 0);
+      d[i] = f(white(), 700 + 900 * Math.exp(-((t % 0.6) * 8)), 1).band * e;
+    });
+    return [d, 0.5];
+  },
+});
+
 console.log(`Writing sound effects to ${OUT}`);
 for (const [name, make] of Object.entries(sounds)) {
   const [data, gain] = make();

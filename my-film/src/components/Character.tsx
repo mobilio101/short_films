@@ -34,6 +34,10 @@ export type Pose = {
   look?: number;
   /** Draw something held in both hands (e.g. a dumbbell), centred between them. */
   held?: React.ReactNode;
+  /** Identifying shape drawn on the head (hat, hair, helmet), in head coordinates: head radius 88, centre at 0,0. */
+  hat?: React.ReactNode;
+  /** Something drawn on the chest (badge, medal), in torso coordinates: 0,0 is the top of the torso. */
+  chest?: React.ReactNode;
 };
 
 const LEG = 120;
@@ -62,6 +66,8 @@ export const Character: React.FC<
   squash = 1,
   look = 10,
   held,
+  hat,
+  chest,
   seed = 0,
   skin,
 }) => {
@@ -181,7 +187,9 @@ export const Character: React.FC<
             />
           </>
         )}
+        {hat}
       </g>
+      {chest && <g transform={`translate(0,${torsoTop})`}>{chest}</g>}
       {/* held object goes between the hands, in front of the body */}
       {held && <g transform={`translate(${(hands[0][0] + hands[1][0]) / 2},${(hands[0][1] + hands[1][1]) / 2})`}>{held}</g>}
       {limbPaths.slice(2).map((d, i) => (
