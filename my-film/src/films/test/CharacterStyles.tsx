@@ -74,6 +74,8 @@ const LOOKS: Look[] = [
   },
 ];
 
+const CYCLE: Pose[] = [{}, EMOTE.shock, EMOTE.despair, EMOTE.joy];
+
 export const CharacterStyles: React.FC = () => {
   const f = useCurrentFrame();
   return (
@@ -91,12 +93,12 @@ export const CharacterStyles: React.FC = () => {
               </text>
               <line x1={40} y1={base} x2={1040} y2={base} stroke={M.ink} strokeWidth={4} />
               <g style={{ filter: OFFSET }}>
-                <Character x={150} y={base} scale={0.62} skin={skin(M.amber)} seed={r} {...l.main} />
+                <Character x={150} y={base} scale={0.62} skin={skin(M.amber)} seed={r} {...l.main} {...CYCLE[Math.floor(f / 30) % CYCLE.length]} {...(Math.floor(f / 30) % CYCLE.length === 3 ? { jump: Math.abs(Math.sin(f / 5)) * 40, fx: "none" as const } : {})} />
                 <Character x={410} y={base} scale={0.62} skin={skin(M.amber)} seed={r + 3} {...l.main} {...EMOTE.shock} />
                 <Character x={670} y={base} scale={0.62} skin={skin("#FFFFFF")} seed={r + 6} {...l.side} {...EMOTE.joy} fx="none" />
                 <g transform={`translate(910,${base})`}>{l.mascot(f)}</g>
               </g>
-              <text x={150} y={base + 46} textAnchor="middle" fontFamily={BUNGEE} fontSize={22} fill={M.ink}>MAIN</text>
+              <text x={150} y={base + 46} textAnchor="middle" fontFamily={BUNGEE} fontSize={22} fill={M.ink}>{["CALM", "SHOCK", "DESPAIR", "JOY"][Math.floor(f / 30) % 4]}</text>
               <text x={410} y={base + 46} textAnchor="middle" fontFamily={BUNGEE} fontSize={22} fill={M.ink}>SHOCK</text>
               <text x={670} y={base + 46} textAnchor="middle" fontFamily={BUNGEE} fontSize={22} fill={M.ink}>SIDE</text>
               <text x={910} y={base + 46} textAnchor="middle" fontFamily={BUNGEE} fontSize={22} fill={M.ink}>MASCOT</text>

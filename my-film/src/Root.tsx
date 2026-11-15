@@ -21,7 +21,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="GhostArmy" component={GhostArmy} durationInFrames={GHOST_ARMY_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="Test" component={TestFilm} {...common} />
       {/* Style experiments: same 10 seconds, five different looks */}
-      <Composition id="Test-CharacterStyles" component={CharacterStyles} durationInFrames={90} fps={FPS} width={1080} height={1920} />
+      <Composition id="Test-CharacterStyles" component={CharacterStyles} durationInFrames={240} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-Emotions" component={Emotions} durationInFrames={120} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-Pixel" component={PixelTest} {...common} />
       <Composition id="Test-Paper" component={() => <StyledTest st={PAPER} />} {...common} />
