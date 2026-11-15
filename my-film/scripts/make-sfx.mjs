@@ -560,6 +560,85 @@ Object.assign(sounds, {
   },
 });
 
+// ---------------------------------------------------------------------------
+// Apollo 13 Short: explosion, alarms, heartbeat, cheering, splashdown.
+// ---------------------------------------------------------------------------
+Object.assign(sounds, {
+  // Deep muffled explosion with a long rumble tail, 2.4 s.
+  boom() {
+    const d = buf(2.4), f = svf(), g = svf();
+    let ph = 0;
+    d.forEach((_, i) => {
+      const t = i / SR;
+      ph += (2 * Math.PI * (60 * Math.exp(-t * 3) + 28)) / SR;
+      const body = Math.sin(ph) * env(t, 0.003, 0.5);
+      const crack = f(white(), 2000, 0.7).low * env(t, 0.001, 0.05);
+      const rumble = g(white(), 180, 0.8).low * env(t, 0.02, 0.8) * 3;
+      d[i] = Math.tanh(2 * (body + 0.8 * crack + rumble));
+    });
+    return [d, 1];
+  },
+  // Master alarm: urgent two-tone beeping, 1.6 s.
+  alarm() {
+    const d = buf(1.6);
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const on = t % 0.4 < 0.3;
+      const fr = t % 0.8 < 0.4 ? 1250 : 950;
+      d[i] = on ? (Math.sin(2 * Math.PI * fr * t) > 0 ? 0.6 : -0.6) * Math.min(1, (t % 0.4) * 200) : 0;
+    });
+    return [d, 0.35];
+  },
+  // Heartbeat: lub-dub pairs, 2.4 s.
+  heartbeat() {
+    const d = buf(2.4);
+    let ph = 0;
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const k = t % 0.8;
+      const e = env(k, 0.005, 0.05) + 0.7 * env(Math.max(0, k - 0.18), 0.005, 0.05) * (k > 0.18 ? 1 : 0);
+      ph += (2 * Math.PI * 55) / SR;
+      d[i] = Math.sin(ph) * e;
+    });
+    return [d, 0.9];
+  },
+  // Crowd cheer: many voices rising, plus scattered claps, 2.6 s.
+  cheer() {
+    const len = 2.6, d = buf(len);
+    for (let v = 0; v < 12; v++) {
+      const f0 = 160 + rnd() * 220, formant = 700 + rnd() * 600;
+      const fl = svf();
+      let ph = 0;
+      for (let i = 0; i < d.length; i++) {
+        const t = i / SR;
+        ph += (2 * Math.PI * f0 * (1 + 0.15 * (t / len) + 0.02 * Math.sin(2 * Math.PI * (3 + v) * t))) / SR;
+        const src = (ph / (2 * Math.PI)) % 1 < 0.2 ? 1 : -0.2;
+        d[i] += fl(src + 0.4 * white(), formant, 2).band * 0.25;
+      }
+    }
+    for (let k = 0; k < 120; k++) {
+      const s0 = Math.floor(rnd() * len * SR);
+      for (let j = 0; j < 0.02 * SR && s0 + j < d.length; j++) d[s0 + j] += white() * 0.5 * Math.exp(-j / (0.004 * SR));
+    }
+    d.forEach((v, i) => {
+      const x = i / d.length;
+      d[i] = v * Math.min(1, x * 3) * Math.min(1, (1 - x) * 3);
+    });
+    return [d, 0.6];
+  },
+  // Big splash: water burst with a low thump, 1.4 s.
+  splash() {
+    const d = buf(1.4), f = svf();
+    let ph = 0;
+    d.forEach((_, i) => {
+      const t = i / SR;
+      ph += (2 * Math.PI * (80 * Math.exp(-t * 6) + 40)) / SR;
+      d[i] = 0.8 * Math.sin(ph) * env(t, 0.003, 0.12) + f(white(), 1500 + 1500 * Math.exp(-t * 3), 0.7).band * env(t, 0.01, 0.4) * 1.4;
+    });
+    return [d, 0.8];
+  },
+});
+
 console.log(`Writing sound effects to ${OUT}`);
 for (const [name, make] of Object.entries(sounds)) {
   const [data, gain] = make();

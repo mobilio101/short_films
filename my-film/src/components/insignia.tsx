@@ -49,3 +49,21 @@ export const GERMAN_PATCH = (
     <Balkenkreuz s={1.5} />
   </g>
 );
+
+/** US flag patch (stripes in red and white, black canton with white stars), centred on 0,0. */
+export const USFlag: React.FC<{ w?: number; h?: number }> = ({ w = 60, h = 34 }) => (
+  <g>
+    <rect x={-w / 2} y={-h / 2} width={w} height={h} fill="#FFFFFF" />
+    {Array.from({ length: 7 }, (_, i) => (
+      <rect key={i} x={-w / 2} y={-h / 2 + (i * 2 * h) / 13} width={w} height={h / 13} fill={M.pink} />
+    ))}
+    <rect x={-w / 2} y={-h / 2} width={w * 0.42} height={h * 0.54} fill={M.ink} />
+    {[0, 1, 2].flatMap((r) => [0, 1, 2].map((c) => <circle key={`${r}${c}`} cx={-w / 2 + w * 0.07 + c * w * 0.14} cy={-h / 2 + h * 0.1 + r * h * 0.17} r={1.6} fill="#FFFFFF" />))}
+    <rect x={-w / 2} y={-h / 2} width={w} height={h} fill="none" stroke={M.ink} strokeWidth={3} />
+  </g>
+);
+export const US_PATCH = (
+  <g transform="translate(-2,74)">
+    <USFlag w={56} h={32} />
+  </g>
+);

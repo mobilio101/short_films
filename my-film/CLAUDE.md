@@ -108,9 +108,17 @@ No other colours. The palette lives in `src/components/memphis.tsx` (`PALETTES.n
 selected by `ACTIVE_PALETTE`); the other palettes there are retired experiments.
 
 ## Characters
-- Every character is built on one base design: a big round head sitting straight on the body
-  (no neck), dot eyes, one line per eyebrow, one line for the mouth, long noodle limbs (smooth
-  bendy curves, not jointed sticks), no fingers.
+- The channel's character look is **Ink blot** (chosen by the user so our characters are
+  recognisably ours): an ink-drop head (pointed tip on top) sitting straight on the body,
+  big white eyes with ink pupils, one line per eyebrow, a simple mouth, long noodle limbs
+  (smooth bendy curves, not jointed sticks), no fingers. Spread the presets from
+  `src/components/mascot.tsx` into `<Character>`: `INK_MAIN` for the main character (adds a
+  black neckerchief), `INK_SIDE` for everyone else (adds a small red cheek mark).
+- Avoid caps and hats that hide the drop tip; use headsets, hair, scarves, ties or chest
+  patches to show who someone is.
+- The host mascot `InkDrop` (a little ink drop with eyes, in `mascot.tsx`) appears in each
+  Short: small in the hook reacting to the event, and cheering on the end card. On dark
+  backgrounds put it on a cream badge so it stays visible.
 - Flat body colour with a thick black outline. The main character is red; other people are
   white or beige-grey so the main character always stands out. Two groups (two crews, two
   armies) are white and beige-grey, or told apart by their hats.
@@ -142,6 +150,7 @@ selected by `ACTIVE_PALETTE`); the other palettes there are retired experiments.
 - WWII Germany: the Balkenkreuz (the black-and-white cross on German military vehicles and
   aircraft). Do not draw swastikas or SS runes: they get Shorts age-restricted, demonetised or
   shown less, and displaying them is illegal in Germany outside narrow exceptions.
+- USA: `US_PATCH` / `USFlag` (red-and-white stripes, black canton).
 - Other sides: a simple flag or emblem in the palette colours; avoid symbols banned or
   restricted on YouTube or in major markets.
 
@@ -233,7 +242,7 @@ selected by `ACTIVE_PALETTE`); the other palettes there are retired experiments.
   from `@remotion/media` inside a `<Sequence from={...}>`.
 - Current library: `roomtone` (bed), `step`, `click`, `hum` (loop), `whoosh`, `rumble` (shadow
   appears), `pop` (counts), `impact` (big moment), `type` (title letters), `shimmer`
-  (underline). `projector` and the `chip_*` sounds belong to retired experiments.
+  (underline). Later additions include `boom`, `alarm`, `heartbeat`, `cheer`, `splash`, `static`, `hiss` and more: see the list at the end of the script. `projector` and the `chip_*` sounds belong to retired experiments.
 - Sync sounds to the picture: footsteps on each foot landing, a pop on every count, an impact
   with every flash, a whoosh on every hard cut, a quiet ambience bed under every scene.
 - Mix: voice on top, ambience quiet (about 0.2), effects clear but never harsh. Keep
