@@ -4,6 +4,7 @@ import { TestFilm, TEST_DURATION } from "./films/test/TestFilm";
 import { StyledTest } from "./films/test/StyledTest";
 import { PixelTest } from "./films/test/PixelTest";
 import { Emotions } from "./films/test/Emotions";
+import { CharacterStyles } from "./films/test/CharacterStyles";
 import { CHALK, MEMPHIS, NEON, PAPER, VINTAGE } from "./films/test/styles";
 import { FPS, H, W } from "./components/theme";
 import { GhostArmy, GHOST_ARMY_DURATION } from "./films/ghost-army/GhostArmy";
@@ -20,6 +21,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="GhostArmy" component={GhostArmy} durationInFrames={GHOST_ARMY_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="Test" component={TestFilm} {...common} />
       {/* Style experiments: same 10 seconds, five different looks */}
+      <Composition id="Test-CharacterStyles" component={CharacterStyles} durationInFrames={90} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-Emotions" component={Emotions} durationInFrames={120} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-Pixel" component={PixelTest} {...common} />
       <Composition id="Test-Paper" component={() => <StyledTest st={PAPER} />} {...common} />

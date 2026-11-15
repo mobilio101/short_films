@@ -68,6 +68,25 @@ export type Pose = {
   hands?: { l?: Pt; r?: Pt };
   /** Draw clenched fists. */
   fists?: boolean;
+
+  // ---- Design (character style experiments) ----
+  /** Head shape: round (default), drop (ink drop, point on top), cut (angular paper cut-out with a fold line). */
+  headShape?: "round" | "drop" | "cut";
+  /** Body shape: tube (default) or pear (narrow shoulders, wide hips). */
+  bodyShape?: "tube" | "pear";
+  /** Normal eyes drawn big: white eyes with black pupils. */
+  bigEyes?: boolean;
+  /** Eyes that touch in the middle (classic print cartoon). */
+  joinedEyes?: boolean;
+  /** A big round nose. */
+  nose?: boolean;
+  /** White mitten hands. */
+  gloves?: boolean;
+  /** Red cheek mark. */
+  cheek?: string;
+  /** Neckerchief or bow tie in this colour. */
+  neckerchief?: string;
+  bowTie?: string;
 };
 
 const LEG = 120;
@@ -128,6 +147,15 @@ export const Character: React.FC<
   shake = 0,
   hands: handTargets,
   fists = false,
+  headShape = "round",
+  bodyShape = "tube",
+  bigEyes = false,
+  joinedEyes = false,
+  nose = false,
+  gloves = false,
+  cheek,
+  neckerchief,
+  bowTie,
 }) => {
   const frame = useCurrentFrame();
   const isShadow = variant === "shadow";
@@ -221,6 +249,16 @@ export const Character: React.FC<
       case "glare":
         return <ellipse key={side} cx={ex} cy={0} rx={9} ry={4} fill={ink} transform={`rotate(${side * 14} ${ex} 0)`} />;
       default:
+        if (bigEyes || joinedEyes) {
+          const rx = joinedEyes ? 20 : 15;
+          const cx = joinedEyes ? look + side * 19 : ex;
+          return (
+            <g key={side}>
+              <ellipse cx={cx} cy={-6} rx={rx} ry={(joinedEyes ? 26 : 18) * eyeScale} fill={WHITE} stroke={ink} strokeWidth={4} />
+              {!blink && <ellipse cx={cx + lk + side * 2} cy={-2} rx={6.5} ry={9} fill={ink} />}
+            </g>
+          );
+        }
         return <ellipse key={side} cx={ex} cy={-2} rx={7} ry={7 * eyeScale} fill={ink} />;
     }
   };
@@ -339,7 +377,22 @@ export const Character: React.FC<
     }
   })();
 
-  const fist = (p: Pt, k: number) => (fists ? <circle key={`f${k}`} cx={p[0]} cy={p[1]} r={LIMB * 0.95} fill={body} stroke={ow > 0 ? outline : ink} strokeWidth={ow > 0 ? ow : 3} /> : null);
+  const fist = (p: Pt, k: number) =>
+    gloves ? (
+      <g key={`g${k}`}>
+        <circle cx={p[0]} cy={p[1]} r={LIMB * 1.25} fill={WHITE} stroke={ink} strokeWidth={4} />
+        <circle cx={p[0] + (k ? 9 : -9)} cy={p[1] - 8} r={LIMB * 0.55} fill={WHITE} stroke={ink} strokeWidth={3} />
+      </g>
+    ) : fists ? (
+      <circle key={`f${k}`} cx={p[0]} cy={p[1]} r={LIMB * 0.95} fill={body} stroke={ow > 0 ? outline : ink} strokeWidth={ow > 0 ? ow : 3} />
+    ) : null;
+  const R = HEAD_R;
+  const headPath =
+    headShape === "drop"
+      ? `M0,${-1.45 * R} C${0.3 * R},${-1.05 * R} ${1.02 * R},${-0.55 * R} ${1.02 * R},${0.12 * R} C${1.02 * R},${0.7 * R} ${0.56 * R},${1.02 * R} 0,${1.02 * R} C${-0.56 * R},${1.02 * R} ${-1.02 * R},${0.7 * R} ${-1.02 * R},${0.12 * R} C${-1.02 * R},${-0.55 * R} ${-0.3 * R},${-1.05 * R} 0,${-1.45 * R} Z`
+      : headShape === "cut"
+        ? `M${-0.62 * R},${-0.98 * R} L${0.7 * R},${-1.02 * R} L${1.04 * R},${-0.3 * R} L${0.94 * R},${0.62 * R} L${0.42 * R},${1.0 * R} L${-0.52 * R},${0.96 * R} L${-1.02 * R},${0.4 * R} L${-0.98 * R},${-0.44 * R} Z`
+        : null;
 
   return (
     <g
@@ -360,9 +413,36 @@ export const Character: React.FC<
       <g transform={`rotate(${lean} 0 ${hipY})`}>
         {ow > 0 &&
           arms.map((d, i) => <path key={`oa${i}`} d={d} stroke={outline} strokeWidth={LIMB + ow * 2} strokeLinecap="round" fill="none" />)}
-        <rect x={-TORSO_W / 2} y={torsoTop} width={TORSO_W} height={hipY - torsoTop + 12} rx={40} fill={body} stroke={outline} strokeWidth={ow} />
+        {bodyShape === "pear" ? (
+          <path
+            d={`M${-TORSO_W * 0.34},${torsoTop + 10} Q0,${torsoTop - 8} ${TORSO_W * 0.34},${torsoTop + 10} Q${TORSO_W * 0.85},${hipY - 10} ${TORSO_W * 0.55},${hipY + 14} Q0,${hipY + 30} ${-TORSO_W * 0.55},${hipY + 14} Q${-TORSO_W * 0.85},${hipY - 10} ${-TORSO_W * 0.34},${torsoTop + 10} Z`}
+            fill={body}
+            stroke={outline}
+            strokeWidth={ow}
+          />
+        ) : (
+          <rect x={-TORSO_W / 2} y={torsoTop} width={TORSO_W} height={hipY - torsoTop + 12} rx={40} fill={body} stroke={outline} strokeWidth={ow} />
+        )}
+        {neckerchief && (
+          <g>
+            <path d={`M${-TORSO_W * 0.45},${torsoTop + 6} Q0,${torsoTop + 30} ${TORSO_W * 0.45},${torsoTop + 6} L${TORSO_W * 0.18},${torsoTop + 22} L${TORSO_W * 0.05},${torsoTop + 58} L${-TORSO_W * 0.12},${torsoTop + 24} Z`} fill={neckerchief} stroke={ink} strokeWidth={4} strokeLinejoin="round" />
+          </g>
+        )}
+        {bowTie && (
+          <g transform={`translate(0,${torsoTop + 12})`}>
+            <path d="M0,0 L-30,-16 L-30,16 Z M0,0 L30,-16 L30,16 Z" fill={bowTie} stroke={ink} strokeWidth={4} strokeLinejoin="round" />
+            <circle r={8} fill={bowTie} stroke={ink} strokeWidth={4} />
+          </g>
+        )}
         <g transform={`rotate(${headTilt} 0 ${torsoTop})`}>
-          <circle cx={0} cy={headY} r={HEAD_R} fill={body} stroke={outline} strokeWidth={ow} />
+          {headPath ? (
+            <g transform={`translate(0,${headY})`}>
+              <path d={headPath} fill={body} stroke={outline} strokeWidth={ow} strokeLinejoin="round" />
+              {headShape === "cut" && <path d={`M${-0.62 * R},${-0.98 * R} L${0.12 * R},${0.05 * R} L${0.94 * R},${0.62 * R}`} fill="none" stroke={ink} strokeWidth={3} opacity={0.35} />}
+            </g>
+          ) : (
+            <circle cx={0} cy={headY} r={HEAD_R} fill={body} stroke={outline} strokeWidth={ow} />
+          )}
           <g transform={`translate(0,${headY})`}>
             {isShadow ? (
               <>
@@ -376,6 +456,8 @@ export const Character: React.FC<
                 <path d={browLine(eyeL, 1)} stroke={ink} strokeWidth={eyes === "glare" ? 7 : 5.5} strokeLinecap="round" />
                 <path d={browLine(eyeR, -1)} stroke={ink} strokeWidth={eyes === "glare" ? 7 : 5.5} strokeLinecap="round" />
                 {mouthEl}
+                {nose && <ellipse cx={look * 1.4} cy={14} rx={17} ry={14} fill={ink} />}
+                {cheek && <ellipse cx={look + (look >= 0 ? 44 : -44)} cy={18} rx={13} ry={8} fill={cheek} />}
                 {tearEls}
                 {sweatEl}
               </>
