@@ -6,6 +6,7 @@ import { UiContext, clamp01, lerp } from "../../components/theme";
 import { BUNGEE, Captions, Label, LightRings, M, MEMPHIS_UI, SAFE, SH, SW, WARM, skin } from "../../components/memphis";
 import { Flash, GROUND, Paper, Sfx, SpeedLines, STROKE, Stage, makeCues, useLocal } from "../../components/shortkit";
 import { WORDS } from "./words";
+import { BRITISH_PATCH, Balkenkreuz, GERMAN_PATCH } from "../../components/insignia";
 
 export const GARBO_DURATION = 1800;
 const CAPTION_Y = 1500;
@@ -137,6 +138,9 @@ const Tank: React.FC<{ x: number; y: number; s?: number }> = ({ x, y, s = 1 }) =
     <path d="M-185,-70 L-150,-150 L150,-150 L185,-70 Z" fill={M.lilac} {...STROKE} />
     <rect x={-75} y={-215} width={150} height={70} rx={28} fill={M.lilac} {...STROKE} />
     <rect x={70} y={-196} width={190} height={24} rx={10} fill={M.lilac} {...STROKE} />
+    <g transform="translate(-40,-110)">
+      <Balkenkreuz s={1.3} />
+    </g>
   </g>
 );
 const IronCross = (
@@ -215,7 +219,7 @@ const Shot3: React.FC<ShotProps> = () => {
   const plead = Math.sin(f / 4) * 10;
   return (
     <Stage moon={false} cam={{ s: 1.05, x: 540, y: 950 }}>
-      <Character x={760} y={GROUND} scale={0.95} skin={BRIT} hat={BritCap} brow={-0.4} mouth={-0.3} look={-14} hands={{ l: [-60, -200], r: [60, -200] }} />
+      <Character x={760} y={GROUND} scale={0.95} skin={BRIT} hat={BritCap} brow={-0.4} mouth={-0.3} look={-14} hands={{ l: [-60, -200], r: [60, -200] }} chest={BRITISH_PATCH} />
       <Desk x={760} />
       <Character x={300} y={GROUND} scale={0.95} skin={PUJOL} hat={PujolHat} eyes="wide" brow={1} mouthShape="open" mouthOpen={0.5} kneel={1} look={14} hands={{ l: [20, -265 + plead], r: [50, -265 + plead] }} />
     </Stage>
@@ -231,8 +235,8 @@ const Shot4: React.FC<ShotProps> = () => {
       <Stage moon={false}>
         <Door x={150} open={1} />
         <Character x={lerp(380, 150, shove)} y={GROUND} scale={0.9} skin={PUJOL} hat={PujolHat} {...EMOTE.sad} lean={-12 * (1 - shove)} look={14} squash={snap(f, 16) * 0.95} />
-        <Character x={640} y={GROUND} scale={0.85} skin={BRIT} hat={BritCap} {...EMOTE.laugh} look={-14} squash={1 + 0.06 * Math.abs(Math.sin(f / 2.5))} seed={2} />
-        <Character x={880} y={GROUND} scale={0.85} skin={BRIT} hat={BritCap} {...EMOTE.laugh} lean={10} look={-14} squash={1 + 0.06 * Math.abs(Math.sin(f / 2.7 + 1))} seed={5} />
+        <Character x={640} y={GROUND} scale={0.85} skin={BRIT} hat={BritCap} {...EMOTE.laugh} look={-14} squash={1 + 0.06 * Math.abs(Math.sin(f / 2.5))} seed={2} chest={BRITISH_PATCH} />
+        <Character x={880} y={GROUND} scale={0.85} skin={BRIT} hat={BritCap} {...EMOTE.laugh} lean={10} look={-14} squash={1 + 0.06 * Math.abs(Math.sin(f / 2.7 + 1))} seed={5} chest={BRITISH_PATCH} />
       </Stage>
       <HaLetters from={2} />
     </AbsoluteFill>
@@ -264,7 +268,7 @@ const Shot6: React.FC<ShotProps> = ({ start }) => {
   return (
     <AbsoluteFill>
       <Stage moon={false}>
-        <Character x={330} y={GROUND} scale={0.95} skin={GERMAN} hat={GermanCap} eyes={hired ? "dot" : "glare"} brow={hired ? -0.2 : -1} mouth={hired ? 0.7 : -0.4} look={14} hands={{ r: [150, -170 + stampY * 0.6] }} squash={snap(f, tHire)} />
+        <Character x={330} y={GROUND} scale={0.95} skin={GERMAN} hat={GermanCap} eyes={hired ? "dot" : "glare"} brow={hired ? -0.2 : -1} mouth={hired ? 0.7 : -0.4} look={14} hands={{ r: [150, -170 + stampY * 0.6] }} squash={snap(f, tHire)} chest={GERMAN_PATCH} />
         <Desk x={420} w={420} />
         <Paperwork x={440} y={GROUND - 190} r={-4} s={1.1} />
         {hired && (
@@ -358,7 +362,7 @@ const Shot9: React.FC<ShotProps> = () => {
         const t = ((f * 3 + i * 37) % 260) / 260;
         return <circle key={i} cx={100 + ((i * 173) % 880)} cy={200 + t * 1000} r={18} fill="#FFFFFF" stroke={M.ink} strokeWidth={4} />;
       })}
-      <Character x={330} y={GROUND} scale={0.95} skin={GERMAN} hat={GermanCap} {...EMOTE.joy} fx="none" jump={Math.abs(Math.sin(f / 5)) * 40} look={14} />
+      <Character x={330} y={GROUND} scale={0.95} skin={GERMAN} hat={GermanCap} {...EMOTE.joy} fx="none" jump={Math.abs(Math.sin(f / 5)) * 40} look={14} chest={GERMAN_PATCH} />
       {[0, 1, 2].map((k) => (
         <g key={k} transform={`translate(${640 + k * 120},${GROUND})`}>
           {[0, 1, 2, 3].map((j) => (
@@ -384,9 +388,9 @@ const Shot10: React.FC<ShotProps> = ({ start }) => {
         {pins.map(([x, y], i) => (
           <circle key={i} cx={x} cy={y} r={14} fill={M.pink} stroke={M.ink} strokeWidth={4} />
         ))}
-        <Character x={260} y={GROUND} scale={0.85} skin={BRIT} hat={BritCap} {...(f >= tHunt ? EMOTE.shock : {})} fx={f >= tHunt ? "shock" : "none"} hands={{ r: [140, -330] }} look={14} squash={snap(f, tHunt)} />
+        <Character x={260} y={GROUND} scale={0.85} skin={BRIT} hat={BritCap} {...(f >= tHunt ? EMOTE.shock : {})} fx={f >= tHunt ? "shock" : "none"} hands={{ r: [140, -330] }} look={14} squash={snap(f, tHunt)}  chest={BRITISH_PATCH} />
         <Magnifier x={260 + 140 * 0.85} y={GROUND - 330 * 0.85 - 40} s={1.1} />
-        <Character x={820} y={GROUND} scale={0.85} skin={BRIT} hat={BritCap} eyes="wide" brow={0.6} mouthShape="o" hands={{ l: [-140, -340] }} look={-14} seed={4} squash={snap(f, tHunt + 4)} />
+        <Character x={820} y={GROUND} scale={0.85} skin={BRIT} hat={BritCap} eyes="wide" brow={0.6} mouthShape="o" hands={{ l: [-140, -340] }} look={-14} seed={4} squash={snap(f, tHunt + 4)} chest={BRITISH_PATCH} />
         <Magnifier x={820 - 140 * 0.85} y={GROUND - 340 * 0.85 - 40} s={1.1} />
       </Stage>
       <Label text="MI5 SPY HUNT" x={LABEL_X} y={230} from={tHunt} to={9999} size={50} />
@@ -407,7 +411,7 @@ const Shot11: React.FC<ShotProps> = ({ start }) => {
     <AbsoluteFill>
       <Stage moon={false}>
         <Door x={180} open={burst} />
-        <Character x={lerp(180, 340, burst)} y={GROUND} scale={0.9} skin={BRIT} hat={BritCap} {...brit} look={14} squash={snap(f, tHire)} />
+        <Character x={lerp(180, 340, burst)} y={GROUND} scale={0.9} skin={BRIT} hat={BritCap} {...brit} look={14} squash={snap(f, tHire)} chest={BRITISH_PATCH} />
         <Character x={660} y={GROUND} scale={0.9} skin={PUJOL} hat={PujolHat} {...pujol} look={-14} squash={snap(f, hired ? (f >= tNow ? tNow : tHire) : 2)} />
       </Stage>
       <Flash at={1} />
@@ -465,8 +469,8 @@ const Shot13: React.FC<ShotProps> = ({ start }) => {
         <rect x={720} y={GROUND - 20} width={360} height={20} fill={M.cream} />
         <Tank x={200} y={GROUND} s={0.55} />
         <Tank x={480} y={GROUND} s={0.55} />
-        <Character x={330} y={GROUND} scale={0.55} skin={GERMAN} hat={Helmet} eyes={f >= tWait ? "closed" : "dot"} mouthShape={f >= tWait ? "o" : "line"} brow={0.4} headTilt={f >= tWait ? 12 : 0} hands={f >= tWait ? { l: [-30, -330], r: [40, -330] } : undefined} seed={3} look={14} />
-        <Character x={620} y={GROUND} scale={0.55} skin={GERMAN} hat={Helmet} eyes="closed" mouth={-0.3} headTilt={-10} seed={8} look={14} />
+        <Character x={330} y={GROUND} scale={0.55} skin={GERMAN} hat={Helmet} eyes={f >= tWait ? "closed" : "dot"} mouthShape={f >= tWait ? "o" : "line"} brow={0.4} headTilt={f >= tWait ? 12 : 0} hands={f >= tWait ? { l: [-30, -330], r: [40, -330] } : undefined} seed={3} look={14}  chest={GERMAN_PATCH} />
+        <Character x={620} y={GROUND} scale={0.55} skin={GERMAN} hat={Helmet} eyes="closed" mouth={-0.3} headTilt={-10} seed={8} look={14} chest={GERMAN_PATCH} />
         {f >= tWait && (
           <g transform={`translate(${lerp(1100, 520, gull)},${lerp(380, GROUND - 200 * 0.55 - 30, gull)})`}>
             <ellipse cx={0} cy={0} rx={30} ry={16} fill="#FFFFFF" {...STROKE} />
@@ -492,8 +496,8 @@ const Shot14: React.FC<ShotProps> = ({ start }) => {
     <AbsoluteFill>
       <Stage moon={false}>
         <LightRings x={540} y={760} radii={[520, 400, 290]} colors={WARM} dots={{ r: 380, color: M.pink }} />
-        <Character x={210} y={GROUND} scale={0.85} skin={GERMAN} hat={GermanCap} mouth={0.5} look={14} hands={f >= tCross && f < tCross + 20 ? { r: [300, -230] } : undefined} />
-        <Character x={870} y={GROUND} scale={0.85} skin={BRIT} hat={BritCap} mouth={0.5} look={-14} hands={f >= tMedal && f < tMedal + 20 ? { l: [-300, -230] } : undefined} />
+        <Character x={210} y={GROUND} scale={0.85} skin={GERMAN} hat={GermanCap} mouth={0.5} look={14} hands={f >= tCross && f < tCross + 20 ? { r: [300, -230] } : undefined}  chest={GERMAN_PATCH} />
+        <Character x={870} y={GROUND} scale={0.85} skin={BRIT} hat={BritCap} mouth={0.5} look={-14} hands={f >= tMedal && f < tMedal + 20 ? { l: [-300, -230] } : undefined}  chest={BRITISH_PATCH} />
         <Character
           x={540}
           y={GROUND}

@@ -134,6 +134,17 @@ selected by `ACTIVE_PALETTE`); the other palettes there are retired experiments.
     the body alive (trembling fear, shaking laughter, falling tears, bouncing joy).
   - `Test-Emotions` (src/films/test/Emotions.tsx) shows every pose.
 
+## Insignia
+- When a story has sides (armies, countries, teams), give each side a clear patch on the chest
+  (`chest` prop) and on its vehicles, so viewers can tell them apart instantly at Shorts speed.
+  Shared patches live in `src/components/insignia.tsx`.
+- British: a Union Jack patch, drawn in the palette (black field, white and red crosses).
+- WWII Germany: the Balkenkreuz (the black-and-white cross on German military vehicles and
+  aircraft). Do not draw swastikas or SS runes: they get Shorts age-restricted, demonetised or
+  shown less, and displaying them is illegal in Germany outside narrow exceptions.
+- Other sides: a simple flag or emblem in the palette colours; avoid symbols banned or
+  restricted on YouTube or in major markets.
+
 ## The shadow
 - The main character's inner voice: doubt, fear, despair or temptation, whatever the story's
   struggle is. Same body as the main character but ink black, taller, with a red outline
