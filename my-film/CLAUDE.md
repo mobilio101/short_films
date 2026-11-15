@@ -7,6 +7,13 @@ survival, history, personal struggle, comedy or tragedy.
 Reference images the user shares are for general feel only. Never copy their characters,
 art, titles or layouts: we design our own.
 
+## The channel: Inkredible
+- Channel name **Inkredible** (handle idea `@InkredibleHistory` if `@Inkredible` is taken),
+  tagline "History you won't believe". Chosen by the user.
+- Brand files live in `brand/`: `avatar.svg`/`avatar.png` (800×800 channel picture: the shocked
+  ink-drop mascot in a cream circle on red) and `banner.svg`/`banner.png` (2560×1440 channel
+  banner; the logo and name sit inside YouTube's 1546×423 safe area in the middle).
+
 ## The channel style: Newsprint
 Every Short looks like a page from an old newspaper or history book brought to life: cream
 paper, black ink and one red. Flat shapes with thick black outlines and hard black offset
