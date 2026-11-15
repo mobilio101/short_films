@@ -7,18 +7,53 @@ import { Ui } from "./theme";
 
 export const BUNGEE = loadBungee("normal", { weights: ["400"], subsets: ["latin"] }).fontFamily;
 
-export const M = {
-  night: "#17134A",
-  floor: "#221C5C",
-  ink: "#0A0A0A",
-  pink: "#FF5FA2",
-  teal: "#2EC4B6",
-  yellow: "#FFD23F",
-  lilac: "#9B8CFF",
-  cream: "#FFF6E9",
-  amber: "#FFB627",
-  grey: "#C9C2DA",
+type Palette = {
+  night: string; floor: string; ink: string; pink: string; teal: string; yellow: string;
+  lilac: string; cream: string; amber: string; grey: string; shadow: string;
+  warm: string[]; moon: string[]; gold: string[];
 };
+
+/**
+ * Colour palettes. Role names (pink, teal...) come from the first Memphis look; in other
+ * palettes they are just slots: pink = accent, teal = props, amber = main character, etc.
+ */
+export const PALETTES: Record<string, Palette> = {
+  memphis: {
+    night: "#17134A", floor: "#221C5C", ink: "#0A0A0A", pink: "#FF5FA2", teal: "#2EC4B6", yellow: "#FFD23F",
+    lilac: "#9B8CFF", cream: "#FFF6E9", amber: "#FFB627", grey: "#C9C2DA", shadow: "#FF5FA2",
+    warm: ["#2A2270", "#43297E", "#713487", "#B8578A", "#F2957F"],
+    moon: ["#1F1A5A", "#28226E", "#332C85"],
+    gold: ["#2A2270", "#5A3A7A", "#B07A4A", "#E8B54A", "#FFD23F"],
+  },
+  // A: newsprint. Cream paper, black ink, one red.
+  newsprint: {
+    night: "#EDE4CF", floor: "#DED2B6", ink: "#111111", pink: "#D7263D", teal: "#FFFFFF", yellow: "#D7263D",
+    lilac: "#B9B09D", cream: "#FFFFFF", amber: "#D7263D", grey: "#8F8F8F", shadow: "#111111",
+    warm: ["#F1E9D7", "#F5EFE1", "#F8F4EA", "#FBF9F3", "#FFFFFF"],
+    moon: ["#F1E9D7", "#F5EFE1", "#F8F4EA"],
+    gold: ["#F1E9D7", "#F4E6C4", "#F6E1A8", "#F7DA87", "#F9D060"],
+  },
+  // B: night poster. Near-black, off-white, one yellow.
+  poster: {
+    night: "#0D0D11", floor: "#17171D", ink: "#0D0D11", pink: "#FFC400", teal: "#F2EFE8", yellow: "#FFC400",
+    lilac: "#8E8E98", cream: "#F2EFE8", amber: "#FFC400", grey: "#B5B5BD", shadow: "#33333D",
+    warm: ["#15151B", "#1D1D24", "#27272F", "#34343D", "#47474F"],
+    moon: ["#14141A", "#1B1B22", "#24242C"],
+    gold: ["#15151B", "#2A2412", "#4A3E14", "#806A16", "#FFC400"],
+  },
+  // C: blueprint. Deep blue, off-white, one orange.
+  blueprint: {
+    night: "#10224A", floor: "#0B1838", ink: "#07112A", pink: "#FF7A1A", teal: "#F2EFE8", yellow: "#FF7A1A",
+    lilac: "#7F93C2", cream: "#F2EFE8", amber: "#FF7A1A", grey: "#B9C3DC", shadow: "#07112A",
+    warm: ["#132854", "#17305F", "#1C386B", "#244379", "#2E5089"],
+    moon: ["#132854", "#17305F", "#1C386B"],
+    gold: ["#132854", "#2A3A5E", "#5A4E52", "#A86A3A", "#FF7A1A"],
+  },
+};
+
+/** The palette every Short uses. */
+export const ACTIVE_PALETTE = "newsprint";
+export const M = PALETTES[ACTIVE_PALETTE];
 
 /** Vertical Short canvas and safe area. */
 export const SW = 1080;
@@ -35,7 +70,7 @@ export const MEMPHIS_UI: Ui = {
 };
 
 /** Hard pink offset shadow used on every drawn thing. */
-export const OFFSET = `drop-shadow(10px 10px 0 ${M.pink})`;
+export const OFFSET = `drop-shadow(10px 10px 0 ${M.shadow})`;
 
 export const skin = (body: string): Skin => ({ body, outline: M.ink, outlineWidth: 5, face: M.ink });
 
@@ -64,9 +99,9 @@ export const LightRings: React.FC<{
 };
 
 /** The warm lamp / sunset ramp and the cool moon ramp. */
-export const WARM = ["#2A2270", "#43297E", "#713487", "#B8578A", "#F2957F"];
-export const MOON = ["#1F1A5A", "#28226E", "#332C85"];
-export const GOLD = ["#2A2270", "#5A3A7A", "#B07A4A", "#E8B54A", "#FFD23F"];
+export const WARM = M.warm;
+export const MOON = M.moon;
+export const GOLD = M.gold;
 
 type Spot = { x: number; y: number; kind: string; color: string; size?: number };
 
@@ -156,7 +191,7 @@ export const Label: React.FC<{ text: string; x: number; y: number; from: number;
         color: M.ink,
         background: color,
         border: `5px solid ${M.ink}`,
-        boxShadow: `8px 8px 0 ${M.pink}`,
+        boxShadow: `8px 8px 0 ${M.shadow}`,
         padding: "6px 18px",
         whiteSpace: "nowrap",
       }}

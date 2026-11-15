@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Img, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { Audio } from "@remotion/media";
 import { Character } from "../../components/Character";
 import { UiContext, clamp01, lerp } from "../../components/theme";
@@ -63,6 +63,7 @@ const CUTS = [
   cue("At the Rhine six"),
   cue("Their secret"),
   cue("In twenty twenty-four"),
+  cue("they finally received"),
   cue("Because sometimes"),
   VOICE_END + 6,
   GHOST_ARMY_DURATION,
@@ -195,7 +196,7 @@ const useLocal = () => {
 const Flash: React.FC<{ at: number }> = ({ at }) => {
   const f = useCurrentFrame();
   const o = interpolate(f, [at, at + 1, at + 7], [0, 0.85, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ background: M.yellow, opacity: o }} />;
+  return <AbsoluteFill style={{ background: "#FFFFFF", opacity: o }} />;
 };
 
 const SpeedLines: React.FC<{ at: number; dir?: 1 | -1 }> = ({ at, dir = -1 }) => {
@@ -208,7 +209,7 @@ const SpeedLines: React.FC<{ at: number; dir?: 1 | -1 }> = ({ at, dir = -1 }) =>
         const y = 250 + i * 95 + ((i * 37) % 40);
         const len = 300 + ((i * 131) % 300);
         const x = dir < 0 ? SW - t * (SW + len) : t * (SW + len) - len;
-        return <line key={i} x1={x} y1={y} x2={x + len} y2={y} stroke={M.cream} strokeWidth={8} strokeLinecap="round" opacity={1 - t} />;
+        return <line key={i} x1={x} y1={y} x2={x + len} y2={y} stroke={M.ink} strokeWidth={8} strokeLinecap="round" opacity={1 - t} />;
       })}
     </svg>
   );
@@ -252,7 +253,7 @@ const Shot2: React.FC<ShotProps> = ({ start }) => {
       <g transform="translate(540,760) rotate(-2)">
         <Paper w={760} h={1000} />
       </g>
-      <path d={river} fill="none" stroke={M.teal} strokeWidth={46} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - drawn} />
+      <path d={river} fill="none" stroke={M.lilac} strokeWidth={46} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - drawn} />
       <text x={700} y={560} fontFamily={BUNGEE} fontSize={44} fill={M.ink}>RHINE</text>
       {flag(430, 760, tDiv + 6)}
       {flag(400, 960, tDiv + 14)}
@@ -559,7 +560,7 @@ const Shot13: React.FC<ShotProps> = ({ start }) => {
         <g transform="translate(540,860) rotate(1.5)">
           <Paper w={800} h={880} />
         </g>
-        <path d="M820,450 C760,560 900,700 820,860 C760,980 880,1100 820,1270" fill="none" stroke={M.teal} strokeWidth={34} strokeLinecap="round" />
+        <path d="M820,450 C760,560 900,700 820,860 C760,980 880,1100 820,1270" fill="none" stroke={M.lilac} strokeWidth={34} strokeLinecap="round" />
         <path d="M170,1280 C210,1220 170,1160 240,1100 C300,1050 240,1000 300,960" fill="none" stroke={M.lilac} strokeWidth={14} />
         <text x={160} y={1270} fontFamily={BUNGEE} fontSize={36} fill={M.ink}>NORMANDY</text>
         <text x={650} y={500} fontFamily={BUNGEE} fontSize={36} fill={M.ink}>RHINE</text>
@@ -606,7 +607,7 @@ const Shot14: React.FC<ShotProps> = ({ start }) => {
       {/* bottom: the real crossing, quiet and dark */}
       <AbsoluteFill style={{ top: SH / 2, height: SH / 2, opacity: interpolate(f, [tReal - 6, tReal + 4], [0.35, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
         <svg width={SW} height={SH / 2} viewBox={`0 0 ${SW} ${SH / 2}`}>
-          <rect width={SW} height={SH / 2} fill="#0F0C33" />
+          <rect width={SW} height={SH / 2} fill={M.night} />
           <rect y={330} width={SW} height={SH / 2 - 330} fill={M.floor} />
           {[0, 1, 2, 3, 4].map((i) => (
             <path key={i} d={`M${((i * 230 + f * 2) % 1300) - 150},${400 + i * 60} q30,-16 60,0 t60,0`} fill="none" stroke={M.teal} strokeWidth={6} />
@@ -660,15 +661,15 @@ const Shot15: React.FC<ShotProps> = ({ start }) => {
 };
 
 // 16. "In 2024, they finally received the Congressional Gold Medal." The old soldier gets the medal.
-const Shot16: React.FC<ShotProps> = ({ start }) => {
+const Shot16: React.FC<ShotProps> = () => {
   const { f, pop } = useLocal();
-  const tMedal = abs(start, cue("Gold Medal"));
+  const tMedal = 18;
   const drop = pop(tMedal, 8);
   const push = 1 + 0.12 * clamp01(f / 120);
   const medal = (
     <g transform={`translate(0,${-260 + drop * 300}) scale(${0.6 + 0.4 * drop})`} opacity={clamp01((f - tMedal + 6) / 4)}>
       <path d="M-30,0 L-14,60 L14,60 L30,0 Z" fill={M.pink} stroke={M.ink} strokeWidth={4} />
-      <circle cx={0} cy={86} r={34} fill={M.yellow} stroke={M.ink} strokeWidth={5} />
+      <circle cx={0} cy={86} r={34} fill={M.cream} stroke={M.ink} strokeWidth={5} />
     </g>
   );
   return (
@@ -678,6 +679,67 @@ const Shot16: React.FC<ShotProps> = ({ start }) => {
         <Character x={540} y={GROUND} scale={1.1} skin={skin(M.amber)} hat={GreyHair} mouth={0.7} brow={0.5} browRaise={drop * 0.6} chest={f >= tMedal - 6 ? medal : undefined} />
       </Stage>
       <Label text="MARCH 21, 2024" x={LABEL_X} y={LABEL_Y} from={4} to={9999} />
+    </AbsoluteFill>
+  );
+};
+
+// 16b. "they finally received the Congressional Gold Medal." The real photo from the ceremony.
+const PHOTO = { src: "photos/dvids-8301726-medal.jpg", w: 1999, h: 1333, focusX: 0.6, focusY: 0.5, credit: "U.S. ARMY PHOTO: HENRY VILLARAMA" };
+const ShotPhoto: React.FC<ShotProps> = () => {
+  const { f, pop } = useLocal();
+  const { durationInFrames } = useVideoConfig();
+  const enter = pop(0, 11);
+  const zoom = 1 + 0.18 * clamp01(f / durationInFrames);
+  const boxW = 880;
+  const boxH = 960;
+  return (
+    <AbsoluteFill style={{ background: M.night }}>
+      <svg width={SW} height={SH} style={{ position: "absolute", inset: 0 }}>
+        <LightRings x={540} y={800} radii={[620, 480, 340]} colors={WARM} />
+      </svg>
+      <div
+        style={{
+          position: "absolute",
+          left: (SW - boxW) / 2 - 20,
+          top: 270,
+          width: boxW,
+          height: boxH,
+          border: `10px solid ${M.ink}`,
+          boxShadow: `14px 14px 0 ${M.shadow}`,
+          background: M.ink,
+          overflow: "hidden",
+          transform: `rotate(${-2 + (1 - enter) * -6}deg) scale(${0.85 + 0.15 * enter})`,
+        }}
+      >
+        <Img
+          src={staticFile(PHOTO.src)}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: `${PHOTO.focusX * 100}% ${PHOTO.focusY * 100}%`,
+            transform: `scale(${zoom})`,
+            transformOrigin: `${PHOTO.focusX * 100}% ${PHOTO.focusY * 100}%`,
+            filter: "saturate(0.8) contrast(1.05)",
+          }}
+        />
+      </div>
+      <Label text="REAL PHOTO · MARCH 21, 2024" x={LABEL_X} y={215} from={3} to={9999} size={40} />
+      <div
+        style={{
+          position: "absolute",
+          top: 270 + boxH + 30,
+          left: SAFE.left,
+          width: SW - SAFE.left - SAFE.right,
+          textAlign: "center",
+          fontFamily: BUNGEE,
+          fontSize: 26,
+          color: M.ink,
+          opacity: clamp01((f - 6) / 8),
+        }}
+      >
+        {PHOTO.credit}
+      </div>
     </AbsoluteFill>
   );
 };
@@ -737,7 +799,7 @@ const Shot18: React.FC<ShotProps> = () => {
   );
 };
 
-const SHOTS = [Shot1, Shot2, Shot3, Shot4, Shot5, Shot6, Shot7, Shot8, Shot9, Shot10, Shot11, Shot12, Shot13, Shot14, Shot15, Shot16, Shot17, Shot18];
+const SHOTS = [Shot1, Shot2, Shot3, Shot4, Shot5, Shot6, Shot7, Shot8, Shot9, Shot10, Shot11, Shot12, Shot13, Shot14, Shot15, Shot16, ShotPhoto, Shot17, Shot18];
 
 // ---------------------------------------------------------------------------
 // Sound: voice on top, code-made effects underneath.
@@ -805,17 +867,19 @@ const SoundTrack: React.FC = () => {
       <Sfx name="slam" at={C[14] + 22} vol={0.45} />
       <Sfx name="stamp" at={word("nineteen ninety-six") + 4} vol={0.5} />
       {/* 16 */}
+      <Sfx name="pop" at={C[15] + 18} vol={0.3} />
+      <Sfx name="click" at={C[16]} vol={0.5} />
       <Sfx name="shimmer" at={word("Gold Medal")} vol={0.35} />
       <Sfx name="applause" at={word("Gold Medal") + 4} vol={0.3} len={70} />
       {/* 17 */}
       {[0, 1, 2].map((i) => (
-        <Sfx key={i} name="hiss" at={C[16] + Math.round((C[17] - C[16]) * 0.35) + i * 10} vol={0.25} rate={0.8} />
+        <Sfx key={i} name="hiss" at={C[17] + Math.round((C[18] - C[17]) * 0.35) + i * 10} vol={0.25} rate={0.8} />
       ))}
       {/* 18 */}
       {Array.from({ length: 13 }, (_, i) => (
-        <Sfx key={`t${i}`} name="type" at={C[17] + i * 2} vol={0.5} len={6} />
+        <Sfx key={`t${i}`} name="type" at={C[18] + i * 2} vol={0.5} len={6} />
       ))}
-      <Sfx name="shimmer" at={C[17] + 28} vol={0.35} />
+      <Sfx name="shimmer" at={C[18] + 28} vol={0.35} />
     </>
   );
 };

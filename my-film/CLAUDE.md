@@ -7,12 +7,13 @@ survival, history, personal struggle, comedy or tragedy.
 Reference images the user shares are for general feel only. Never copy their characters,
 art, titles or layouts: we design our own.
 
-## The channel style: Memphis at night
-Every film uses the 1980s Memphis design look, set mostly at night: flat bold colours (hot pink,
-teal, yellow, lilac, cream) on deep indigo, thick black outlines, hard pink offset shadows,
-flat rings of light instead of soft glows, and geometric confetti (squiggles, zigzags,
-triangles, dot grids) floating in the background. Clean and graphic: no film grain, blur or
-texture. The look is our own; never imitate a specific designer, brand or show.
+## The channel style: Newsprint
+Every Short looks like a page from an old newspaper or history book brought to life: cream
+paper, black ink and one red. Flat shapes with thick black outlines and hard black offset
+shadows, flat rings of light instead of soft glows, and a few small geometric marks in the
+background. High contrast and few colours, so the important thing always stands out. Clean and
+graphic: no gradients or blur. The look is our own; never imitate a specific publication,
+designer, brand or show.
 
 ## Story
 - One clear story per film: a dramatic moment in history (a war, a strategy, a turning point,
@@ -39,46 +40,61 @@ texture. The look is our own; never imitate a specific designer, brand or show.
 - Frame the side-on stage for vertical: the ground line around 60% down, characters larger,
   with sky, light rings and confetti filling the top. Close-ups and maps suit vertical well.
 - No music for now. If music is ever added, it must be generated in code like the sound effects.
-- Everything is drawn in code in Remotion (SVG / React / CSS). No AI video, no stock footage, no photos.
+- Everything is drawn in code in Remotion (SVG / React / CSS), plus the occasional real photo
+  (see "Real photos"). No AI video, no AI images, no stock footage.
 
 ## Look
-- Deep indigo night backgrounds (`#17134A`). Day scenes use one flat light colour for the sky
-  (teal or cream) instead, with the same outlines and shadows.
-- Side-on view, like a 2D stage. Characters move left and right along a cream ground line
-  (about 5px). Under the ground line: a black-and-white checker strip, then a darker floor
-  scattered with small terrazzo flecks. Outdoors, swap the strip for something that fits
-  (sand, water, grass) drawn the same flat way.
+- Cream paper background (`#EDE4CF`). Night scenes stay on paper; the moon or a lamp is drawn
+  as flat rings that get lighter toward the source.
+- Side-on view, like a 2D stage. Characters move left and right along a ground line (about
+  5px). Under it: a black-and-white checker strip, then a slightly darker paper floor with
+  small flecks. Outdoors, swap the strip for something that fits (sand, water, grass) drawn
+  the same flat way.
 - No ambient light. Light only comes from things in the scene: a lamp, a fire, a candle, the
-  moon, the sun, a lighthouse, a window. Each light source is drawn as flat concentric rings
-  of solid colour (indigo to plum to rose to peach toward the source), sometimes with a ring of
-  dots around it. Never soft gradients or blur.
-- Everything (characters and props) is a flat shape with a thick black outline (about 5px) and
-  a hard pink offset shadow (about 10px down and right, no blur).
-- Background confetti: about a dozen small geometric shapes that slowly drift and turn. Keep
-  them around the edges and the upper background, away from text, faces and the action.
-  Choose shapes that suit the scene (e.g. wavy lines and dots at sea).
+  moon, the sun, a lighthouse, a window. Each light source is flat concentric rings of
+  solid colour, lighter toward the source. Never soft gradients or blur.
+- Everything (characters and props) is a flat shape with a thick black outline (about 5-6px)
+  and a hard black offset shadow (about 10px down and right, no blur).
+- Background marks: a few small geometric shapes (squiggles, triangles, rings, dot grids) that
+  slowly drift. Keep them around the edges, away from text, faces and the action.
+- Maps and documents are white paper sheets with black outlines; rivers and roads in the
+  beige-grey ink (`#B9B09D`), routes and highlights in red.
+- Use red sparingly: the main character, the active caption word, labels, and the one thing
+  in each shot the viewer must look at. Everything else is black, white, cream or beige-grey.
 
-## Palette
+## Real photos
+- Occasional real photos are allowed where they add credibility (proof that it really
+  happened): usually one or two per Short, at most a few seconds each.
+- Only public-domain or properly licensed photos: U.S. military and government photos (DVIDS,
+  National Archives, Library of Congress, NASA...) or photos with a licence that allows
+  commercial use. Check the licence on the photo's own page before using it.
+- Record every photo in `public/photos/CREDITS.md` (file, what it shows, credit, licence,
+  source link). Show the credit on screen under the photo and put it in the video description.
+- Never use photos showing injuries, the dead or anything graphic. Never imply that the
+  military or government endorses the channel.
+- Present a photo like a clipping: a thick black frame, a slight tilt, a hard black offset
+  shadow, a slow push-in on the key detail, a label such as "REAL PHOTO · MARCH 21, 2024",
+  and the credit in small capitals underneath. Keep it clear of the captions.
+
+## Palette (newsprint)
 | Role | Colour |
 |---|---|
-| Night background | Indigo `#17134A` (floor `#221C5C`) |
-| Main character body | Amber `#FFB627` |
-| Outlines, faces, eyes | Ink black `#0A0A0A` |
-| Hot pink: offset shadows, accent (shadow outline, shadow text, title underline) | `#FF5FA2` |
-| Teal | `#2EC4B6` |
-| Yellow: flashes, lamps, shadow's eyes | `#FFD23F` |
-| Lilac | `#9B8CFF` |
-| Cream: ground line, narrator text, title text, moon | `#FFF6E9` |
-Props and other characters use teal, yellow, lilac, pink and cream. No other colours, no
-gradients.
+| Paper background | Cream `#EDE4CF` (floor `#DED2B6`) |
+| Outlines, faces, offset shadows | Ink black `#111111` |
+| Accent: main character, active caption word, labels, highlights | Red `#D7263D` |
+| Props, other characters, map paper, caption fill | White `#FFFFFF` |
+| Second tone: rivers, roads, background people, quiet props | Beige-grey `#B9B09D` |
+| Old age, grey hair | Grey `#8F8F8F` |
+No other colours. The palette lives in `src/components/memphis.tsx` (`PALETTES.newsprint`,
+selected by `ACTIVE_PALETTE`); the other palettes there are retired experiments.
 
 ## Characters
 - Every character is built on one base design: a big round head sitting straight on the body
   (no neck), dot eyes, one line per eyebrow, one line for the mouth, long noodle limbs (smooth
   bendy curves, not jointed sticks), no fingers.
-- Flat body colour with a thick black outline. The main character is amber; other people get
-  another palette colour (teal, lilac, cream...) so they are easy to tell apart. Groups (two
-  crews, two armies) each get their own colour.
+- Flat body colour with a thick black outline. The main character is red; other people are
+  white or beige-grey so the main character always stands out. Two groups (two crews, two
+  armies) are white and beige-grey, or told apart by their hats.
 - Most emotion comes from the eyebrows (angle, height and how fast they move); the mouth line
   supports it. Eyes only change for blinks.
 - Characters always breathe and idle subtly; they are never frozen.
@@ -89,8 +105,8 @@ gradients.
 
 ## The shadow
 - The main character's inner voice: doubt, fear, despair or temptation, whatever the story's
-  struggle is. Same body as the main character but ink black, taller, with a hot pink outline
-  and two narrow yellow slit eyes.
+  struggle is. Same body as the main character but ink black, taller, with a red outline
+  and two narrow white slit eyes.
 - Its size follows the struggle: the weaker the character feels, the bigger the shadow; it
   shrinks as they find strength. It can disappear when the struggle is resolved, or win if the
   story ends in loss.
@@ -134,13 +150,14 @@ gradients.
 - The voice is the loudest thing in the mix; sound effects sit underneath it.
 
 ## Text
-- Font: Bungee (`@remotion/google-fonts/Bungee`), a chunky 1980s display face, all capitals.
-- Captions: the voiceover shown 1 to 3 words at a time, big, cream with a thick black outline,
-  centred in the lower-middle of the safe area, the current word popping in hot pink or yellow.
-  Captions are synced to the word timestamps.
-- Labels: short tags on the picture (a place, a date, a number) that pop in and out. Use them
-  for facts the picture alone can't show (e.g. "ELEPHANT ISLAND, 1916").
-- Shadow lines: hot pink, appear beside the shadow near its head, fade or type in.
+- Font: Bungee (`@remotion/google-fonts/Bungee`), a chunky display face, all capitals.
+- Captions: the voiceover shown 1 to 3 words at a time, big, white with a thick black outline,
+  centred in the lower-middle of the safe area, the current word in red. Captions are synced
+  to the word timestamps.
+- Labels: short tags on the picture (a place, a date, a number) that pop in and out: black
+  text on a red tag with a black outline and offset shadow. Use them for facts the picture
+  alone can't show (e.g. "ELEPHANT ISLAND, 1916").
+- Shadow lines: red, appear beside the shadow near its head, fade or type in.
 - Characters do not speak in text bubbles; the narrator tells the story.
 
 ## On-screen counters
@@ -158,7 +175,7 @@ gradients.
 - Use `spring()` and `interpolate()` with easing; no linear robotic motion except scrolling.
 - Camera: locked by default. Slow push-ins (gentle scale up) on emotional moments. Hard cuts
   to close-ups of important objects (a diary, a fire, a horizon, a tally mark).
-- Big moments (a storm hits, a ship appears, a fall): speed lines and a short yellow flash.
+- Big moments (a storm hits, a ship appears, a fall): black speed lines and a short white flash.
 - Travel (walking far, sailing, drifting): the background scrolls past in parallax layers.
 - Shot length: a new shot every 2 to 3 seconds; montage shots about 1 second. Nothing holds
   still for more than 4 seconds.
@@ -184,18 +201,21 @@ gradients.
 - Video titles are short, punchy and curiosity-driven, in the patterns "Why ___", "How ___
   worked", "The ___ that ___" (e.g. "The Army Made of Balloons"). Never misleading.
 - The last 2 to 3 seconds are an end card, under the narrator's final line: the payoff word or
-  phrase in big cream Bungee letters with a wavy hot pink underline drawing in. No fade to black
+  phrase in big white Bungee letters with a black outline and a wavy red underline drawing in. No fade to black
   (Shorts loop, so the end should flow back into the hook).
 
 ## Where things are in the code
 - Shared pieces live in `src/components/`: `Character` (with `Skin` for the look), `Stage`
   (`Letterbox`, `Glow`, `Floor`, `WobblyShape`, `Layer`), `Hud` (`DayCounter`, `Narrator`,
   `ShadowLine`, `RepPop`, `SpeedLines`), `TitleCard`, and `theme` (`UiContext` for text style).
-- The Memphis look for Shorts lives in `src/components/memphis.tsx`: palette `M`, `BUNGEE`
-  font, `MEMPHIS_UI`, `skin(color)` for characters, `OFFSET` (pink offset shadow filter),
+- The Short look lives in `src/components/memphis.tsx` (named after the first style; it now
+  uses the newsprint palette): palette `M`, `BUNGEE` font, `MEMPHIS_UI`, `skin(color)` for
+  characters, `OFFSET` (offset shadow filter),
   `LightRings` with colour ramps `WARM`, `MOON`, `GOLD`, `Confetti`, `CheckerFloor`, `Label`
   (pop-up tag), `Captions` (word-by-word, synced to `Word[]` timings), and the canvas and safe
   area (`SW`, `SH`, `SAFE`). `Character` takes `hat` and `chest` shapes for identifying details.
+- Real photos live in `public/photos/` with their credits in `public/photos/CREDITS.md`;
+  `ShotPhoto` in the Ghost Army Short is the pattern for showing one.
 - `src/films/ghost-army/` is the reference Short: `words.ts` holds word timings from the voice,
   `cue("phrase")` turns a phrase into its start frame, and every cut and sound is placed with it.
   Copy this pattern for new Shorts.
@@ -204,8 +224,8 @@ gradients.
   timings by the same factor.
 - Each film lives in its own folder under `src/films/<film-name>/` and is registered as a
   `<Composition>` in `src/Root.tsx` at 1080×1920, 30 fps. The `Test-*` compositions are a
-  10-second experiment in six styles (pixel, paper, neon, chalk, vintage, Memphis); only
-  Memphis is the channel style now.
+  10-second experiment in six styles (pixel, paper, neon, chalk, vintage, Memphis). The
+  channel style is now Newsprint.
 - `prompts/history-short.md` is the prompt for planning a new Short (ideas, voiceover script,
   scenes). Word timestamps for captions: use the `remotion-captions` skill.
 
