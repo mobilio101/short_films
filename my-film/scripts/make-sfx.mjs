@@ -504,6 +504,62 @@ Object.assign(sounds, {
   },
 });
 
+// ---------------------------------------------------------------------------
+// Garbo Short: farm, money, seaside, vanishing spies.
+// ---------------------------------------------------------------------------
+Object.assign(sounds, {
+  // Chicken clucks: three short nasal pitch-drop blips, 1 s.
+  chicken() {
+    const d = buf(1.0), fl = svf();
+    [0, 0.18, 0.5].forEach((st, k) => {
+      let ph = 0;
+      const n = Math.floor((k === 2 ? 0.3 : 0.1) * SR);
+      for (let i = 0; i < n; i++) {
+        const t = i / SR;
+        ph += (2 * Math.PI * ((k === 2 ? 900 : 700) - (k === 2 ? 500 : 200) * (t / (n / SR)))) / SR;
+        const src = (ph / (2 * Math.PI)) % 1 < 0.2 ? 1 : -0.25;
+        d[Math.floor(st * SR) + i] += fl(src, 1600, 3).band * env(t, 0.005, k === 2 ? 0.12 : 0.04);
+      }
+    });
+    return [d, 0.55];
+  },
+  // Coins: a cascade of short bright metallic pings, 1.2 s.
+  coins() {
+    const d = buf(1.2);
+    for (let k = 0; k < 14; k++) {
+      const st = rnd() * 0.9, fr = 2500 + rnd() * 2500;
+      for (let i = 0; i < 0.25 * SR && st * SR + i < d.length; i++) {
+        const t = i / SR;
+        d[Math.floor(st * SR) + i] += (Math.sin(2 * Math.PI * fr * t) + 0.5 * Math.sin(2 * Math.PI * fr * 1.51 * t)) * Math.exp(-t / 0.05) * 0.5;
+      }
+    }
+    return [d, 0.5];
+  },
+  // Seagull cry: two falling, warbling calls, 1.4 s.
+  seagull() {
+    const d = buf(1.4), fl = svf();
+    [0, 0.55].forEach((st) => {
+      let ph = 0;
+      for (let i = 0; i < 0.5 * SR; i++) {
+        const t = i / SR;
+        ph += (2 * Math.PI * (1500 - 700 * (t / 0.5) + 80 * Math.sin(2 * Math.PI * 18 * t))) / SR;
+        const src = (ph / (2 * Math.PI)) % 1 < 0.3 ? 1 : -0.4;
+        d[Math.floor(st * SR) + i] += fl(src, 2200, 2).band * Math.sin(Math.PI * (t / 0.5));
+      }
+    });
+    return [d, 0.45];
+  },
+  // Cartoon puff: a quick breathy burst for things vanishing.
+  puff() {
+    const d = buf(0.35), f = svf();
+    d.forEach((_, i) => {
+      const t = i / SR;
+      d[i] = f(white(), 1200 + 2500 * Math.exp(-t * 12), 1).band * env(t, 0.005, 0.07);
+    });
+    return [d, 0.5];
+  },
+});
+
 console.log(`Writing sound effects to ${OUT}`);
 for (const [name, make] of Object.entries(sounds)) {
   const [data, gain] = make();
