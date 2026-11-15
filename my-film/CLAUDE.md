@@ -221,6 +221,15 @@ selected by `ACTIVE_PALETTE`); the other palettes there are retired experiments.
   pass `maxWords={2}` to `Captions`. Korean versions of a film live in `src/films/<name>-ko/`
   (see `dragon-jar-ko`). Korean scripts run longer than English: keep the fitted speed at about
   1.2× or less by shortening lines, not by speeding up more.
+- Korean scripts are written natively in Korean, never translated from the English script (the
+  user's rule). Tell the story the way a Korean narrator would: start with the setting and the person
+  ("이천 년 전 중국, 장형이라는 사람이…"), not an English-style hook line; one consistent ending
+  (~습니다 with an occasional ~죠); dialogue in quotes; no translation habits ("그의", "~이 시작된다",
+  noun-only fragments like "청동 용 여덟 마리."). Choose words for their real Korean meaning:
+  "덕에" only for good things (use "때문에"), "소름 돋는" only for something eerie (use "안타깝게도"
+  for loss), and end with a question that names what is being asked. Show the user the Korean script
+  and get approval before recording, and recut the scenes to the Korean script rather than reusing
+  the English cut as is.
 - Shadow lines: red, appear beside the shadow near its head, fade or type in.
 - Characters do not speak in text bubbles; the narrator tells the story.
 

@@ -1,7 +1,8 @@
 import React from "react";
 import { AbsoluteFill, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { Audio } from "@remotion/media";
-import { Character, Skin } from "../../components/Character";
+import { Character, EMOTE, Pose, Skin } from "../../components/Character";
+import { INK, INK_MAIN, INK_SIDE, InkDrop } from "../../components/mascot";
 import { UiContext, clamp01, lerp } from "../../components/theme";
 import { Captions, FontContext, GOLD, Label, LightRings, M, MEMPHIS_UI, SAFE, SH, SW, WARM, skin } from "../../components/memphis";
 import { Flash, GROUND, Paper, Sfx, SpeedLines, STROKE, Stage, makeCues, useLocal } from "../../components/shortkit";
@@ -10,7 +11,7 @@ import { KO_FONT } from "../../components/korean";
 
 const FONT = KO_FONT;
 
-export const DRAGON_JAR_KO_DURATION = 1800;
+export const DRAGON_JAR_KO_DURATION = 2070;
 const CAPTION_Y = 1490;
 const LABEL_X = (SAFE.left + SW - SAFE.right) / 2;
 const LABEL_Y = 330;
@@ -19,51 +20,49 @@ const { cue, end: VOICE_END } = makeCues(WORDS);
 
 const CUTS = [
   0,
-  cue("청동 항아리"),
-  cue("약 이천"),
-  cue("장형이 신기한"),
-  cue("청동 용"),
-  cue("입 벌린"),
-  cue("그의 약속"),
+  cue("장형이라는"),
+  cue("항아리 둘레에는"),
+  cue("그 아래에는"),
+  cue("장형은 장담했습니다"),
   cue("그러던 어느"),
   cue("쨍그랑"),
-  cue("모두가 얼어붙는다"),
-  cue("그리고 웃음이"),
-  cue("궁궐의 적들이"),
-  cue("장형은 궁에서"),
-  cue("하루가 지나고"),
-  cue("그때 성문에"),
-  cue("거대한 지진이"),
+  cue("모두 숨죽이고"),
+  cue("장난감 아니야"),
+  cue("결국 장형은"),
+  cue("궁에서 쫓겨나"),
+  cue("그렇게 이틀이"),
+  cue("먼지투성이"),
+  cue("북서쪽에 큰"),
   cue("바로 용이"),
-  cue("웃음이 멈춘다"),
-  cue("더 기묘한"),
+  cue("비웃던"),
+  cue("그 뒤로"),
+  cue("하지만 안타깝게도"),
   cue("이천 년이"),
-  cue("대체 항아리는"),
+  cue("이 항아리는 대체"),
   VOICE_END + 4,
   DRAGON_JAR_KO_DURATION,
 ];
 type ShotProps = { start: number };
-const at = (start: number, phrase: string) => cue(phrase) - start;
+const at = (start: number, phrase: string) => cue(phrase, start) - start;
 
 // ---------------------------------------------------------------------------
 // Cast
 // ---------------------------------------------------------------------------
+// Official's hat wings (no crown dome, so the drop tip stays visible).
 const ScholarHat = (
   <g>
-    <path d="M-72,-58 Q0,-140 72,-58 Z" fill={M.ink} />
-    <rect x={-175} y={-80} width={110} height={14} rx={7} fill={M.ink} />
-    <rect x={65} y={-80} width={110} height={14} rx={7} fill={M.ink} />
+    <rect x={-185} y={-52} width={110} height={14} rx={7} fill={M.ink} />
+    <rect x={75} y={-52} width={110} height={14} rx={7} fill={M.ink} />
   </g>
 );
-const CourtCap = <path d="M-64,-56 Q0,-118 64,-56 Z" fill={M.ink} />;
+// The emperor's flat board crown resting on the drop tip, with bead strings.
 const Crown = (
   <g>
-    <path d="M-60,-60 Q0,-112 60,-60 Z" fill={M.ink} />
-    <rect x={-120} y={-118} width={240} height={20} fill={M.ink} />
-    {[-110, -80, 80, 110].map((x) => (
+    <rect x={-130} y={-150} width={260} height={18} fill={M.ink} />
+    {[-120, -95, 95, 120].map((x) => (
       <g key={x}>
-        <line x1={x} y1={-98} x2={x} y2={-30} stroke={M.ink} strokeWidth={3} />
-        {[-80, -60, -40].map((y) => (
+        <line x1={x} y1={-132} x2={x} y2={-60} stroke={M.ink} strokeWidth={3} />
+        {[-110, -88, -66].map((y) => (
           <circle key={y} cx={x} cy={y} r={6} fill={M.pink} />
         ))}
       </g>
@@ -71,6 +70,8 @@ const Crown = (
   </g>
 );
 const ZHANG = skin(M.amber);
+const ZH: Pose & { skin: Skin } = { ...INK_MAIN, skin: ZHANG, hat: ScholarHat };
+const EMPEROR: Pose & { skin: Skin } = { ...INK_SIDE, skin: skin(M.cream), hat: Crown };
 const ENEMY: Skin = { body: M.ink, outline: M.pink, outlineWidth: 4, face: M.pink };
 
 // ---------------------------------------------------------------------------
@@ -208,32 +209,6 @@ const HaLetters: React.FC<{ from: number; count?: number }> = ({ from, count = 8
 // ---------------------------------------------------------------------------
 // Shots
 // ---------------------------------------------------------------------------
-// 1. "Nobody felt the earthquake." A perfectly still cup of tea.
-const Shot1: React.FC<ShotProps> = () => {
-  const { f } = useLocal();
-  return (
-    <Stage moon={false} floor={false} spots={false} cam={{ s: 1 + 0.06 * clamp01(f / 50), x: 540, y: 880 }}>
-      <Pillar x={140} />
-      <Pillar x={940} />
-      <Teacup x={540} y={1000} s={1.6} />
-    </Stage>
-  );
-};
-
-// 2. "Except a bronze jar." The jar rises into view.
-const Shot2: React.FC<ShotProps> = () => {
-  const { f, pop } = useLocal();
-  const p = pop(0, 12);
-  return (
-    <Stage moon={false} cam={{ s: 1 + 0.08 * clamp01(f / 50), x: 540, y: 900 }}>
-      <LightRings x={540} y={820} radii={[560, 420, 290, 180]} colors={WARM} dots={{ r: 400, color: M.pink }} />
-      <g transform={`translate(0,${(1 - p) * 300})`}>
-        <Jar x={540} y={GROUND} s={1.15} />
-      </g>
-    </Stage>
-  );
-};
-
 // 3. "China, the second century." The palace roof.
 const Shot3: React.FC<ShotProps> = () => (
   <AbsoluteFill>
@@ -244,8 +219,9 @@ const Shot3: React.FC<ShotProps> = () => (
         <rect key={x} x={x - 22} y={800} width={44} height={GROUND - 800} fill={M.cream} {...STROKE} />
       ))}
       <path d="M140,600 Q540,470 940,600" fill="none" stroke={M.ink} strokeWidth={10} />
+      <InkDrop x={880} y={GROUND} s={0.6} mood="happy" />
     </Stage>
-    <Label text="중국 · 서기 2세기" x={LABEL_X} y={LABEL_Y - 60} from={3} to={9999} size={42} />
+    <Label text="이천 년 전 · 중국" x={LABEL_X} y={LABEL_Y - 60} from={3} to={9999} size={42} />
   </AbsoluteFill>
 );
 
@@ -258,11 +234,11 @@ const Shot4: React.FC<ShotProps> = () => {
       <Stage moon={false} cam={{ s: 1, x: 540, y: 960 }}>
         <Pillar x={70} />
         <Pillar x={1010} />
-        <Character x={190} y={GROUND} scale={0.75} skin={skin(M.cream)} hat={Crown} brow={0.3} browRaise={lift * 0.8} mouth={0.2} look={12} />
+        <Character x={190} y={GROUND} scale={0.75} {...EMPEROR} brow={0.3} browRaise={lift * 0.8} mouth={0.2} look={12} />
         <Jar x={540} y={GROUND} s={0.75} />
         <path d={`M380,${GROUND - lift * 700} L700,${GROUND - lift * 700} L720,${GROUND - 20 - lift * 700} L360,${GROUND - 20 - lift * 700} Z`} fill={M.lilac} opacity={1 - lift} />
         {lift < 1 && <path d={`M380,${GROUND - 380 - lift * 700} Q540,${GROUND - 440 - lift * 700} 700,${GROUND - 380 - lift * 700} L720,${GROUND - lift * 700} L360,${GROUND - lift * 700} Z`} fill={M.lilac} {...STROKE} opacity={1 - lift} />}
-        <Character x={880} y={GROUND} scale={0.85} skin={ZHANG} hat={ScholarHat} mouth={0.5} brow={-0.2} look={-12} handsY={lerp(120, 300, lift)} />
+        <Character x={880} y={GROUND} scale={0.85} {...ZH} mouth={0.5} brow={-0.2} look={-12} handsY={lerp(120, 300, lift)} />
       </Stage>
       <Label text="장형" x={880} y={600} from={20} to={9999} size={40} />
     </AbsoluteFill>
@@ -272,7 +248,7 @@ const Shot4: React.FC<ShotProps> = () => {
 // 5. "Eight bronze dragons. Eight balls." Top-down: dragons pop out around the jar, then balls.
 const Shot5: React.FC<ShotProps> = ({ start }) => {
   const { f, pop } = useLocal();
-  const tBalls = at(start, "구슬 여덟");
+  const tBalls = at(start, "구슬을");
   return (
     <Stage moon={false} floor={false}>
       <LightRings x={540} y={900} radii={[520, 400, 290]} colors={WARM} />
@@ -319,7 +295,7 @@ const Shot7: React.FC<ShotProps> = () => {
   return (
     <Stage moon={false} cam={{ s: 1.1, x: 560, y: 920 }}>
       <Jar x={330} y={GROUND} s={0.75} />
-      <Character x={790} y={GROUND} scale={1} skin={ZHANG} hat={ScholarHat} mouth={0.6} brow={-0.5} look={-14} handsY={330} />
+      <Character x={790} y={GROUND} scale={1} {...ZH} {...EMOTE.proud} look={-14} />
       <path d={pts} fill="none" stroke={M.pink} strokeWidth={12} strokeLinejoin="round" />
     </Stage>
   );
@@ -366,7 +342,7 @@ const Shot10: React.FC<ShotProps> = ({ start }) => {
   return (
     <Stage moon={false}>
       {[140, 340, 540, 740, 940].map((x, i) => (
-        <Character key={x} x={x} y={GROUND} scale={0.62} skin={skin(i === 2 ? M.cream : M.lilac)} hat={CourtCap} browRaise={1} mouth={-0.1} seed={i} look={(i - 2) * -4} />
+        <Character key={x} x={x} y={GROUND} scale={0.62} skin={skin(i === 2 ? M.cream : M.lilac)} {...INK_SIDE} browRaise={1} mouth={-0.1} eyes="wide" sweat={1} seed={i} look={(i - 2) * -4} />
       ))}
     </Stage>
   );
@@ -375,21 +351,21 @@ const Shot10: React.FC<ShotProps> = ({ start }) => {
 // 11. "Then the laughing starts. A toy! A fraud! The scholars mock him." Laughing court, Zhang Heng crushed.
 const Shot11: React.FC<ShotProps> = ({ start }) => {
   const { f } = useLocal();
-  const tToy = at(start, "장난감이다");
-  const tFraud = at(start, "사기꾼이다");
-  const tMock = at(start, "학자들이");
+  const tToy = 0;
+  const tFraud = at(start, "순 사기꾼이네");
+  const tMock = tFraud + 10;
   const bounce = (i: number) => 1 + 0.07 * Math.abs(Math.sin(f / 3.2 + i));
   return (
     <AbsoluteFill>
       <Stage moon={false} cam={{ s: 1 + 0.06 * clamp01(f / 120), x: 540, y: 960 }}>
         {[130, 330, 530].map((x, i) => (
-          <Character key={x} x={x} y={GROUND} scale={0.66} skin={skin(i === 1 ? M.cream : M.lilac)} hat={CourtCap} mouth={1} brow={0.3} browRaise={0.6} squash={bounce(i)} seed={i} look={10} />
+          <Character key={x} x={x} y={GROUND} scale={0.66} skin={skin(i === 1 ? M.cream : M.lilac)} {...INK_SIDE} {...EMOTE.laugh} squash={bounce(i)} seed={i} look={10} />
         ))}
-        <Character x={850} y={GROUND} scale={0.8} skin={ZHANG} hat={ScholarHat} mouth={-0.8} brow={1} squash={f > tMock ? 0.92 : 1} look={-14} />
+        <Character x={850} y={GROUND} scale={0.8} {...ZH} mouth={-0.8} brow={1} eyes="wide" mouthShape="wobble" sweat={1} squash={f > tMock ? 0.92 : 1} look={-14} />
       </Stage>
       <HaLetters from={2} />
-      <Label text="장난감이다!" x={330} y={330} from={tToy} to={9999} size={56} />
-      <Label text="사기꾼이다!" x={620} y={460} from={tFraud} to={9999} size={56} />
+      <Label text="장난감 아니야?" x={330} y={330} from={tToy} to={9999} size={56} />
+      <Label text="순 사기꾼이네!" x={620} y={460} from={tFraud} to={9999} size={56} />
     </AbsoluteFill>
   );
 };
@@ -401,10 +377,10 @@ const Shot12: React.FC<ShotProps> = () => {
   return (
     <Stage moon={false} cam={{ s: 1.1 + 0.1 * clamp01(f / 60), x: 540, y: 900 }}>
       <g transform={`rotate(${lean} 300 ${GROUND})`}>
-        <Character x={300} y={GROUND} scale={0.85} variant="shadow" skin={ENEMY} seed={4} />
+        <Character x={300} y={GROUND} scale={0.85} variant="shadow" skin={ENEMY} headShape={INK.headShape} seed={4} />
       </g>
       <g transform={`rotate(${-lean} 780 ${GROUND})`}>
-        <Character x={780} y={GROUND} scale={0.85} variant="shadow" skin={ENEMY} seed={7} />
+        <Character x={780} y={GROUND} scale={0.85} variant="shadow" skin={ENEMY} headShape={INK.headShape} seed={7} />
       </g>
       <Pillar x={160} />
       <Pillar x={920} />
@@ -428,7 +404,7 @@ const Shot13: React.FC<ShotProps> = () => {
       <rect x={680} y={560} width={150 * close} height={GROUND - 560} fill={M.pink} {...STROKE} />
       <rect x={980 - 150 * close} y={560} width={150 * close} height={GROUND - 560} fill={M.pink} {...STROKE} />
       <g transform={`translate(0,${-hop})`}>
-        <Character x={x} y={GROUND} scale={0.8} skin={ZHANG} hat={ScholarHat} mouth={-0.9} brow={1} squash={land} look={14} />
+        <Character x={x} y={GROUND} scale={0.8} {...ZH} mouth={-0.9} brow={1} eyes="closed" mouthShape="wobble" squash={land} look={14} />
       </g>
       {f > 30 && (
         <text x={820} y={500 - (f - 30) * 1.5} textAnchor="middle" fontFamily={FONT} fontSize={70} fill={M.pink} stroke={M.ink} strokeWidth={6} paintOrder="stroke" opacity={pop(30)}>
@@ -442,13 +418,13 @@ const Shot13: React.FC<ShotProps> = () => {
 // 14. "One day passes. Then another." Alone outside the walls at night; the day counter ticks.
 const Shot14: React.FC<ShotProps> = ({ start }) => {
   const { f } = useLocal();
-  const tAnother = at(start, "또 하루");
+  const tAnother = at(start, "이틀이");
   return (
     <AbsoluteFill>
       <Stage moon={{ x: 760, y: 420 }} cam={{ s: 1.05, x: 540, y: 940 }}>
         <rect x={0} y={700} width={SW} height={GROUND - 700} fill={M.lilac} {...STROKE} />
         <LightRings x={300} y={GROUND - 80} radii={[200, 130]} colors={GOLD} on={0.9} />
-        <Character x={420} y={GROUND} scale={0.8} skin={ZHANG} hat={ScholarHat} mouth={-0.5} brow={0.9} squash={0.86} look={-6} />
+        <Character x={420} y={GROUND} scale={0.8} {...ZH} {...EMOTE.sad} squash={0.86} look={-6} />
       </Stage>
       <Label text={f >= tAnother ? "2일째" : "1일째"} x={LABEL_X} y={LABEL_Y} from={2} to={9999} size={70} />
     </AbsoluteFill>
@@ -469,7 +445,7 @@ const Shot15: React.FC<ShotProps> = () => {
           return <circle key={i} cx={x + 200 + age * 6} cy={GROUND - 30 - age * 2} r={20 + age * 1.5} fill={M.lilac} opacity={1 - age / 40} />;
         })}
         <g transform={`translate(0,${-bob})`}>
-          <Character x={x - 10} y={GROUND - 170} scale={0.55} skin={skin(M.lilac)} hat={CourtCap} mouth={-0.4} brow={0.6} seed={9} look={-14} />
+          <Character x={x - 10} y={GROUND - 170} scale={0.55} skin={skin(M.lilac)} {...INK_SIDE} mouth={-0.4} brow={0.6} seed={9} look={-14} />
           <g transform={`translate(${x},${GROUND}) scale(-1,1) translate(${-x},${-GROUND})`}>
             <Horse x={x} y={GROUND} s={0.9} phase={phase} />
           </g>
@@ -529,17 +505,61 @@ const Shot17: React.FC<ShotProps> = () => {
 const Shot18: React.FC<ShotProps> = () => (
   <Stage moon={false}>
     {[150, 350].map((x, i) => (
-      <Character key={x} x={x} y={GROUND} scale={0.66} skin={skin(M.lilac)} hat={CourtCap} mouth={-0.2} browRaise={1} brow={0.2} seed={i} look={14} />
+      <Character key={x} x={x} y={GROUND} scale={0.66} skin={skin(M.lilac)} {...INK_SIDE} eyes="wide" mouthShape="o" fx="shock" seed={i} look={14} />
     ))}
     <Jar x={620} y={GROUND} s={0.55} toadBall={2} balls={[true, true, false]} />
-    <Character x={890} y={GROUND} scale={0.85} skin={ZHANG} hat={ScholarHat} mouth={0.5} brow={-0.6} look={-14} />
+    <Character x={890} y={GROUND} scale={0.85} {...ZH} {...EMOTE.proud} look={-14} />
   </Stage>
 );
+
+// NEW. "그 뒤로 조정은 ... 기록하게 했고, 장형은 다시 궁으로 불려 왔습니다." A scribe records; Zhang Heng returns, the court bows.
+const ShotRecalled: React.FC<ShotProps> = ({ start }) => {
+  const { f } = useLocal();
+  const tBack = at(start, "장형은 다시");
+  if (f < tBack) {
+    const write = clamp01((f - 10) / 50);
+    return (
+      <AbsoluteFill>
+        <Stage moon={false}>
+          <rect x={360} y={GROUND - 150} width={560} height={30} fill={M.lilac} {...STROKE} />
+          <rect x={400} y={GROUND - 120} width={30} height={120} fill={M.lilac} {...STROKE} />
+          <rect x={850} y={GROUND - 120} width={30} height={120} fill={M.lilac} {...STROKE} />
+          <g transform={`translate(640,${GROUND - 170}) rotate(-4)`}>
+            <rect x={-200} y={-30} width={400} height={40} fill={M.teal} {...STROKE} />
+            {[0, 1, 2, 3].map((k) => (
+              <rect key={k} x={-170 + k * 90} y={-20} width={60 * clamp01(write * 4 - k)} height={20} fill={k === 3 ? M.pink : M.ink} />
+            ))}
+          </g>
+          <Jar x={850} y={GROUND - 150} s={0.32} toadBall={2} balls={[true, true, false]} />
+          <Character x={270} y={GROUND} scale={0.8} {...INK_SIDE} skin={skin(M.cream)} eyes="squint" mouth={0.2} lean={10} look={14} hands={{ r: [250, -170 + Math.sin(f / 2) * 8] }} held={undefined} />
+        </Stage>
+        <Label text="지진 방향 기록" x={LABEL_X} y={LABEL_Y} from={4} to={9999} size={52} />
+      </AbsoluteFill>
+    );
+  }
+  const lf = f - tBack;
+  const walk = clamp01(lf / 40);
+  const bow = clamp01((lf - 20) / 12);
+  return (
+    <AbsoluteFill>
+      <Stage moon={false}>
+        <LightRings x={540} y={820} radii={[520, 400, 280]} colors={WARM} />
+        <Pillar x={70} />
+        <Pillar x={1010} />
+        {[200, 880].map((x, i) => (
+          <Character key={x} x={x} y={GROUND} scale={0.7} {...INK_SIDE} skin={skin(i ? M.lilac : M.cream)} eyes="closed" mouth={0.3} lean={(i ? -1 : 1) * 24 * bow} headTilt={(i ? -1 : 1) * 10 * bow} seed={i} look={(i ? -1 : 1) * 12} />
+        ))}
+        <Character x={lerp(-80, 540, walk)} y={GROUND} scale={0.9} {...ZH} {...EMOTE.joy} fx="sparkle" walk={walk < 1 ? 1 : 0} walkPhase={lf * 0.5} squash={walk >= 1 ? 1 + 0.05 * Math.sin(lf / 3) : 1} look={0} />
+      </Stage>
+      <Label text="다시 궁으로" x={LABEL_X} y={LABEL_Y} from={tBack + 30} to={9999} size={56} />
+    </AbsoluteFill>
+  );
+};
 
 // 19. "The strangest part? The jar was lost." The jar crumbles away, leaving an outline.
 const Shot19: React.FC<ShotProps> = ({ start }) => {
   const { f } = useLocal();
-  const tLost = at(start, "그 항아리는");
+  const tLost = at(start, "이 항아리는");
   const g = clamp01((f - tLost) / 24);
   return (
     <Stage moon={false} cam={{ s: 1.1, x: 540, y: 930 }}>
@@ -621,12 +641,13 @@ const Shot22: React.FC<ShotProps> = () => {
           strokeDasharray={1}
           strokeDashoffset={1 - under}
         />
+        <InkDrop x={540} y={1360} s={1.1} mood="cheer" />
       </svg>
     </AbsoluteFill>
   );
 };
 
-const SHOTS = [Shot1, Shot2, Shot3, Shot4, Shot5, Shot6, Shot7, Shot8, Shot9, Shot10, Shot11, Shot12, Shot13, Shot14, Shot15, Shot16, Shot17, Shot18, Shot19, Shot20, Shot21, Shot22];
+const SHOTS = [Shot3, Shot4, Shot5, Shot6, Shot7, Shot8, Shot9, Shot10, Shot11, Shot12, Shot13, Shot14, Shot15, Shot16, Shot17, Shot18, ShotRecalled, Shot19, Shot20, Shot21, Shot22];
 
 // ---------------------------------------------------------------------------
 // Sound
@@ -637,33 +658,37 @@ const SoundTrack: React.FC = () => {
     <>
       <Audio src={staticFile("voice/dragon-jar-ko.mp3")} volume={1} />
       <Audio src={staticFile("sfx/roomtone.wav")} volume={0.1} loop />
-      <Sfx name="gong" at={C[1]} vol={0.35} len={90} />
-      <Sfx name="whoosh" at={C[3]} vol={0.3} />
-      {Array.from({ length: 8 }, (_, i) => <Sfx key={`d${i}`} name="pop" at={C[4] + i * 4} vol={0.22} len={8} />)}
-      {Array.from({ length: 8 }, (_, i) => <Sfx key={`b${i}`} name="pop" at={cue("구슬 여덟") + i * 2} vol={0.18} len={8} rate={1.3} />)}
-      <Sfx name="croak" at={C[5] + 6} vol={0.35} len={10} />
-      <Sfx name="croak" at={C[5] + 12} vol={0.35} len={10} rate={1.1} />
-      <Sfx name="cricket" at={C[7]} vol={0.3} len={60} />
-      <Sfx name="clang" at={C[8]} vol={0.7} len={50} />
-      <Sfx name="impact" at={C[8]} vol={0.25} />
-      <Sfx name="laugh" at={C[10]} vol={0.4} len={90} />
-      <Sfx name="laugh" at={C[10] + 60} vol={0.3} len={80} rate={1.08} />
-      <Sfx name="rumble" at={C[11]} vol={0.35} />
-      <Sfx name="whoosh" at={C[12]} vol={0.35} />
-      <Sfx name="slam" at={C[12] + 22} vol={0.5} />
-      <Sfx name="laugh" at={C[12] + 30} vol={0.2} len={60} rate={0.95} />
-      <Sfx name="cricket" at={C[13]} vol={0.3} len={80} />
-      <Sfx name="tick" at={C[13]} vol={0.25} len={78} />
-      <Sfx name="hooves" at={C[14]} vol={0.55} len={50} />
-      <Sfx name="hooves" at={C[14] + 48} vol={0.45} len={50} />
-      <Sfx name="scribble" at={C[15] + 6} vol={0.3} />
-      <Sfx name="rumble" at={C[15] + 36} vol={0.4} />
-      <Sfx name="impact" at={C[16] + 18} vol={0.35} />
-      <Sfx name="shimmer" at={C[16] + 18} vol={0.3} />
-      <Sfx name="hiss" at={cue("그 항아리는")} vol={0.25} rate={0.7} />
-      <Sfx name="tick" at={C[19]} vol={0.2} len={90} />
-      <Sfx name="clang" at={C[21] + 2} vol={0.35} len={50} />
-      {Array.from({ length: 6 }, (_, i) => <Sfx key={`t${i}`} name="type" at={C[21] + i * 2} vol={0.4} len={6} />)}
+      <Sfx name="gong" at={4} vol={0.35} len={90} />
+      <Sfx name="whoosh" at={C[1]} vol={0.3} />
+      {Array.from({ length: 8 }, (_, i) => <Sfx key={`d${i}`} name="pop" at={C[2] + i * 4} vol={0.22} len={8} />)}
+      {Array.from({ length: 8 }, (_, i) => <Sfx key={`b${i}`} name="pop" at={cue("구슬을") + i * 2} vol={0.18} len={8} rate={1.3} />)}
+      <Sfx name="croak" at={C[3] + 6} vol={0.35} len={10} />
+      <Sfx name="croak" at={C[3] + 12} vol={0.35} len={10} rate={1.1} />
+      <Sfx name="rumble" at={cue("땅이")} vol={0.2} />
+      <Sfx name="cricket" at={C[5]} vol={0.3} len={40} />
+      <Sfx name="clang" at={C[6]} vol={0.7} len={50} />
+      <Sfx name="impact" at={C[6]} vol={0.25} />
+      <Sfx name="cricket" at={cue("아무 일도")} vol={0.3} len={60} />
+      <Sfx name="laugh" at={C[8]} vol={0.4} len={84} />
+      <Sfx name="rumble" at={C[9]} vol={0.35} />
+      <Sfx name="whoosh" at={C[10]} vol={0.35} />
+      <Sfx name="slam" at={C[10] + 22} vol={0.5} />
+      <Sfx name="laugh" at={C[10] + 30} vol={0.2} len={48} rate={0.95} />
+      <Sfx name="cricket" at={C[11]} vol={0.3} len={56} />
+      <Sfx name="tick" at={C[11]} vol={0.25} len={56} />
+      <Sfx name="hooves" at={C[12]} vol={0.55} len={67} />
+      <Sfx name="scribble" at={C[13] + 6} vol={0.3} />
+      <Sfx name="rumble" at={C[13] + 36} vol={0.4} />
+      <Sfx name="impact" at={C[14] + 18} vol={0.35} />
+      <Sfx name="shimmer" at={C[14] + 18} vol={0.3} />
+      <Sfx name="scribble" at={C[16] + 10} vol={0.3} />
+      {Array.from({ length: 5 }, (_, i) => <Sfx key={`s${i}`} name="step" at={cue("장형은 다시") + i * 8} vol={0.3} len={8} />)}
+      <Sfx name="shimmer" at={cue("장형은 다시") + 30} vol={0.3} />
+      <Sfx name="applause" at={cue("궁으로")} vol={0.2} len={50} />
+      <Sfx name="hiss" at={cue("이 항아리는", C[17])} vol={0.25} rate={0.7} />
+      <Sfx name="tick" at={C[18]} vol={0.2} len={110} />
+      <Sfx name="clang" at={C[20] + 2} vol={0.35} len={50} />
+      {Array.from({ length: 6 }, (_, i) => <Sfx key={`t${i}`} name="type" at={C[20] + i * 2} vol={0.4} len={6} />)}
     </>
   );
 };
