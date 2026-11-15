@@ -12,7 +12,7 @@ export const STROKE = { stroke: M.ink, strokeWidth: 6, strokeLinejoin: "round" a
 
 /** Turns a narration's word timings into a `cue("phrase")` → start-frame lookup. */
 export const makeCues = (words: Word[], fps = SHORT_FPS) => {
-  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9']/g, "");
+  const norm = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}']/gu, "");
   const cue = (phrase: string, afterFrame = 0): number => {
     const target = phrase.split(" ").map(norm);
     for (let i = 0; i + target.length <= words.length; i++) {

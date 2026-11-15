@@ -216,6 +216,11 @@ selected by `ACTIVE_PALETTE`); the other palettes there are retired experiments.
 - Labels: short tags on the picture (a place, a date, a number) that pop in and out: black
   text on a red tag with a black outline and offset shadow. Use them for facts the picture
   alone can't show (e.g. "ELEPHANT ISLAND, 1916").
+- Korean Shorts: Bungee has no Hangul, so wrap the film in `<FontContext.Provider value={KO_FONT}>`
+  (`src/components/korean.ts`, Black Han Sans) and use that font for any text drawn directly;
+  pass `maxWords={2}` to `Captions`. Korean versions of a film live in `src/films/<name>-ko/`
+  (see `dragon-jar-ko`). Korean scripts run longer than English: keep the fitted speed at about
+  1.2× or less by shortening lines, not by speeding up more.
 - Shadow lines: red, appear beside the shadow near its head, fade or type in.
 - Characters do not speak in text bubbles; the narrator tells the story.
 

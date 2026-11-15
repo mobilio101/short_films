@@ -11,12 +11,14 @@ import { GhostArmy, GHOST_ARMY_DURATION } from "./films/ghost-army/GhostArmy";
 import { DragonJar, DRAGON_JAR_DURATION } from "./films/dragon-jar/DragonJar";
 import { Garbo, GARBO_DURATION } from "./films/garbo/Garbo";
 import { Apollo13, APOLLO13_DURATION } from "./films/apollo13/Apollo13";
+import { DragonJarKo, DRAGON_JAR_KO_DURATION } from "./films/dragon-jar-ko/DragonJarKo";
 
 const common = { durationInFrames: TEST_DURATION, fps: FPS, width: W, height: H };
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      <Composition id="DragonJarKo" component={DragonJarKo} durationInFrames={DRAGON_JAR_KO_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="Apollo13" component={Apollo13} durationInFrames={APOLLO13_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="Garbo" component={Garbo} durationInFrames={GARBO_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="DragonJar" component={DragonJar} durationInFrames={DRAGON_JAR_DURATION} fps={FPS} width={1080} height={1920} />

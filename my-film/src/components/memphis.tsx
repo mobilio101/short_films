@@ -164,6 +164,9 @@ export const CheckerFloor: React.FC<{ y: number; width?: number; height?: number
   </g>
 );
 
+/** Display font for captions and labels. Korean Shorts provide KO_FONT (src/components/korean.ts). */
+export const FontContext = React.createContext<string>(BUNGEE);
+
 /** A short tag on the picture (place, date, number) that pops in and out. */
 export const Label: React.FC<{ text: string; x: number; y: number; from: number; to: number; color?: string; size?: number }> = ({
   text,
@@ -176,6 +179,7 @@ export const Label: React.FC<{ text: string; x: number; y: number; from: number;
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const font = React.useContext(FontContext);
   if (frame < from || frame > to) return null;
   const s = spring({ frame: frame - from, fps, config: { damping: 9, stiffness: 180 } });
   const out = interpolate(frame, [to - 6, to], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -186,7 +190,7 @@ export const Label: React.FC<{ text: string; x: number; y: number; from: number;
         left: x,
         top: y,
         transform: `translate(-50%, -50%) scale(${s * out}) rotate(${(1 - s) * -8}deg)`,
-        fontFamily: BUNGEE,
+        fontFamily: font,
         fontSize: size,
         color: M.ink,
         background: color,
@@ -204,8 +208,9 @@ export const Label: React.FC<{ text: string; x: number; y: number; from: number;
 export type Word = { text: string; startMs: number; endMs: number };
 
 /** Word-by-word captions synced to the voice: 1 to 3 words per page, current word in pink. */
-export const Captions: React.FC<{ words: Word[]; y: number; hideAfterMs?: number }> = ({ words, y, hideAfterMs }) => {
+export const Captions: React.FC<{ words: Word[]; y: number; hideAfterMs?: number; maxWords?: number }> = ({ words, y, hideAfterMs, maxWords = 3 }) => {
   const frame = useCurrentFrame();
+  const font = React.useContext(FontContext);
   const { fps } = useVideoConfig();
   const ms = (frame / fps) * 1000;
   if (hideAfterMs !== undefined && ms > hideAfterMs) return null;
@@ -214,7 +219,7 @@ export const Captions: React.FC<{ words: Word[]; y: number; hideAfterMs?: number
   let cur: Word[] = [];
   words.forEach((w) => {
     cur.push(w);
-    if (/[.,:;!?]$/.test(w.text) || cur.length === 3) {
+    if (/[.,:;!?]$/.test(w.text) || cur.length === maxWords) {
       pages.push(cur);
       cur = [];
     }
@@ -236,7 +241,7 @@ export const Captions: React.FC<{ words: Word[]; y: number; hideAfterMs?: number
         top: y,
         transform: `translateY(-50%) scale(${0.85 + 0.15 * pop})`,
         textAlign: "center",
-        fontFamily: BUNGEE,
+        fontFamily: font,
         fontSize: 84,
         lineHeight: 1.1,
         textTransform: "uppercase",
