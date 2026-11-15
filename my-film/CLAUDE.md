@@ -121,6 +121,18 @@ selected by `ACTIVE_PALETTE`); the other palettes there are retired experiments.
   headscarf, a helmet. Keep it the same for the whole film.
 - The main character can be anyone the story needs, of any age or gender, with the same base
   design and their identifying shape.
+- Characters ACT. Every emotional beat is shown in the whole body, not just the brows:
+  - Faces: `eyes` (dot, wide, squint, happy, closed, glare), `mouthShape` (line, open, shout,
+    teeth, wobble, o), `tears`, `sweat`, and head marks `fx` (shock lines, anger vein, gloom
+    lines, sparkles).
+  - Bodies: `lean`, `headTilt`, `kneel`, `jump`, `shake` (tremble), explicit `hands` positions
+    and `fists`, plus squash and stretch.
+  - Start from the ready-made poses in `EMOTE` (joy, shock, despair, rage, fear, smug, laugh,
+    sad, point, proud) and push them further when the story needs it. Exaggerate: big shapes,
+    big moves, quick changes between emotions on the beat of the narration.
+  - Animate the change: snap into the new emotion with a spring and some squash, then keep
+    the body alive (trembling fear, shaking laughter, falling tears, bouncing joy).
+  - `Test-Emotions` (src/films/test/Emotions.tsx) shows every pose.
 
 ## The shadow
 - The main character's inner voice: doubt, fear, despair or temptation, whatever the story's
