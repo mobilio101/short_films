@@ -10,6 +10,7 @@ import { ChibiSheet } from "./films/test/chibi/ChibiSheet";
 import { ComicSheet } from "./films/test/chibi/ComicSheet";
 import { ToonSheet } from "./films/test/toon/ToonSheet";
 import { CaptainCompare } from "./films/test/toon/CaptainCompare";
+import { ShadesSheet } from "./films/test/toon/ShadesSheet";
 import { CHALK, MEMPHIS, NEON, PAPER, VINTAGE } from "./films/test/styles";
 import { FPS, H, W } from "./components/theme";
 import { GhostArmy, GHOST_ARMY_DURATION } from "./films/ghost-army/GhostArmy";
@@ -38,6 +39,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="Test-Chalk" component={() => <StyledTest st={CHALK} />} {...common} />
       <Composition id="Test-Memphis" component={() => <StyledTest st={MEMPHIS} />} {...common} />
       {/* New style experiment: real 3D world, flat 2D characters */}
+      <Composition id="Test-ShadesSheet" component={ShadesSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-CaptainCompare" component={CaptainCompare} durationInFrames={60} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-ToonSheet" component={ToonSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-ComicSheet" component={ComicSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />

@@ -29,7 +29,7 @@ export const POP = {
 export type HeadShape = "round" | "square" | "triangle";
 export type Pattern = "stripes" | "wavy" | "pinstripe" | "zigzag" | "none";
 export type HatKind = "cap" | "captain" | "beanie" | "tophat" | "hardhat" | "bucket" | "none";
-export type Expr = "neutral" | "smug" | "shock" | "panic" | "grin" | "angry" | "happy";
+export type Expr = "neutral" | "smug" | "shock" | "panic" | "grin" | "angry" | "happy" | "sneaky";
 
 export type Look = {
   head: HeadShape;
@@ -44,6 +44,8 @@ export type Look = {
   hat: HatKind;
   hatColor: string;
   hatColor2?: string;
+  /** Black sunglasses. In shock or panic they pop up onto the forehead. */
+  sunglasses?: boolean;
 };
 
 // ---- Head geometry: centre (0, -470) ----
@@ -181,6 +183,8 @@ const Face: React.FC<{ l: Look; e: Expr; look: number; blink: boolean; frame: nu
     if (e === "smug") d > 0 ? ((inner = -18), (outer = -26)) : ((inner = 6), (outer = 4));
     if (e === "neutral") (inner = 6), (outer = 6);
     if (e === "grin" || e === "happy") (inner = -10), (outer = -14);
+    if (e === "sneaky") d > 0 ? ((inner = -26), (outer = -40)) : ((inner = 10), (outer = 2));
+    if (l.sunglasses && e !== "shock" && e !== "panic") (inner -= 14), (outer -= 14);
     return <path key={d} d={`M${d * 18 + L},${by + inner} L${d * 84 + L},${by + outer}`} stroke={INK} strokeWidth={20} strokeLinecap="round" />;
   };
   // ---- Mouth ----
@@ -217,13 +221,43 @@ const Face: React.FC<{ l: Look; e: Expr; look: number; blink: boolean; frame: nu
     case "smug":
       mouth = <path d={`M${L - 30},${my + 6} Q${L + 14},${my + 18} ${L + 44},${my - 18}`} fill="none" stroke={INK} strokeWidth={10} strokeLinecap="round" />;
       break;
+    case "sneaky":
+      // A wide, lopsided, cynical grin: one corner pulled way up, a row of teeth.
+      mouth = (
+        <g>
+          <path d={`M${L - 58},${my - 2} Q${L - 10},${my + 40} ${L + 66},${my - 34} Q${L + 10},${my + 4} ${L - 58},${my - 2} Z`} fill={INK} {...ol} strokeWidth={7} />
+          <path d={`M${L - 48},${my} Q${L - 8},${my + 14} ${L + 56},${my - 28} Q${L + 6},${my + 2} ${L - 48},${my} Z`} fill={POP.white} />
+          <path d={`M${L + 62},${my - 34} q14,-6 18,-20`} fill="none" stroke={INK} strokeWidth={7} strokeLinecap="round" />
+        </g>
+      );
+      break;
     default:
       mouth = <path d={`M${L - 24},${my + 4} L${L + 24},${my + 2}`} stroke={INK} strokeWidth={10} strokeLinecap="round" />;
   }
+  const popped = e === "shock" || e === "panic";
+  const shades = l.sunglasses && !popped ? (
+    <g transform={popped ? `translate(0,${-96})` : undefined}>
+      {[-1, 1].map((d) => {
+        const cx = d * (ex + 4) + (popped ? 0 : L);
+        return (
+          <g key={`g${d}`}>
+            <path d={`M${cx - 50},${ey - 30} L${cx + 50},${ey - 30} L${cx + 46},${ey + 14} Q${cx + 40},${ey + 34} ${cx},${ey + 34} Q${cx - 40},${ey + 34} ${cx - 46},${ey + 14} Z`} fill={INK} {...ol} strokeWidth={6} />
+            <path d={`M${cx - 30},${ey - 16} L${cx - 12},${ey - 16}`} stroke={POP.white} strokeWidth={8} strokeLinecap="round" opacity={0.9} />
+          </g>
+        );
+      })}
+      <path d={`M${-ex + 50 + (popped ? 0 : L)},${ey - 24} Q${popped ? 0 : L},${ey - 34} ${ex - 50 + (popped ? 0 : L)},${ey - 24}`} fill="none" stroke={INK} strokeWidth={10} />
+      {[-1, 1].map((d) => (
+        <path key={`arm${d}`} d={`M${d * (ex + 54) + (popped ? 0 : L)},${ey - 26} L${d * 150},${ey - 34}`} stroke={INK} strokeWidth={8} strokeLinecap="round" />
+      ))}
+    </g>
+  ) : null;
+  const hideEyes = l.sunglasses && !popped;
   return (
     <g>
-      {eye(-1)}
-      {eye(1)}
+      {!hideEyes && eye(-1)}
+      {!hideEyes && eye(1)}
+      {shades}
       {brow(-1)}
       {brow(1)}
       {mouth}
@@ -313,6 +347,19 @@ export const Toon: React.FC<{
           <path d={headPath(l.head)} fill={l.skin} {...ol} />
           <Face l={l} e={expr} look={gaze} blink={blink} frame={f} />
           <Hat l={l} />
+          {l.sunglasses && (expr === "shock" || expr === "panic") && (
+            // Shock: the sunglasses fly off and spin above the head.
+            <g transform={`translate(${175 + Math.sin(f / 6) * 6},${headTop(l.head) - 110}) rotate(${-28 + Math.sin(f / 5) * 10})`}>
+              {[-1, 1].map((d) => (
+                <path key={d} d={`M${d * 50 - 44},-28 L${d * 50 + 44},-28 L${d * 50 + 40},10 Q${d * 50 + 34},30 ${d * 50},30 Q${d * 50 - 34},30 ${d * 50 - 40},10 Z`} fill={INK} {...ol} strokeWidth={6} />
+              ))}
+              <path d="M-8,-22 Q0,-30 8,-22" fill="none" stroke={INK} strokeWidth={9} />
+              <path d="M-74,-16 L-58,-16" stroke={POP.white} strokeWidth={7} strokeLinecap="round" />
+              {[0, 1, 2].map((i) => (
+                <path key={i} d={`M${-120 - i * 8},${40 + i * 22} L${-150 - i * 14},${52 + i * 26}`} stroke={INK} strokeWidth={6} strokeLinecap="round" opacity={0.7} />
+              ))}
+            </g>
+          )}
         </g>
       </g>
     </g>
