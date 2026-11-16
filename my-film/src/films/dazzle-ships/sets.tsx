@@ -179,7 +179,7 @@ export const Foam: React.FC<{ position: P3; size: [number, number]; frame: numbe
 );
 
 /** A wooden dock along the x axis at z in [z0-depth, z0], top at y = 0.6. */
-export const Dock: React.FC<{ z0?: number; depth?: number; length?: number }> = ({ z0 = 6, depth = 4, length = 40 }) => {
+export const Dock: React.FC<{ z0?: number; depth?: number; length?: number }> = ({ z0 = 12, depth = 10, length = 40 }) => {
   const wood = useMemo(() => woodTexture({ base: "#C48A55", planks: 10, seed: 22, repeat: [6, 1], vertical: true }), []);
   return (
     <group>
@@ -196,6 +196,60 @@ export const Dock: React.FC<{ z0?: number; depth?: number; length?: number }> = 
     </group>
   );
 };
+
+/**
+ * A far shore across the harbour: low hills, warehouses and cranes. Placed far away so the fog turns
+ * it pale blue, which tells the eye how deep the scene goes.
+ */
+export const Coast: React.FC<{ z?: number }> = ({ z = -75 }) => (
+  <group position={[0, 0, z]}>
+    {[
+      [-60, 9, 26],
+      [-28, 13, 30],
+      [8, 10, 34],
+      [44, 14, 30],
+      [78, 9, 26],
+    ].map(([x, h, r], i) => (
+      <mesh key={i} position={[x, 0, -12 - (i % 2) * 6]} scale={[1, h / r, 0.5]}>
+        <sphereGeometry args={[r, 24, 10, 0, Math.PI * 2, 0, Math.PI / 2]} />
+        <meshStandardMaterial color={i % 2 ? "#4E8F6A" : "#5FA27A"} roughness={1} />
+      </mesh>
+    ))}
+    {[-30, -18, -8, 14, 26, 38].map((x, i) => (
+      <Box key={x} size={[6 + (i % 3) * 2, 3 + (i % 2) * 2.5, 4]} position={[x, 1.5 + (i % 2) * 1.25, 0]} color={["#D8C3A0", "#C9744A", "#E4D9C4"][i % 3]} ink={0} />
+    ))}
+    {[-22, 20].map((x) => (
+      <group key={x} position={[x, 0, 2]}>
+        <Box size={[0.6, 12, 0.6]} position={[0, 6, 0]} color="#D7263D" ink={0} />
+        <Box size={[9, 0.6, 0.6]} position={[2.5, 11.5, 0]} color="#D7263D" ink={0} />
+      </group>
+    ))}
+  </group>
+);
+
+/** A thick iron mooring post with a loop of rope: a good blurry foreground shape. */
+export const Bollard: React.FC<{ position: P3 }> = ({ position }) => (
+  <group position={position}>
+    <Cyl r={0.22} h={0.55} position={[0, 0.27, 0]} color="#2B2B2B" ink={5} seg={16} />
+    <Cyl r={0.32} h={0.1} position={[0, 0.58, 0]} color="#2B2B2B" ink={5} seg={16} />
+    <mesh position={[0, 0.2, 0]} rotation={[Math.PI / 2, 0, 0]}>
+      <torusGeometry args={[0.3, 0.06, 8, 24]} />
+      <meshStandardMaterial color="#D9B77A" roughness={1} />
+    </mesh>
+  </group>
+);
+
+/** A rope coil lying on the planks. */
+export const RopeCoil: React.FC<{ position: P3 }> = ({ position }) => (
+  <group position={position}>
+    {[0, 1, 2].map((i) => (
+      <mesh key={i} position={[0, 0.05 + i * 0.09, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.38 - i * 0.07, 0.055, 8, 28]} />
+        <meshStandardMaterial color="#D9B77A" roughness={1} />
+      </mesh>
+    ))}
+  </group>
+);
 
 /** Stacked crates and paint pots on the dock (good foreground props). */
 export const Crates: React.FC<{ position: P3; rotation?: number }> = ({ position, rotation = 0 }) => {

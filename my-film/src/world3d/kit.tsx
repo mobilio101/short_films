@@ -39,12 +39,12 @@ export const placeToon = (project: Project, at: THREE.Vector3, heightM = 1.6) =>
   return { x: feet.x, y: feet.y, scale: (feet.y - head.y) / 720 };
 };
 
-const CameraRig: React.FC<{ cam: Cam }> = ({ cam }) => {
+const CameraRig: React.FC<{ cam: Cam; near?: number; far?: number }> = ({ cam, near = 0.05, far = 400 }) => {
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   camera.position.copy(cam.pos);
   camera.fov = cam.fov;
-  camera.near = 0.05;
-  camera.far = 400;
+  camera.near = near;
+  camera.far = far;
   camera.lookAt(cam.target);
   camera.updateProjectionMatrix();
   return null;
@@ -144,8 +144,13 @@ export const Daylight: React.FC<{ sun?: P3; sunColor?: string; amb?: number; sun
 );
 
 /**
- * One shot in three layers. `back` and `front` are 3D scene contents (lights included by the caller);
+ * One shot in layers. `back` and `front` are 3D scene contents (lights included by the caller);
  * `chars` draws the flat characters as SVG, given a projector for this camera.
+ *
+ * Depth: with `focus` (metres from the camera), the back world is drawn twice: everything farther
+ * than `focus` goes on a far layer that is blurrier and slightly hazier (`farBlur`), everything
+ * nearer on a sharper mid layer (`backBlur`). Together with the blurred `front` layer this gives
+ * three steps of focus, like a real camera lens.
  */
 export const World3D: React.FC<{
   cam: Cam;
@@ -156,19 +161,42 @@ export const World3D: React.FC<{
   fog?: [string, number, number];
   backBlur?: number;
   frontBlur?: number;
-}> = ({ cam, back, front, chars, bg, fog, backBlur = 1.6, frontBlur = 7 }) => {
+  focus?: number;
+  farBlur?: number;
+}> = ({ cam, back, front, chars, bg, fog, backBlur = 1.6, frontBlur = 7, focus, farBlur = 3.5 }) => {
   const project = projector(cam);
   const camProps = { fov: cam.fov, position: cam.pos.toArray() as P3, near: 0.05, far: 400 };
+  const gl = { antialias: true, preserveDrawingBuffer: true };
   return (
     <AbsoluteFill style={{ background: bg }}>
-      <AbsoluteFill style={{ filter: `blur(${backBlur}px) saturate(1.12)` }}>
-        <ThreeCanvas width={W} height={H} shadows="percentage" gl={{ antialias: true, preserveDrawingBuffer: true }} camera={camProps}>
-          <CameraRig cam={cam} />
-          <color attach="background" args={[bg]} />
-          {fog && <fog attach="fog" args={fog} />}
-          {back}
-        </ThreeCanvas>
-      </AbsoluteFill>
+      {focus === undefined ? (
+        <AbsoluteFill style={{ filter: `blur(${backBlur}px) saturate(1.12)` }}>
+          <ThreeCanvas width={W} height={H} shadows="percentage" gl={gl} camera={camProps}>
+            <CameraRig cam={cam} />
+            <color attach="background" args={[bg]} />
+            {fog && <fog attach="fog" args={fog} />}
+            {back}
+          </ThreeCanvas>
+        </AbsoluteFill>
+      ) : (
+        <>
+          <AbsoluteFill style={{ filter: `blur(${farBlur}px) saturate(1.0) brightness(1.03)` }}>
+            <ThreeCanvas width={W} height={H} shadows="percentage" gl={gl} camera={camProps}>
+              <CameraRig cam={cam} near={focus} far={400} />
+              <color attach="background" args={[bg]} />
+              {fog && <fog attach="fog" args={fog} />}
+              {back}
+            </ThreeCanvas>
+          </AbsoluteFill>
+          <AbsoluteFill style={{ filter: `blur(${backBlur}px) saturate(1.12)` }}>
+            <ThreeCanvas width={W} height={H} shadows="percentage" gl={{ ...gl, alpha: true }} camera={camProps}>
+              <CameraRig cam={cam} near={0.05} far={focus + 0.05} />
+              {fog && <fog attach="fog" args={fog} />}
+              {back}
+            </ThreeCanvas>
+          </AbsoluteFill>
+        </>
+      )}
       {chars && (
         <AbsoluteFill>
           <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>

@@ -8,7 +8,7 @@ import * as THREE from "three";
 import { makeCues } from "../../components/shortkit";
 import { Brush, CAST, INK, Look, MAIN, POP, PaintRoller, Toon } from "../../characters/toon/Toon";
 import { Cam, ContactShadow, Daylight, Project, World3D, lerpCam, placeToon, v3 } from "../../world3d/kit";
-import { Crates, Dock, Foam, SeaAndSky, Ship, Studio, SubRoom } from "./sets";
+import { Bollard, Coast, Crates, Dock, Foam, RopeCoil, SeaAndSky, Ship, Studio, SubRoom } from "./sets";
 import { WORDS } from "./words";
 
 const { fontFamily: LILITA } = loadFont("normal", { weights: ["400"], subsets: ["latin"] });
@@ -37,10 +37,10 @@ const S = {
 // ---- Cast ----
 const WILK: Look = { ...MAIN, shirt: POP.white, pattern: "splatter", patternColor: POP.red, hat: "captain", hatColor: POP.blue, hatColor2: POP.white };
 const KING: Look = { head: "square", skin: POP.skin, hair: "#6B4A2B", hairStyle: "flat", shirt: POP.red, pattern: "buttons", patternColor: POP.yellow, shoes: INK, hat: "crown", hatColor: POP.red, beard: "#6B4A2B" };
-const BRASS: Look = { head: "square", skin: POP.skin2, hair: "#3B2618", hairStyle: "flat", shirt: "#22315A", pattern: "buttons", patternColor: POP.yellow, shoes: INK, hat: "captain", hatColor: "#22315A", hatColor2: "#22315A" };
+const BRASS: Look = { head: "square", skin: POP.skin2, hair: "#3B2618", hairStyle: "flat", shirt: "#22315A", pattern: "buttons", patternColor: POP.yellow, shoes: INK, hat: "captain", hatColor: "#22315A", hatColor2: "#22315A", stubble: "#3E5F8C" };
 const BRASS2: Look = { ...BRASS, skin: POP.skin3, head: "square" };
-const BRASS3: Look = { ...BRASS, skin: POP.skin, beard: "#9A9A9A" };
-const UCAP: Look = { head: "triangle", skin: POP.skin, hair: "#1B1B1B", hairStyle: "spiky", shirt: "#3A3F45", pattern: "pinstripe", patternColor: "#555C63", shoes: INK, hat: "cap", hatColor: "#2B2F33", hatColor2: "#555C63" };
+const BRASS3: Look = { ...BRASS, skin: POP.skin, stubble: "#3E5F8C" };
+const UCAP: Look = { head: "triangle", skin: POP.skin, stubble: "#3E5F8C", hair: "#1B1B1B", hairStyle: "spiky", shirt: "#3A3F45", pattern: "pinstripe", patternColor: "#555C63", shoes: INK, hat: "cap", hatColor: "#2B2F33", hatColor2: "#555C63" };
 const SAILOR1: Look = { ...CAST.squareCaptain, head: "round", hat: "beanie", hatColor: "#22315A", hatColor2: POP.white };
 const SAILOR2: Look = { ...CAST.squareCaptain, head: "square", skin: POP.skin3, hat: "beanie", hatColor: POP.red, hatColor2: POP.white };
 const SAILOR3: Look = { ...CAST.squareCaptain, head: "triangle", skin: POP.skin2, hat: "bucket", hatColor: POP.white, hatColor2: POP.blue };
@@ -171,29 +171,42 @@ const At: React.FC<{ project: Project; at: THREE.Vector3; look: Look; id: string
 
 // =========================== SHOTS ===========================
 
+/** The dock camera used by the hook and the matching payoff: a sideways arc so near, middle and far things slide past each other. */
+const DOCK_A: Cam = { pos: v3(2.6, 1.7, 10.6), target: v3(0, 2.0, -1), fov: 58 };
+const DOCK_B: Cam = { pos: v3(-0.8, 1.6, 9.8), target: v3(-0.2, 2.0, -1), fov: 58 };
+const DockFront: React.FC = () => (
+  <>
+    <Crates position={[3.4, 0.6, 7.4]} rotation={0.4} />
+    <Bollard position={[-2.0, 0.6, 7.8]} />
+    <RopeCoil position={[-1.1, 0.6, 8.4]} />
+  </>
+);
+
 /** 1 · Hook: a dazzle ship slides past the dock; Wilkinson with his paint roller. */
 const Shot1: React.FC = () => {
   const { f } = useLocal();
   const k = ease(f, 0, S.s2a - S.s1);
-  const cam = lerpCam({ pos: v3(1.4, 1.8, 12.5), target: v3(0, 2.2, -1), fov: 50 }, { pos: v3(0.8, 1.6, 11.2), target: v3(0, 2.1, -1), fov: 50 }, k);
+  const cam = lerpCam(DOCK_A, DOCK_B, k);
   const shipX = interpolate(f, [0, 170], [-8, 1.5]);
   const wilk = v3(-0.35, 0.6, 3.7);
   return (
     <World3D
       cam={cam}
       bg="#CFEBFF"
-      fog={["#CFEBFF", 30, 160]}
+      fog={["#CFEBFF", 8, 90]}
+      focus={10.5}
       back={
         <>
           <Daylight />
           <SeaAndSky frame={f} />
+          <Coast />
           <Ship paint={12} position={[shipX, 0, -3]} frame={f} smoke />
           <Foam position={[shipX, 0, -3]} size={[7.4, 1.8]} frame={f} />
           <Dock />
           <ContactShadow at={wilk} size={1.0} />
         </>
       }
-      front={<Crates position={[2.0, 0.6, 8.6]} rotation={0.4} />}
+      front={<DockFront />}
       chars={(p) => <At project={p} at={wilk} look={WILK} id="w1" expr="sneaky" gaze={10} holding={<PaintRoller />} handR={[160, -330]} />}
     />
   );
@@ -216,6 +229,7 @@ const Shot2a: React.FC = () => {
           <>
             <Daylight />
             <SeaAndSky frame={f} />
+            <Coast />
             <Ship paint="grey" position={[0, -Math.min(0.9, t * 0.006), -45]} rotation={[0, 0.35, Math.min(0.12, t * 0.0012)]} frame={f} smoke />
             {t > 0 && (
               <>
@@ -243,24 +257,31 @@ const Shot2a: React.FC = () => {
 const Shot2b: React.FC = () => {
   const { f } = useLocal();
   const k = ease(f, 0, S.s3 - S.s2b);
-  const cam = lerpCam({ pos: v3(-0.6, 1.6, 10.6), target: v3(0, 2.0, -1), fov: 50 }, { pos: v3(-0.2, 1.5, 9.8), target: v3(0, 2.0, -1), fov: 50 }, k);
+  const cam = lerpCam({ pos: v3(-2.4, 1.6, 9.8), target: v3(0, 2.0, -1), fov: 56 }, { pos: v3(0.9, 1.5, 9.0), target: v3(0, 2.0, -1), fov: 56 }, k);
   const adm = v3(0, 0.6, 4.4);
   return (
     <World3D
       cam={cam}
       bg="#CFEBFF"
-      fog={["#CFEBFF", 30, 160]}
+      fog={["#CFEBFF", 8, 90]}
+      focus={8.5}
       back={
         <>
           <Daylight />
           <SeaAndSky frame={f} />
+          <Coast />
           <Ship paint="grey" position={[-3, 0, -8]} rotation={[0, 0.15, 0]} frame={f} smoke />
           <Ship paint="grey" position={[7, 0, -18]} rotation={[0, -0.25, 0]} frame={f + 30} smoke />
           <Dock />
           <ContactShadow at={adm} />
         </>
       }
-      front={<Crates position={[-2.2, 0.6, 8.4]} rotation={-0.3} />}
+      front={
+        <>
+          <Crates position={[-2.4, 0.6, 7.4]} rotation={-0.3} />
+          <Bollard position={[2.0, 0.6, 7.2]} />
+        </>
+      }
       chars={(p) => <At project={p} at={adm} look={BRASS3} id="adm" expr={f > 25 ? "panic" : "neutral"} armsUp={f > 25 ? 0.4 : 0} />}
     />
   );
@@ -272,14 +293,15 @@ const studioCam = (f: number, a: Cam, b: Cam, len: number) => lerpCam(a, b, ease
 const Shot3: React.FC = () => {
   const { f } = useLocal();
   const len = S.s4 - S.s3;
-  const cam = studioCam(f, { pos: v3(0.9, 1.25, 4.3), target: v3(0.2, 1.3, -1), fov: 60 }, { pos: v3(0.4, 1.15, 3.2), target: v3(0.1, 1.25, -1), fov: 60 }, len);
+  const cam = studioCam(f, { pos: v3(1.6, 1.25, 4.2), target: v3(0.2, 1.3, -1), fov: 60 }, { pos: v3(-0.2, 1.15, 3.3), target: v3(0.1, 1.25, -1), fov: 60 }, len);
   const wilk = v3(0.15, 0, -0.1);
   const confuse = cue("confuse") - S.s3;
   return (
     <World3D
       cam={cam}
       bg="#F2D6A2"
-      fog={["#F6E4C2", 6, 20]}
+      fog={["#F6E4C2", 4, 16]}
+      focus={5.2}
       back={
         <>
           <Daylight sun={[3, 8, -6]} amb={1.1} />
@@ -337,13 +359,14 @@ const Swatch: React.FC<{ kind: "stripes" | "zigzag" | "swirl"; x: number; y: num
 /** 4 · "The Navy thought he'd lost his mind": two officers laughing in the studio. */
 const Shot4: React.FC = () => {
   const { f } = useLocal();
-  const cam: Cam = { pos: v3(-0.2 + f * 0.004, 1.25, 3.6), target: v3(-1.0, 1.25, -1), fov: 60 };
+  const cam: Cam = { pos: v3(-0.9 + f * 0.009, 1.25, 3.6), target: v3(-1.0, 1.25, -1), fov: 60 };
   const a = v3(-1.7, 0, 0.2), b = v3(-0.85, 0, 0.5), w = v3(0.9, 0, 1.4);
   return (
     <World3D
       cam={cam}
       bg="#F2D6A2"
-      fog={["#F6E4C2", 6, 20]}
+      fog={["#F6E4C2", 4, 16]}
+      focus={5.2}
       back={
         <>
           <Daylight sun={[3, 8, -6]} amb={1.1} />
@@ -378,7 +401,8 @@ const Shot5: React.FC = () => {
     <World3D
       cam={camEnd}
       bg="#F2D6A2"
-      fog={["#F6E4C2", 6, 20]}
+      fog={["#F6E4C2", 4, 16]}
+      focus={5.2}
       back={
         <>
           <Daylight sun={[3, 8, -6]} amb={1.1} />
@@ -410,7 +434,8 @@ const Shot6a: React.FC = () => {
     <World3D
       cam={cam}
       bg="#1E3438"
-      fog={["#1E3438", 5, 14]}
+      fog={["#1E3438", 3, 11]}
+      focus={4}
       back={
         <>
           <ambientLight color="#9FC6CC" intensity={0.9} />
@@ -450,6 +475,7 @@ const Shot6b: React.FC = () => {
           <>
             <Daylight />
             <SeaAndSky frame={f} />
+            <Coast />
             <Ship paint={12} position={[shipX, 0, -40]} rotation={[0, 0.5, 0]} frame={f} smoke />
             {tw > 0 && (
               <mesh position={[mid.x, 0.04, mid.z]} rotation={[-Math.PI / 2, 0, -ang]}>
@@ -474,11 +500,20 @@ const Shot7: React.FC = () => {
     <World3D
       cam={cam}
       bg="#CFEBFF"
-      fog={["#CFEBFF", 25, 140]}
+      fog={["#CFEBFF", 8, 90]}
+      focus={14}
+      front={
+        <>
+          <Bollard position={[-6.2, 0.6, 6.6]} />
+          <Bollard position={[4.6, 0.6, 6.4]} />
+          <RopeCoil position={[-1.5, 0.6, 7.6]} />
+        </>
+      }
       back={
         <>
           <Daylight />
           <SeaAndSky frame={f} />
+          <Coast />
           <Ship paint={3} position={[-4, 0, -2.5]} frame={f} smoke />
           <Ship paint={17} position={[9, 0, -7]} rotation={[0, Math.PI, 0]} frame={f + 20} smoke />
           <Ship paint={26} position={[-6, 0, -14]} rotation={[0, 0.2, 0]} frame={f + 40} />
@@ -495,14 +530,15 @@ const Shot7: React.FC = () => {
 const Shot8a: React.FC = () => {
   const { f } = useLocal();
   const shrug = cue("couldn't") - S.s8a;
-  const cam: Cam = { pos: v3(0.2, 1.3, 3.6 - f * 0.004), target: v3(0, 1.1, -1), fov: 58 };
+  const cam: Cam = { pos: v3(0.9 - f * 0.008, 1.3, 3.6 - f * 0.004), target: v3(0, 1.1, -1), fov: 58 };
   const xs = [-1.0, 0, 1.0];
   const looks = [BRASS, BRASS3, BRASS2];
   return (
     <World3D
       cam={cam}
       bg="#F2D6A2"
-      fog={["#F6E4C2", 6, 20]}
+      fog={["#F6E4C2", 4, 16]}
+      focus={5.2}
       back={
         <>
           <Daylight sun={[3, 8, -6]} amb={1.1} />
@@ -523,18 +559,26 @@ const Shot8a: React.FC = () => {
 /** 8b · But the sailors loved it. */
 const Shot8b: React.FC = () => {
   const { f } = useLocal();
-  const cam: Cam = { pos: v3(0.3, 1.6, 10.6 - f * 0.006), target: v3(0, 2.0, -1), fov: 50 };
+  const cam: Cam = { pos: v3(1.6 - f * 0.012, 1.6, 9.6 - f * 0.006), target: v3(0, 2.0, -1), fov: 56 };
   const ps = [v3(-1.05, 0.6, 4.0), v3(0, 0.6, 4.5), v3(1.05, 0.6, 4.0)];
   const looks = [SAILOR1, SAILOR2, SAILOR3];
   return (
     <World3D
       cam={cam}
       bg="#CFEBFF"
-      fog={["#CFEBFF", 30, 160]}
+      fog={["#CFEBFF", 8, 90]}
+      focus={8.5}
+      front={
+        <>
+          <RopeCoil position={[-2.0, 0.6, 7.4]} />
+          <Bollard position={[2.2, 0.6, 7.2]} />
+        </>
+      }
       back={
         <>
           <Daylight />
           <SeaAndSky frame={f} />
+          <Coast />
           <Ship paint={21} position={[0.5, 0, -2.5]} frame={f} smoke />
           <Dock />
           {ps.map((q, i) => (
@@ -558,25 +602,27 @@ const Shot9: React.FC = () => {
   const { f } = useLocal();
   const len = DAZZLE_DURATION - S.s9;
   const k = ease(f, 0, len);
-  const cam = lerpCam({ pos: v3(0.8, 1.6, 11.2), target: v3(0, 2.1, -1), fov: 50 }, { pos: v3(1.4, 1.8, 12.5), target: v3(0, 2.2, -1), fov: 50 }, k);
+  const cam = lerpCam(DOCK_B, DOCK_A, k);
   const shipX = interpolate(f, [0, len], [1.5, 7]);
   const wilk = v3(-0.35, 0.6, 3.7);
   return (
     <World3D
       cam={cam}
       bg="#CFEBFF"
-      fog={["#CFEBFF", 30, 160]}
+      fog={["#CFEBFF", 8, 90]}
+      focus={10.5}
       back={
         <>
           <Daylight />
           <SeaAndSky frame={f} />
+          <Coast />
           <Ship paint={12} position={[shipX, 0, -3]} frame={f} smoke />
           <Foam position={[shipX, 0, -3]} size={[7.4, 1.8]} frame={f} />
           <Dock />
           <ContactShadow at={wilk} />
         </>
       }
-      front={<Crates position={[2.0, 0.6, 8.6]} rotation={0.4} />}
+      front={<DockFront />}
       chars={(p) => {
         const w = placeToon(p, wilk);
         return (

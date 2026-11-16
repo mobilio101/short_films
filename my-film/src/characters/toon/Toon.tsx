@@ -46,8 +46,10 @@ export type Look = {
   hatColor2?: string;
   /** Black sunglasses. In shock or panic they pop up onto the forehead. */
   sunglasses?: boolean;
-  /** Beard colour (a full beard around the chin; the mouth sits on top). */
+  /** Full beard colour: covers the lower face, following this head shape's jawline; the mouth sits on top. */
   beard?: string;
+  /** Shaving shadow colour: a soft bluish stubble area on the lower face that follows the jawline. */
+  stubble?: string;
   /** Shape of the shades. */
   shades?: "wayfarer" | "round" | "aviator" | "visor";
   /** Lens colour (default black). */
@@ -154,6 +156,52 @@ const Hat: React.FC<{ l: Look }> = ({ l }) => {
     default:
       return null;
   }
+};
+
+/**
+ * Beard or shaving shadow on the lower face. It is clipped to the head's own outline, so it always
+ * follows the jawline of a round, square or triangle head; the head outline is redrawn on top.
+ */
+const Jaw: React.FC<{ l: Look; id: string }> = ({ l, id }) => {
+  if (!l.beard && !l.stubble) return null;
+  const Y = HEAD_Y;
+  // Area below the cheekbones: sideburns at the ears, dipping under the nose in the middle (upper lip included).
+  const beard = l.beard !== undefined;
+  const top = beard ? 12 : 16;
+  const area = `M-260,${Y - 40 + top} L-152,${Y - 32 + top} C-118,${Y + 34 + top} -70,${Y + 42 + top} -40,${Y + 36 + top} Q0,${Y + 28 + top} 40,${Y + 36 + top} C70,${Y + 42 + top} 118,${Y + 34 + top} 152,${Y - 32 + top} L260,${Y - 40 + top} L260,-200 L-260,-200 Z`;
+  const cid = `jaw-${id}`;
+  const dots: React.ReactNode[] = [];
+  if (!beard) {
+    for (let r = 0; r < 9; r++)
+      for (let c = 0; c < 18; c++) {
+        const x = -170 + c * 20 + (r % 2) * 10;
+        const y = Y - 20 + r * 18;
+        dots.push(<circle key={`${r}-${c}`} cx={x} cy={y} r={2.6} fill={l.stubble} opacity={0.55} />);
+      }
+  }
+  return (
+    <g>
+      <clipPath id={cid}>
+        <path d={headPath(l.head)} />
+      </clipPath>
+      <g clipPath={`url(#${cid})`}>
+        {beard ? (
+          <path d={area} fill={l.beard} />
+        ) : (
+          <>
+            <path d={area} fill={l.stubble} opacity={0.32} />
+            <clipPath id={`${cid}-a`}>
+              <path d={area} />
+            </clipPath>
+            <g clipPath={`url(#${cid}-a)`}>{dots}</g>
+          </>
+        )}
+        {/* Edge of the beard/stubble area: a soft inked line for a beard, none for stubble */}
+        {beard && <path d={area} fill="none" stroke={INK} strokeWidth={6} />}
+      </g>
+      <path d={headPath(l.head)} fill="none" {...ol} />
+    </g>
+  );
 };
 
 const Face: React.FC<{ l: Look; e: Expr; look: number; blink: boolean; frame: number; part?: "all" | "brows" | "noBrows" }> = ({ l, e, look, blink, frame, part = "all" }) => {
@@ -341,14 +389,6 @@ const Face: React.FC<{ l: Look; e: Expr; look: number; blink: boolean; frame: nu
       {shades}
       {part === "all" && brow(-1)}
       {part === "all" && brow(1)}
-      {l.beard && (
-        <path
-          d={`M-130,${HEAD_Y + 10} Q-120,${HEAD_Y + 150} 0,${HEAD_Y + 158} Q120,${HEAD_Y + 150} 130,${HEAD_Y + 10} Q70,${HEAD_Y + 60} 0,${HEAD_Y + 52} Q-70,${HEAD_Y + 60} -130,${HEAD_Y + 10} Z`}
-          fill={l.beard}
-          {...ol}
-          strokeWidth={6}
-        />
-      )}
       {mouth}
       {(e === "panic" || e === "shock") && (
         <path transform={`translate(${130 + L},${-560 + (frame % 24) * 1.2})`} d="M0,0 C-16,26 -16,44 0,46 C16,44 16,26 0,0 Z" fill={POP.sky} {...ol} strokeWidth={5} />
@@ -461,6 +501,7 @@ export const Toon: React.FC<{
         <g>
           {l.hat === "none" && <Hair l={l} />}
           <path d={headPath(l.head)} fill={l.skin} {...ol} />
+          <Jaw l={l} id={id} />
           <Face l={l} e={expr} look={gaze} blink={blink} frame={f} part={l.hat !== "none" ? "noBrows" : "all"} />
           <Hat l={l} />
           {/* Eyebrows float on top of the hat brim (cartoon convention) so the acting always shows. */}
