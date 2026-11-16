@@ -14,6 +14,15 @@ export type Base = {
   eye: string; // iris colour
   hairStyle: "bob" | "spiky" | "buns";
   freckles?: boolean;
+  /** Comic version: head shape and face quirks. Without `comic`, the cute sparkly-eyed face is used. */
+  comic?: {
+    head: "round" | "potato" | "egg";
+    eyes: "beady" | "lidded" | "bug";
+    nose?: "button" | "bulb" | "none";
+    brow: "thin" | "thick" | "uni";
+    gapTooth?: boolean;
+    cowlick?: boolean;
+  };
 };
 
 export type Outfit = {
@@ -30,7 +39,7 @@ export type Outfit = {
   hatTrim?: string;
 };
 
-export type Mood = "neutral" | "happy" | "shock" | "worried";
+export type Mood = "neutral" | "happy" | "shock" | "worried" | "smug" | "panic" | "grin" | "angry";
 
 const ol = { stroke: LINE, strokeWidth: OW, strokeLinejoin: "round" as const, strokeLinecap: "round" as const };
 
@@ -125,6 +134,155 @@ const Face: React.FC<{ b: Base; mood: Mood; blink: boolean; look: number }> = ({
   );
 };
 
+/** The comic face: small or droopy eyes, quirks, and big exaggerated reactions. */
+const ComicFace: React.FC<{ b: Base; mood: Mood; blink: boolean; look: number; frame: number }> = ({ b, mood, blink, look, frame }) => {
+  const c = b.comic!;
+  const L = look;
+  // Which eye drawing to use: the base style, overridden by strong reactions.
+  const eyes = mood === "shock" || mood === "panic" ? "bug" : mood === "grin" || mood === "happy" ? "squint" : mood === "smug" ? "lidded" : mood === "neutral" ? (c.eyes === "bug" ? "beady" : c.eyes) : mood === "angry" ? "glare" : c.eyes;
+  const eyeY = -322;
+  const eye = (d: number) => {
+    const cx = d * 52 + L;
+    if (blink && eyes !== "bug") return <path key={d} d={`M${cx - 22},${eyeY} L${cx + 22},${eyeY}`} {...ol} strokeWidth={8} />;
+    switch (eyes) {
+      case "bug":
+        return (
+          <g key={d}>
+            <circle cx={cx} cy={eyeY - 6} r={mood === "shock" ? 44 : 38} fill="#FFFFFF" {...ol} strokeWidth={6} />
+            <circle cx={cx + L * 0.1 + (mood === "panic" ? Math.sin(frame * 1.7 + d) * 4 : 0)} cy={eyeY - 6} r={mood === "shock" ? 6 : 8} fill={LINE} />
+          </g>
+        );
+      case "lidded":
+        return (
+          <g key={d}>
+            <ellipse cx={cx} cy={eyeY} rx={28} ry={24} fill="#FFFFFF" {...ol} strokeWidth={6} />
+            <circle cx={cx + 4 + L * 0.15} cy={eyeY + 8} r={10} fill={LINE} />
+            {/* Heavy lid: covers the top half, flat line = unimpressed */}
+            <path d={`M${cx - 31},${eyeY + (mood === "smug" && d > 0 ? -8 : 0)} L${cx + 31},${eyeY + (mood === "smug" && d < 0 ? -8 : 0)} L${cx + 31},${eyeY - 28} L${cx - 31},${eyeY - 28} Z`} fill={b.skin} />
+            <path d={`M${cx - 31},${eyeY + (mood === "smug" && d > 0 ? -8 : 0)} L${cx + 31},${eyeY + (mood === "smug" && d < 0 ? -8 : 0)}`} {...ol} strokeWidth={7} />
+          </g>
+        );
+      case "squint":
+        return <path key={d} d={`M${cx - 26},${eyeY + 6} Q${cx},${eyeY - 26} ${cx + 26},${eyeY + 6}`} fill="none" {...ol} strokeWidth={9} />;
+      case "glare":
+        return (
+          <g key={d}>
+            <ellipse cx={cx} cy={eyeY} rx={26} ry={16} fill="#FFFFFF" {...ol} strokeWidth={6} />
+            <circle cx={cx + L * 0.1} cy={eyeY + 2} r={8} fill={LINE} />
+            <path d={`M${cx - 30},${eyeY - 4 - d * 10} L${cx + 30},${eyeY - 4 + d * 10} L${cx + 30},${eyeY - 22} L${cx - 30},${eyeY - 22} Z`} fill={b.skin} />
+            <path d={`M${cx - 30},${eyeY - 4 - d * 10} L${cx + 30},${eyeY - 4 + d * 10}`} {...ol} strokeWidth={7} />
+          </g>
+        );
+      default: // beady
+        return (
+          <g key={d}>
+            <ellipse cx={cx} cy={eyeY} rx={11} ry={15} fill={LINE} />
+            <circle cx={cx - 3} cy={eyeY - 6} r={3.5} fill="#FFFFFF" />
+          </g>
+        );
+    }
+  };
+  // Brows
+  const browY = -378;
+  const brow = (d: number) => {
+    let inner = 0;
+    let outer = 0;
+    if (mood === "angry") inner = 18;
+    if (mood === "panic" || mood === "worried") (inner = -14), (outer = 8);
+    if (mood === "shock") (inner = -24), (outer = -24);
+    if (mood === "smug" && d > 0) (inner = -14), (outer = -22);
+    const w = c.brow === "thick" ? 16 : c.brow === "uni" ? 14 : 8;
+    const x1 = d * (c.brow === "uni" ? 6 : 26) + L;
+    const x2 = d * 84 + L;
+    return <path key={d} d={`M${x1},${browY + inner} L${x2},${browY + outer}`} fill="none" stroke={LINE} strokeWidth={w} strokeLinecap="round" />;
+  };
+  // Mouth
+  const my = -258;
+  let mouth: React.ReactNode;
+  switch (mood) {
+    case "shock":
+      mouth = (
+        <g>
+          <path d={`M${L - 30},${my - 12} Q${L},${my - 22} ${L + 30},${my - 12} L${L + 26},${my + 46} Q${L},${my + 60} ${L - 26},${my + 46} Z`} fill="#6B1F1A" {...ol} strokeWidth={6} />
+          <ellipse cx={L} cy={my + 38} rx={16} ry={9} fill="#E2706A" />
+        </g>
+      );
+      break;
+    case "panic":
+      mouth = (
+        <g>
+          <path d={`M${L - 40},${my} Q${L - 20},${my - 14} ${L},${my} Q${L + 20},${my + 14} ${L + 40},${my} L${L + 40},${my + 26} Q${L + 20},${my + 38} ${L},${my + 26} Q${L - 20},${my + 14} ${L - 40},${my + 26} Z`} fill="#FFFFFF" {...ol} strokeWidth={6} />
+          <path d={`M${L - 40},${my + 13} Q${L - 20},${my + 1} ${L},${my + 13} Q${L + 20},${my + 25} ${L + 40},${my + 13}`} fill="none" stroke={LINE} strokeWidth={3} />
+        </g>
+      );
+      break;
+    case "grin":
+    case "happy":
+      mouth = (
+        <g>
+          <path d={`M${L - 56},${my - 14} Q${L},${my + 62} ${L + 56},${my - 14} Z`} fill="#6B1F1A" {...ol} strokeWidth={6} />
+          <path d={`M${L - 50},${my - 10} L${L + 50},${my - 10} L${L + 44},${my + 4} L${L - 44},${my + 4} Z`} fill="#FFFFFF" />
+          {c.gapTooth && <rect x={L - 4} y={my - 10} width={8} height={14} fill="#6B1F1A" />}
+        </g>
+      );
+      break;
+    case "angry":
+      mouth = (
+        <g>
+          <rect x={L - 34} y={my - 6} width={68} height={24} rx={6} fill="#FFFFFF" {...ol} strokeWidth={6} />
+          {[-17, 0, 17].map((x) => (
+            <line key={x} x1={L + x} y1={my - 6} x2={L + x} y2={my + 18} stroke={LINE} strokeWidth={3} />
+          ))}
+          <line x1={L - 34} y1={my + 6} x2={L + 34} y2={my + 6} stroke={LINE} strokeWidth={3} />
+        </g>
+      );
+      break;
+    case "smug":
+      mouth = <path d={`M${L - 26},${my + 2} Q${L + 10},${my + 10} ${L + 34},${my - 14}`} fill="none" {...ol} strokeWidth={7} />;
+      break;
+    case "worried":
+      mouth = <path d={`M${L - 22},${my + 6} Q${L},${my - 10} ${L + 22},${my + 6}`} fill="none" {...ol} strokeWidth={7} />;
+      break;
+    default: // deadpan: a short flat line, slightly off-centre
+      mouth = <path d={`M${L - 14},${my} L${L + 22},${my - 2}`} fill="none" {...ol} strokeWidth={7} />;
+  }
+  return (
+    <g>
+      {b.freckles &&
+        [-1, 1].map((d) => (
+          <g key={`f${d}`} fill={LINE} opacity={0.4}>
+            <circle cx={d * 84 + L * 0.5} cy={-288} r={3.5} />
+            <circle cx={d * 98 + L * 0.5} cy={-280} r={3.5} />
+            <circle cx={d * 88 + L * 0.5} cy={-272} r={3.5} />
+          </g>
+        ))}
+      {(mood === "grin" || mood === "happy" || mood === "panic") && [-1, 1].map((d) => <ellipse key={`c${d}`} cx={d * 92 + L * 0.5} cy={-282} rx={22} ry={12} fill={b.cheek} opacity={0.7} />)}
+      {eye(-1)}
+      {eye(1)}
+      {brow(-1)}
+      {brow(1)}
+      {c.nose === "bulb" && <ellipse cx={L * 1.1} cy={-290} rx={20} ry={16} fill={b.cheek} {...ol} strokeWidth={5} />}
+      {c.nose === "button" && <path d={`M${L - 8},-296 Q${L + 6},-282 ${L + 12},-296`} fill="none" {...ol} strokeWidth={5} />}
+      {mouth}
+      {/* Sweat drops when panicking or worried */}
+      {(mood === "panic" || mood === "worried") && (
+        <g transform={`translate(${118 + L},${-410 + (frame % 30) * 0.8})`}>
+          <path d="M0,0 C-14,22 -14,38 0,40 C14,38 14,22 0,0 Z" fill="#9FD3F2" {...ol} strokeWidth={4} />
+        </g>
+      )}
+      {/* Shock lines */}
+      {mood === "shock" &&
+        [-1, 1].map((d) =>
+          [0, 1, 2].map((i) => (
+            <line key={`${d}${i}`} x1={d * (165 + i * 6)} y1={-420 + i * 34} x2={d * (205 + i * 10)} y2={-440 + i * 30} stroke={LINE} strokeWidth={7} strokeLinecap="round" />
+          )),
+        )}
+      {/* Anger vein */}
+      {mood === "angry" && <path d="M95,-420 l14,-14 m-14,14 l-14,-14 m14,14 l14,14 m-14,-14 l-14,14" stroke="#C21F33" strokeWidth={7} strokeLinecap="round" transform="translate(10,0)" />}
+    </g>
+  );
+};
+
 const Hat: React.FC<{ o: Outfit }> = ({ o }) => {
   const c = o.hatColor ?? "#22324F";
   const t = o.hatTrim ?? "#D9A93A";
@@ -189,6 +347,7 @@ export const Chibi: React.FC<{
   const breathe = 1 + 0.012 * Math.sin(f / 14 + seed);
   const blink = (f + seed * 23) % 110 < 4;
   const hatOn = outfit.hat !== undefined && outfit.hat !== "none";
+  const hs: [number, number] = base.comic?.head === "potato" ? [1.14, 0.9] : base.comic?.head === "egg" ? [0.9, 1.14] : [1, 1];
   const hand = (d: number): [number, number] => {
     const down: [number, number] = [d * 92, -112];
     const up: [number, number] = [d * 128, -300];
@@ -223,16 +382,19 @@ export const Chibi: React.FC<{
         <g>{outfit.neck}</g>
         {/* Head */}
         <g transform={`translate(0,${-2 * Math.sin(f / 14 + seed)})`}>
-          {!hatOn || base.hairStyle !== "spiky" ? <HairBack b={base} /> : null}
-          <ellipse cx={0} cy={-330} rx={142} ry={130} fill={base.skin} {...ol} />
+          <g transform={`translate(0,-330) scale(${hs[0]},${hs[1]}) translate(0,330)`}>{!hatOn || base.hairStyle !== "spiky" ? <HairBack b={base} /> : null}</g>
+          <ellipse cx={0} cy={-330} rx={142 * hs[0]} ry={130 * hs[1]} fill={base.skin} {...ol} />
           {/* Ears */}
           {[-1, 1].map((d) => (
-            <ellipse key={d} cx={d * 140} cy={-318} rx={20} ry={26} fill={base.skin} {...ol} />
+            <ellipse key={d} cx={d * 140 * hs[0]} cy={-318} rx={base.comic ? 26 : 20} ry={base.comic ? 32 : 26} fill={base.skin} {...ol} />
           ))}
-          <ellipse cx={0} cy={-330} rx={135} ry={123} fill={base.skin} />
-          <Face b={base} mood={mood} blink={blink} look={look} />
-          <HairFront b={base} hatOn={hatOn} />
-          <Hat o={outfit} />
+          <ellipse cx={0} cy={-330} rx={142 * hs[0] - 7} ry={130 * hs[1] - 7} fill={base.skin} />
+          {base.comic ? <ComicFace b={base} mood={mood} blink={blink} look={look} frame={f} /> : <Face b={base} mood={mood} blink={blink} look={look} />}
+          <g transform={`translate(0,-330) scale(${hs[0]},${hs[1]}) translate(0,330)`}>
+            <HairFront b={base} hatOn={hatOn} />
+            {base.comic?.cowlick && !hatOn && <path d="M10,-450 C0,-500 40,-520 50,-490 C30,-500 20,-480 25,-455" fill="none" stroke={LINE} strokeWidth={8} strokeLinecap="round" />}
+            <Hat o={outfit} />
+          </g>
         </g>
       </g>
     </g>
@@ -247,6 +409,16 @@ export const BASES: Record<string, Base> = {
   rusty: { skin: "#F9DCC3", cheek: "#F0907E", hair: "#D2652D", eye: "#3E8A5A", hairStyle: "spiky", freckles: true },
   /** C: black hair in two buns, warm skin, deep brown eyes. */
   mei: { skin: "#EBC29E", cheek: "#E98778", hair: "#1E1A22", eye: "#4A2C1A", hairStyle: "buns" },
+};
+
+/** Comic versions: funnier faces and shapes. */
+export const COMIC: Record<string, Base> = {
+  /** D: potato head, deadpan droopy eyes, thick brows, bulb nose. The unimpressed one. */
+  dex: { skin: "#F4D2B4", cheek: "#E98B7C", hair: "#3B2618", eye: "#3B2618", hairStyle: "bob", comic: { head: "potato", eyes: "lidded", nose: "bulb", brow: "thick" } },
+  /** E: egg head, beady eyes, cowlick, gap tooth, freckles. The nervous one. */
+  benny: { skin: "#F9DCC3", cheek: "#F0907E", hair: "#D2652D", eye: "#3E8A5A", hairStyle: "spiky", freckles: true, comic: { head: "egg", eyes: "beady", nose: "button", brow: "thin", gapTooth: true, cowlick: true } },
+  /** F: round head, unibrow, buns, bug eyes. The dramatic one. */
+  mo: { skin: "#E8BE98", cheek: "#E58472", hair: "#1E1A22", eye: "#4A2C1A", hairStyle: "buns", comic: { head: "round", eyes: "bug", nose: "button", brow: "uni" } },
 };
 
 // ---------------- Outfits (swap per story) ----------------
