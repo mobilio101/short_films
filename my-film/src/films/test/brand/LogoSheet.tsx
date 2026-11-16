@@ -27,12 +27,12 @@ const Avatar: React.FC<{ cx: number; cy: number; id: string; bg: string; name: s
   </g>
 );
 
-const Glint: React.FC<{ x: number; y: number; s: number }> = ({ x, y, s }) => (
+export const Glint: React.FC<{ x: number; y: number; s: number }> = ({ x, y, s }) => (
   <path d={`M${x},${y - s} L${x + s * 0.25},${y - s * 0.25} L${x + s},${y} L${x + s * 0.25},${y + s * 0.25} L${x},${y + s} L${x - s * 0.25},${y + s * 0.25} L${x - s},${y} L${x - s * 0.25},${y - s * 0.25} Z`} fill="#fff" stroke={INK} strokeWidth={4} />
 );
 
 /** The self-discipline hero's head: amber, dot eyes, one line per brow, one line for the mouth. */
-const Hero: React.FC<{ x: number; y: number; r: number; brow?: number }> = ({ x, y, r, brow = 0.12 }) => (
+export const Hero: React.FC<{ x: number; y: number; r: number; brow?: number }> = ({ x, y, r, brow = 0.12 }) => (
   <g>
     <rect x={x - r * 0.75} y={y + r * 0.7} width={r * 1.5} height={r * 2} rx={r * 0.5} fill="#F5A623" />
     <circle cx={x} cy={y} r={r} fill="#F5A623" />

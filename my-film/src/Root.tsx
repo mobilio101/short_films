@@ -15,6 +15,7 @@ import { ShadesSheet } from "./films/test/toon/ShadesSheet";
 import { SmileSheet } from "./films/test/toon/SmileSheet";
 import { JawSheet } from "./films/test/toon/JawSheet";
 import { LogoSheet } from "./films/test/brand/LogoSheet";
+import { SmirkmanAvatar, SmirkmanBanner, StepAvatar, StepBanner } from "./films/test/brand/Brand";
 import { CHALK, MEMPHIS, NEON, PAPER, VINTAGE } from "./films/test/styles";
 import { FPS, H, W } from "./components/theme";
 import { GhostArmy, GHOST_ARMY_DURATION } from "./films/ghost-army/GhostArmy";
@@ -45,6 +46,10 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="Test-Chalk" component={() => <StyledTest st={CHALK} />} {...common} />
       <Composition id="Test-Memphis" component={() => <StyledTest st={MEMPHIS} />} {...common} />
       {/* New style experiment: real 3D world, flat 2D characters */}
+      <Composition id="Brand-SmirkmanAvatar" component={SmirkmanAvatar} durationInFrames={1} fps={FPS} width={800} height={800} />
+      <Composition id="Brand-SmirkmanBanner" component={SmirkmanBanner} durationInFrames={1} fps={FPS} width={2560} height={1440} />
+      <Composition id="Brand-StepAvatar" component={StepAvatar} durationInFrames={1} fps={FPS} width={800} height={800} />
+      <Composition id="Brand-StepBanner" component={StepBanner} durationInFrames={1} fps={FPS} width={2560} height={1440} />
       <Composition id="Test-LogoSheet" component={LogoSheet} durationInFrames={30} fps={FPS} width={1800} height={2720} />
       <Composition id="Test-JawSheet" component={JawSheet} durationInFrames={30} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-SmileSheet" component={SmileSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />
