@@ -445,3 +445,15 @@ export const CAST: Record<string, Look> = {
   squareCaptain: { head: "square", skin: POP.skin, hair: "#E0E0E0", hairStyle: "flat", shirt: POP.white, pattern: "stripes", patternColor: POP.blue, shoes: INK, hat: "captain", hatColor: POP.blue },
   triBucket: { head: "triangle", skin: POP.skin2, hair: "#D2652D", hairStyle: "spiky", shirt: POP.teal, pattern: "stripes", patternColor: "#7FE3D6", tie: POP.red, shoes: POP.purple, hat: "bucket", hatColor: POP.orange, hatColor2: POP.yellow },
 };
+
+/** THE MAIN CHARACTER: round head, closed smirk, round black shades, one raised brow. The outfit
+ *  changes per story; this is the default (captain). Swap shirt/pattern/hat to dress him for a story. */
+export const MAIN: Look = {
+  ...CAST.squareCaptain,
+  head: "round",
+  skin: POP.skin,
+  sunglasses: true,
+  shades: "round",
+  lens: "#1E1E1E",
+  smile: "closed",
+};

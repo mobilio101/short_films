@@ -9,10 +9,8 @@ import * as THREE from "three";
 import { LineSegments2 } from "three/examples/jsm/lines/LineSegments2.js";
 import { LineSegmentsGeometry } from "three/examples/jsm/lines/LineSegmentsGeometry.js";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
-import { Character, EMOTE } from "../../../components/Character";
-import { INK_MAIN, InkDrop } from "../../../components/mascot";
-import { skin } from "../../../components/memphis";
-import { blobTexture, chartTexture, glowTexture, nightTexture, rugTexture, woodTexture } from "./textures";
+import { MAIN, Toon } from "../../../characters/toon/Toon";
+import { blobTexture, chartTexture, dayTexture, glowTexture, rugTexture, woodTexture } from "./textures";
 
 const W = 1080;
 const H = 1920;
@@ -70,7 +68,7 @@ const CameraRig: React.FC = () => {
 // ---- Ink outlines: thick black lines on every hard edge of a geometry. ----
 const lineMat = (width: number) => new LineMaterial({ color: INK, linewidth: width, resolution: new THREE.Vector2(W, H) });
 
-const Edges: React.FC<{ geometry: THREE.BufferGeometry; width?: number; angle?: number }> = ({ geometry, width = 4.6, angle = 25 }) => {
+const Edges: React.FC<{ geometry: THREE.BufferGeometry; width?: number; angle?: number }> = ({ geometry, width = 6, angle = 25 }) => {
   const obj = useMemo(() => {
     const edges = new THREE.EdgesGeometry(geometry, angle);
     const g = new LineSegmentsGeometry().fromEdgesGeometry(edges);
@@ -90,7 +88,7 @@ type BoxProps = {
 };
 
 /** A painted box with ink outlines that casts and receives shadows. */
-const Box: React.FC<BoxProps> = ({ size, position, rotation = [0, 0, 0], color = "#ffffff", map, ink = 4.6, shadow = true }) => {
+const Box: React.FC<BoxProps> = ({ size, position, rotation = [0, 0, 0], color = "#ffffff", map, ink = 6, shadow = true }) => {
   const geo = useMemo(() => new THREE.BoxGeometry(...size), [size[0], size[1], size[2]]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <group position={position} rotation={rotation}>
@@ -127,11 +125,11 @@ const Cyl: React.FC<{ r: number; h: number; position: [number, number, number]; 
 const Room: React.FC = () => {
   const tex = useMemo(
     () => ({
-      floor: woodTexture({ base: "#8E6646", planks: 8, seed: 3, repeat: [1, 1.2], vertical: true }),
-      back: woodTexture({ base: "#6E4C36", planks: 9, seed: 11, repeat: [1.4, 1] }),
-      side: woodTexture({ base: "#5C3F2C", planks: 9, seed: 21, repeat: [1.6, 1] }),
-      beam: woodTexture({ base: "#4E2E18", planks: 3, seed: 5 }),
-      night: nightTexture(),
+      floor: woodTexture({ base: "#D0935A", planks: 8, seed: 3, repeat: [1, 1.2], vertical: true }),
+      back: woodTexture({ base: "#C07A45", planks: 9, seed: 11, repeat: [1.4, 1] }),
+      side: woodTexture({ base: "#A9653A", planks: 9, seed: 21, repeat: [1.6, 1] }),
+      beam: woodTexture({ base: "#7E4626", planks: 3, seed: 5 }),
+      night: dayTexture(),
     }),
     [],
   );
@@ -169,7 +167,7 @@ const Room: React.FC = () => {
         <mesh geometry={backGeo} castShadow receiveShadow>
           <meshStandardMaterial map={tex.back} roughness={0.95} />
         </mesh>
-        <Edges geometry={backGeo} width={5} />
+        <Edges geometry={backGeo} width={6.5} />
       </group>
       {/* Side walls */}
       {[-1, 1].map((d) => (
@@ -220,7 +218,7 @@ const Room: React.FC = () => {
 };
 
 const Desk: React.FC<{ frame: number }> = ({ frame }) => {
-  const wood = useMemo(() => woodTexture({ base: "#7B4422", planks: 4, seed: 9 }), []);
+  const wood = useMemo(() => woodTexture({ base: "#B0602E", planks: 4, seed: 9 }), []);
   const chart = useMemo(() => chartTexture(4), []);
   const glow = useMemo(() => glowTexture("#FFB347"), []);
   const flick = 1 + 0.08 * Math.sin(frame * 0.9) + 0.05 * Math.sin(frame * 2.3);
@@ -395,13 +393,13 @@ const Scene: React.FC = () => {
   return (
     <>
       <CameraRig />
-      <color attach="background" args={["#120A05"]} />
-      <ambientLight color="#4A4A5E" intensity={0.6} />
-      <hemisphereLight color="#FFD9A8" groundColor="#2A160A" intensity={0.35} />
+      <color attach="background" args={["#8CC8F0"]} />
+      <ambientLight color="#FFF1DE" intensity={1.25} />
+      <hemisphereLight color="#FFF3D6" groundColor="#B7804F" intensity={1.0} />
       {/* Moonlight through the porthole: cool, casts the round window onto the room */}
       <directionalLight
-        color="#8FB0F0"
-        intensity={2.2}
+        color="#FFE9B8"
+        intensity={3.4}
         position={[DESK.x + 1.2, 3.6, BACK - 4]}
         castShadow
         shadow-mapSize-width={1024}
@@ -431,16 +429,13 @@ export const Cabin3D: React.FC = () => {
 
   // Hero: feet on the floor at HERO, about 1.5 m tall in the room.
   const feet = project(HERO);
-  const head = project(HERO.clone().add(new THREE.Vector3(0, 1.5, 0)));
-  const heroScale = (feet.y - head.y) / 420;
-  // Mascot sits on the desk next to the candle.
-  const deskSpot = project(new THREE.Vector3(DESK.x + 0.15, DESK.top + 0.04, DESK.z + 0.22));
-  const deskUp = project(new THREE.Vector3(DESK.x + 0.15, DESK.top + 0.34, DESK.z + 0.22));
-  const dropScale = (deskSpot.y - deskUp.y) / 175;
+  const head = project(HERO.clone().add(new THREE.Vector3(0, 1.6, 0)));
+  // The Toon character is about 720 px tall (feet to hat top) at scale 1.
+  const heroScale = (feet.y - head.y) / 720;
 
   return (
     <AbsoluteFill style={{ background: "#120A05" }}>
-      <AbsoluteFill style={{ filter: "blur(1.1px) saturate(1.05)" }}>
+      <AbsoluteFill style={{ filter: "blur(0.8px) saturate(1.15)" }}>
         <ThreeCanvas
           width={width}
           height={height}
@@ -454,14 +449,11 @@ export const Cabin3D: React.FC = () => {
       {/* Flat 2D characters, sharp, on top of the 3D world */}
       <AbsoluteFill>
         <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
-          <g style={{ filter: "drop-shadow(0 0 10px rgba(255,170,80,0.18))" }}>
-            <InkDrop x={deskSpot.x} y={deskSpot.y} s={dropScale} mood="shock" seed={2} />
-            <Character {...INK_MAIN} {...EMOTE.shock} x={feet.x} y={feet.y} scale={heroScale} skin={skin(RED)} look={12} seed={1} />
-          </g>
+          <Toon id="hero" x={feet.x} y={feet.y} scale={heroScale} look={MAIN} expr="sneaky" gaze={10} seed={1} />
         </svg>
       </AbsoluteFill>
       {/* Warm vignette */}
-      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 45% 42%, rgba(0,0,0,0) 45%, rgba(20,8,0,0.55) 100%)", pointerEvents: "none" }} />
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 45% 42%, rgba(0,0,0,0) 45%, rgba(40,20,0,0.22) 100%)", pointerEvents: "none" }} />
       <div style={{ display: "none" }}>{frame}</div>
     </AbsoluteFill>
   );

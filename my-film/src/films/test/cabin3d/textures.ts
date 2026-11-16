@@ -319,3 +319,50 @@ export const rugTexture = () => {
   t.anisotropy = 8;
   return t;
 };
+
+/** Bright daytime view outside the porthole: blue sky, clouds, sun, turquoise sea. */
+export const dayTexture = () => {
+  const [c, g] = canvas(512, 512);
+  const sky = g.createLinearGradient(0, 0, 0, 290);
+  sky.addColorStop(0, "#3E9BF2");
+  sky.addColorStop(1, "#A9DCFF");
+  g.fillStyle = sky;
+  g.fillRect(0, 0, 512, 290);
+  g.fillStyle = "#FFF4C2";
+  g.beginPath();
+  g.arc(360, 120, 46, 0, Math.PI * 2);
+  g.fill();
+  g.fillStyle = "#FFFFFF";
+  for (const [x, y, s] of [
+    [140, 110, 1],
+    [250, 190, 0.7],
+  ] as const) {
+    for (const [dx, dy, r] of [
+      [0, 0, 36],
+      [34, -12, 30],
+      [64, 4, 26],
+      [-30, 8, 24],
+    ] as const) {
+      g.beginPath();
+      g.arc(x + dx * s, y + dy * s, r * s, 0, Math.PI * 2);
+      g.fill();
+    }
+  }
+  const sea = g.createLinearGradient(0, 290, 0, 512);
+  sea.addColorStop(0, "#1FB5C9");
+  sea.addColorStop(1, "#0C7FA8");
+  g.fillStyle = sea;
+  g.fillRect(0, 290, 512, 222);
+  g.strokeStyle = "rgba(255,255,255,0.8)";
+  g.lineWidth = 4;
+  for (let i = 0; i < 7; i++) {
+    const y = 315 + i * 26;
+    g.beginPath();
+    g.moveTo(40 + (i % 2) * 60, y);
+    g.quadraticCurveTo(80 + (i % 2) * 60, y - 8, 120 + (i % 2) * 60, y);
+    g.moveTo(300 - (i % 2) * 40, y + 10);
+    g.quadraticCurveTo(340 - (i % 2) * 40, y + 2, 380 - (i % 2) * 40, y + 10);
+    g.stroke();
+  }
+  return toTexture(c);
+};
