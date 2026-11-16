@@ -279,7 +279,7 @@ export const Toon: React.FC<{
   const blink = (f + seed * 29) % 100 < 4;
   const hand = (d: number): [number, number] => {
     const down: [number, number] = [d * 150, -205];
-    const up: [number, number] = [d * 165, -470];
+    const up: [number, number] = [d * 235, -520];
     return [down[0] + (up[0] - down[0]) * armsUp, down[1] + (up[1] - down[1]) * armsUp + Math.sin(f / 9 + d + seed) * 4];
   };
   return (
