@@ -27,8 +27,8 @@ export const POP = {
 };
 
 export type HeadShape = "round" | "square" | "triangle";
-export type Pattern = "stripes" | "wavy" | "pinstripe" | "zigzag" | "none";
-export type HatKind = "cap" | "captain" | "beanie" | "tophat" | "hardhat" | "bucket" | "none";
+export type Pattern = "stripes" | "wavy" | "pinstripe" | "zigzag" | "splatter" | "buttons" | "none";
+export type HatKind = "cap" | "captain" | "beanie" | "tophat" | "hardhat" | "bucket" | "crown" | "none";
 export type Expr = "neutral" | "smug" | "shock" | "panic" | "grin" | "angry" | "happy" | "sneaky";
 
 export type Look = {
@@ -46,6 +46,8 @@ export type Look = {
   hatColor2?: string;
   /** Black sunglasses. In shock or panic they pop up onto the forehead. */
   sunglasses?: boolean;
+  /** Beard colour (a full beard around the chin; the mouth sits on top). */
+  beard?: string;
   /** Shape of the shades. */
   shades?: "wayfarer" | "round" | "aviator" | "visor";
   /** Lens colour (default black). */
@@ -129,6 +131,17 @@ const Hat: React.FC<{ l: Look }> = ({ l }) => {
           <path d={`M-150,${t + 10} C-150,${t - 140} 150,${t - 140} 150,${t + 10} Z`} fill={c} {...ol} />
           <rect x={-185} y={t - 4} width={370} height={30} rx={14} fill={c} {...ol} />
           <rect x={-18} y={t - 132} width={36} height={130} rx={10} fill={c} {...ol} strokeWidth={5} />
+        </g>
+      );
+    case "crown":
+      return (
+        <g>
+          <path d={`M-110,${t + 8} L-120,${t - 92} L-60,${t - 40} L0,${t - 112} L60,${t - 40} L120,${t - 92} L110,${t + 8} Z`} fill={POP.yellow} {...ol} />
+          <rect x={-114} y={t - 6} width={228} height={30} rx={8} fill={c} {...ol} strokeWidth={6} />
+          {[-120, 0, 120].map((x, i) => (
+            <circle key={x} cx={x} cy={t - (i === 1 ? 116 : 96)} r={13} fill={POP.white} {...ol} strokeWidth={5} />
+          ))}
+          <circle cx={0} cy={t + 9} r={9} fill={POP.blue} />
         </g>
       );
     case "bucket":
@@ -328,6 +341,14 @@ const Face: React.FC<{ l: Look; e: Expr; look: number; blink: boolean; frame: nu
       {shades}
       {part === "all" && brow(-1)}
       {part === "all" && brow(1)}
+      {l.beard && (
+        <path
+          d={`M-130,${HEAD_Y + 10} Q-120,${HEAD_Y + 150} 0,${HEAD_Y + 158} Q120,${HEAD_Y + 150} 130,${HEAD_Y + 10} Q70,${HEAD_Y + 60} 0,${HEAD_Y + 52} Q-70,${HEAD_Y + 60} -130,${HEAD_Y + 10} Z`}
+          fill={l.beard}
+          {...ol}
+          strokeWidth={6}
+        />
+      )}
       {mouth}
       {(e === "panic" || e === "shock") && (
         <path transform={`translate(${130 + L},${-560 + (frame % 24) * 1.2})`} d="M0,0 C-16,26 -16,44 0,46 C16,44 16,26 0,0 Z" fill={POP.sky} {...ol} strokeWidth={5} />
@@ -349,6 +370,24 @@ const ShirtPattern: React.FC<{ p: Pattern; color: string; id: string }> = ({ p, 
   if (p === "wavy")
     lines = [-305, -260, -215, -175].map((y) => (
       <path key={y} d={`M-130,${y} Q-97,${y - 16} -65,${y} T0,${y} T65,${y} T130,${y}`} fill="none" stroke={color} strokeWidth={10} />
+    ));
+  if (p === "splatter")
+    lines = [
+      [-40, -300, 14, POP.red],
+      [30, -280, 10, POP.blue],
+      [-60, -220, 12, POP.yellow],
+      [50, -210, 16, POP.teal],
+      [0, -250, 8, INK],
+      [-20, -180, 11, POP.blue],
+      [70, -170, 9, POP.red],
+      [-80, -170, 8, POP.teal],
+    ].map(([x, y, r, c], i) => <circle key={i} cx={x as number} cy={y as number} r={r as number} fill={c as string} />);
+  if (p === "buttons")
+    lines = [-300, -255, -210].map((y) => (
+      <g key={y}>
+        <circle cx={-22} cy={y} r={8} fill={color} stroke={INK} strokeWidth={3} />
+        <circle cx={22} cy={y} r={8} fill={color} stroke={INK} strokeWidth={3} />
+      </g>
     ));
   if (p === "zigzag")
     lines = [-290, -220].map((y) => <path key={y} d={`M-130,${y} L-100,${y - 22} L-70,${y} L-40,${y - 22} L-10,${y} L20,${y - 22} L50,${y} L80,${y - 22} L110,${y} L140,${y - 22}`} fill="none" stroke={color} strokeWidth={10} />);
@@ -372,14 +411,22 @@ export const Toon: React.FC<{
   gaze?: number;
   /** 0 = arms spread down, 1 = both arms up. */
   armsUp?: number;
+  /** Explicit right-hand position (relative to the feet; y negative is up). Overrides armsUp for that hand. */
+  handR?: [number, number];
+  /** Explicit left-hand position. */
+  handL?: [number, number];
+  /** Something held in the right hand (drawn centred on the hand, in character units). */
+  holding?: React.ReactNode;
   id: string;
   seed?: number;
   flip?: boolean;
-}> = ({ x, y, scale = 1, look: l, expr = "neutral", gaze = 0, armsUp = 0, id, seed = 0, flip = false }) => {
+}> = ({ x, y, scale = 1, look: l, expr = "neutral", gaze = 0, armsUp = 0, handR, handL, holding, id, seed = 0, flip = false }) => {
   const f = useCurrentFrame();
   const bob = Math.sin(f / 12 + seed) * 3;
   const blink = (f + seed * 29) % 100 < 4;
   const hand = (d: number): [number, number] => {
+    if (d > 0 && handR) return handR;
+    if (d < 0 && handL) return handL;
     const down: [number, number] = [d * 150, -205];
     const up: [number, number] = [d * 235, -520];
     return [down[0] + (up[0] - down[0]) * armsUp, down[1] + (up[1] - down[1]) * armsUp + Math.sin(f / 9 + d + seed) * 4];
@@ -400,6 +447,7 @@ export const Toon: React.FC<{
           return (
             <g key={`a${d}`}>
               <path d={`M${d * 50},-320 Q${d * 110},${(-320 + hy) / 2 - 10} ${hx},${hy}`} fill="none" stroke={INK} strokeWidth={11} strokeLinecap="round" />
+              {d > 0 && holding && <g transform={`translate(${hx},${hy})`}>{holding}</g>}
               <circle cx={hx} cy={hy} r={17} fill={l.skin} {...ol} strokeWidth={6} />
             </g>
           );
@@ -457,3 +505,20 @@ export const MAIN: Look = {
   lens: "#1E1E1E",
   smile: "closed",
 };
+
+/** Things a character can hold (drawn around the hand at 0,0). */
+export const PaintRoller: React.FC<{ color?: string }> = ({ color = POP.white }) => (
+  <g transform="rotate(-20)">
+    <path d="M0,0 L0,-90 L50,-90" fill="none" stroke={INK} strokeWidth={9} strokeLinecap="round" strokeLinejoin="round" />
+    <rect x={30} y={-125} width={110} height={44} rx={16} fill={color} stroke={INK} strokeWidth={7} />
+    <path d="M40,-112 L60,-112 M80,-100 L100,-100" stroke={INK} strokeWidth={10} strokeLinecap="round" />
+    <path d="M70,-81 q4,22 0,34" stroke={INK} strokeWidth={8} strokeLinecap="round" />
+  </g>
+);
+export const Brush: React.FC<{ color?: string }> = ({ color = POP.red }) => (
+  <g transform="rotate(-35)">
+    <rect x={-8} y={-110} width={16} height={100} rx={6} fill="#C98B4E" stroke={INK} strokeWidth={6} />
+    <rect x={-11} y={-128} width={22} height={22} fill="#BFC4CC" stroke={INK} strokeWidth={6} />
+    <path d="M-12,-128 Q0,-175 12,-128 Z" fill={color} stroke={INK} strokeWidth={6} strokeLinejoin="round" />
+  </g>
+);

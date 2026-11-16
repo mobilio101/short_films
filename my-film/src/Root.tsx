@@ -10,6 +10,7 @@ import { ChibiSheet } from "./films/test/chibi/ChibiSheet";
 import { ComicSheet } from "./films/test/chibi/ComicSheet";
 import { ToonSheet } from "./films/test/toon/ToonSheet";
 import { CaptainCompare } from "./films/test/toon/CaptainCompare";
+import { DazzleShips, DAZZLE_DURATION } from "./films/dazzle-ships/DazzleShips";
 import { ShadesSheet } from "./films/test/toon/ShadesSheet";
 import { SmileSheet } from "./films/test/toon/SmileSheet";
 import { CHALK, MEMPHIS, NEON, PAPER, VINTAGE } from "./films/test/styles";
@@ -25,6 +26,8 @@ const common = { durationInFrames: TEST_DURATION, fps: FPS, width: W, height: H 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* New channel (3D world, 2D characters): rules in NEW-CHANNEL.md */}
+      <Composition id="DazzleShips" component={DazzleShips} durationInFrames={DAZZLE_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="DragonJarKo" component={DragonJarKo} durationInFrames={DRAGON_JAR_KO_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="Apollo13" component={Apollo13} durationInFrames={APOLLO13_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="Garbo" component={Garbo} durationInFrames={GARBO_DURATION} fps={FPS} width={1080} height={1920} />
