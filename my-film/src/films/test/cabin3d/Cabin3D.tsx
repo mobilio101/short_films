@@ -23,15 +23,17 @@ const BACK = -2;
 const CEIL = 3.1;
 const HERO = new THREE.Vector3(-0.35, 0, -0.35); // where the main character stands
 const DESK = { x: 0.95, z: -1.55, top: 0.86 };
+const SUN = new THREE.Vector3(2.6, 6.0, -5); // sunlight comes from here, through the porthole
+const PORT = new THREE.Vector3(0.95, 1.95, -2);
 const LANTERN = { x: -0.55, y: 2.25, z: -0.75 };
 
 // ---- Camera ----
 export const cameraAt = (frame: number) => {
   const t = frame / 30;
   return {
-    pos: new THREE.Vector3(0.1 + t * 0, 1.15, 3.6),
-    target: new THREE.Vector3(0.05, 1.32, -0.8),
-    fov: 58,
+    pos: new THREE.Vector3(0.1 + t * 0, 0.95, 3.3),
+    target: new THREE.Vector3(0.0, 1.38, -0.8),
+    fov: 64,
   };
 };
 
@@ -327,31 +329,6 @@ const Lantern: React.FC<{ frame: number }> = ({ frame }) => {
   );
 };
 
-/** Things in the foreground (close to the camera) to give depth: a coiled rope and a barrel. */
-const Foreground: React.FC = () => {
-  const wood = useMemo(() => woodTexture({ base: "#7A4522", planks: 10, seed: 31, vertical: true }), []);
-  return (
-    <group>
-      <group position={[0.95, 0, 1.75]}>
-        <Cyl r={0.38} h={0.95} position={[0, 0.475, 0]} color="#8A5530" seg={22} ink={3.4} />
-        <mesh position={[0, 0.475, 0]} castShadow>
-          <cylinderGeometry args={[0.385, 0.385, 0.95, 22, 1, true]} />
-          <meshStandardMaterial map={wood} roughness={0.9} />
-        </mesh>
-        {[0.18, 0.77].map((y) => (
-          <Cyl key={y} r={0.395} h={0.06} position={[0, y, 0]} color="#2B2B2B" seg={22} ink={2.5} />
-        ))}
-      </group>
-      {[0, 1, 2].map((i) => (
-        <mesh key={i} position={[-0.75, 0.05 + i * 0.07, 2.2]} rotation={[Math.PI / 2, 0, 0]} castShadow>
-          <torusGeometry args={[0.32 - i * 0.07, 0.04, 8, 30]} />
-          <meshStandardMaterial color="#B88A55" roughness={1} />
-        </mesh>
-      ))}
-    </group>
-  );
-};
-
 /** Wall chart in a frame, on the left of the back wall. */
 const WallChart: React.FC = () => {
   const chart = useMemo(() => chartTexture(12), []);
@@ -388,19 +365,86 @@ const ContactShadow: React.FC<{ at: THREE.Vector3; size: number }> = ({ at, size
   );
 };
 
-const Scene: React.FC = () => {
+/** Fake volumetric sunbeam from the porthole to the floor, with dust drifting in it. */
+const SunBeam: React.FC<{ frame: number }> = ({ frame }) => {
+  const { mid, len, quat, end } = useMemo(() => {
+    const dir = PORT.clone().sub(SUN).normalize();
+    const t = PORT.y / -dir.y;
+    const end = PORT.clone().add(dir.clone().multiplyScalar(t));
+    const mid = PORT.clone().add(end).multiplyScalar(0.5);
+    const quat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), PORT.clone().sub(end).normalize());
+    return { mid, len: PORT.distanceTo(end), quat, end };
+  }, []);
+  const motes = useMemo(() => {
+    const r = (i: number) => (Math.sin(i * 91.7) * 43758.5453) % 1;
+    return Array.from({ length: 46 }, (_, i) => ({ t: Math.abs(r(i)), a: Math.abs(r(i + 7)) * Math.PI * 2, rr: Math.abs(r(i + 13)) * 0.4, s: 0.008 + Math.abs(r(i + 3)) * 0.012 }));
+  }, []);
+  return (
+    <group>
+      <mesh position={mid} quaternion={quat}>
+        <cylinderGeometry args={[0.3, 0.62, len, 32, 1, true]} />
+        <meshBasicMaterial color="#FFE9B0" transparent opacity={0.16} blending={THREE.AdditiveBlending} depthWrite={false} side={THREE.DoubleSide} fog={false} />
+      </mesh>
+      <mesh position={[end.x, 0.016, end.z]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.6, 40]} />
+        <meshBasicMaterial color="#FFE3A0" transparent opacity={0.22} blending={THREE.AdditiveBlending} depthWrite={false} />
+      </mesh>
+      {motes.map((m, i) => {
+        const tt = (m.t + frame * 0.0012 * (1 + (i % 3))) % 1;
+        const p = PORT.clone().lerp(end, tt);
+        const w = 0.3 + 0.3 * tt;
+        return (
+          <mesh key={i} position={[p.x + Math.cos(m.a + frame * 0.01) * m.rr * w, p.y + Math.sin(frame * 0.02 + i) * 0.03, p.z + Math.sin(m.a) * m.rr * w]}>
+            <sphereGeometry args={[m.s, 6, 4]} />
+            <meshBasicMaterial color="#FFF6D8" transparent opacity={0.85} blending={THREE.AdditiveBlending} depthWrite={false} fog={false} />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+};
+
+/** Objects very close to the camera, drawn in their own layer in FRONT of the flat characters and
+ *  strongly blurred, like a real lens: a barrel, a rope coil and a wooden post. */
+const FrontProps: React.FC = () => {
+  const wood = useMemo(() => woodTexture({ base: "#A0582C", planks: 10, seed: 31, vertical: true }), []);
+  return (
+    <group>
+      {/* A low crate in the bottom-right corner */}
+      <group position={[0.5, 0, 2.0]} rotation={[0, 0.35, 0]}>
+        <Box size={[0.62, 0.46, 0.5]} position={[0, 0.23, 0]} color="#B5703A" map={wood} ink={6} />
+        <Box size={[0.66, 0.07, 0.54]} position={[0, 0.42, 0]} color="#8A4F26" ink={5} />
+        <Box size={[0.66, 0.07, 0.54]} position={[0, 0.06, 0]} color="#8A4F26" ink={5} />
+      </group>
+      <Box size={[0.14, 3.2, 0.14]} position={[-0.32, 1.6, 2.4]} color="#7E4626" map={wood} ink={6} />
+    </group>
+  );
+};
+
+const Scene: React.FC<{ layer: "back" | "front" }> = ({ layer }) => {
   const frame = useCurrentFrame();
+  if (layer === "front")
+    return (
+      <>
+        <CameraRig />
+        <ambientLight color="#FFF1DE" intensity={1.4} />
+        <hemisphereLight color="#FFF3D6" groundColor="#B7804F" intensity={1.0} />
+        <directionalLight color="#FFE9B8" intensity={1.6} position={[2, 4, 4]} />
+        <FrontProps />
+      </>
+    );
   return (
     <>
       <CameraRig />
       <color attach="background" args={["#8CC8F0"]} />
+      <fog attach="fog" args={["#F6DDB4", 4.2, 13]} />
       <ambientLight color="#FFF1DE" intensity={1.25} />
       <hemisphereLight color="#FFF3D6" groundColor="#B7804F" intensity={1.0} />
       {/* Moonlight through the porthole: cool, casts the round window onto the room */}
       <directionalLight
         color="#FFE9B8"
         intensity={3.4}
-        position={[DESK.x + 1.2, 3.6, BACK - 4]}
+        position={SUN.toArray() as [number, number, number]}
         castShadow
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
@@ -414,9 +458,9 @@ const Scene: React.FC = () => {
       <Desk frame={frame} />
       <Chest />
       <Lantern frame={frame} />
-      <Foreground />
       <Rug />
-      <ContactShadow at={HERO} size={0.9} />
+      <SunBeam frame={frame} />
+      <ContactShadow at={HERO} size={1.0} />
     </>
   );
 };
@@ -435,22 +479,23 @@ export const Cabin3D: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ background: "#120A05" }}>
-      <AbsoluteFill style={{ filter: "blur(0.8px) saturate(1.15)" }}>
-        <ThreeCanvas
-          width={width}
-          height={height}
-          shadows
-          gl={{ antialias: true, preserveDrawingBuffer: true }}
-          camera={{ fov: 52, position: [0, 1.4, 4.3], near: 0.05, far: 100 }}
-        >
-          <Scene />
+      {/* BACK layer: the room, softly out of focus */}
+      <AbsoluteFill style={{ filter: "blur(1.8px) saturate(1.15)" }}>
+        <ThreeCanvas width={width} height={height} shadows gl={{ antialias: true, preserveDrawingBuffer: true }} camera={{ fov: 64, position: [0, 1, 3.3], near: 0.05, far: 100 }}>
+          <Scene layer="back" />
         </ThreeCanvas>
       </AbsoluteFill>
-      {/* Flat 2D characters, sharp, on top of the 3D world */}
+      {/* MIDDLE layer: the flat 2D characters, in sharp focus */}
       <AbsoluteFill>
         <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
           <Toon id="hero" x={feet.x} y={feet.y} scale={heroScale} look={MAIN} expr="sneaky" gaze={10} seed={1} />
         </svg>
+      </AbsoluteFill>
+      {/* FRONT layer: objects right in front of the lens, heavily blurred */}
+      <AbsoluteFill style={{ filter: "blur(7px) saturate(1.1)" }}>
+        <ThreeCanvas width={width} height={height} gl={{ antialias: true, alpha: true, preserveDrawingBuffer: true }} camera={{ fov: 64, position: [0, 1, 3.3], near: 0.05, far: 100 }}>
+          <Scene layer="front" />
+        </ThreeCanvas>
       </AbsoluteFill>
       {/* Warm vignette */}
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 45% 42%, rgba(0,0,0,0) 45%, rgba(40,20,0,0.22) 100%)", pointerEvents: "none" }} />
