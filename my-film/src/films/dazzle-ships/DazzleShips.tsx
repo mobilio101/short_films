@@ -115,7 +115,7 @@ const Captions: React.FC = () => {
   const age = ms - c.start;
   const s = interpolate(age, [0, 90], [0.85, 1], { extrapolateRight: "clamp", easing: Easing.out(Easing.back(2)) });
   return (
-    <div style={{ position: "absolute", left: 0, right: 0, top: 1255, display: "flex", justifyContent: "center", transform: `scale(${s})` }}>
+    <div style={{ position: "absolute", left: 0, right: 0, top: 1400, display: "flex", justifyContent: "center", transform: `scale(${s})` }}>
       <span
         style={{
           fontFamily: LILITA,
@@ -175,9 +175,9 @@ const At: React.FC<{ project: Project; at: THREE.Vector3; look: Look; id: string
 const Shot1: React.FC = () => {
   const { f } = useLocal();
   const k = ease(f, 0, S.s2a - S.s1);
-  const cam = lerpCam({ pos: v3(1.2, 1.5, 10.5), target: v3(0, 1.9, 0), fov: 56 }, { pos: v3(0.6, 1.35, 9.4), target: v3(0, 1.8, 0), fov: 56 }, k);
-  const shipX = interpolate(f, [0, 170], [-7, 1.5]);
-  const wilk = v3(-1.3, 0.6, 4.4);
+  const cam = lerpCam({ pos: v3(1.4, 1.8, 12.5), target: v3(0, 2.2, -1), fov: 50 }, { pos: v3(0.8, 1.6, 11.2), target: v3(0, 2.1, -1), fov: 50 }, k);
+  const shipX = interpolate(f, [0, 170], [-8, 1.5]);
+  const wilk = v3(-0.35, 0.6, 3.7);
   return (
     <World3D
       cam={cam}
@@ -187,13 +187,13 @@ const Shot1: React.FC = () => {
         <>
           <Daylight />
           <SeaAndSky frame={f} />
-          <Ship paint={12} position={[shipX, 0, -2.5]} frame={f} smoke />
-          <Foam position={[shipX, 0, -2.5]} size={[7.4, 1.8]} frame={f} />
+          <Ship paint={12} position={[shipX, 0, -3]} frame={f} smoke />
+          <Foam position={[shipX, 0, -3]} size={[7.4, 1.8]} frame={f} />
           <Dock />
           <ContactShadow at={wilk} size={1.0} />
         </>
       }
-      front={<Crates position={[2.3, 0.6, 7.6]} rotation={0.4} />}
+      front={<Crates position={[2.0, 0.6, 8.6]} rotation={0.4} />}
       chars={(p) => <At project={p} at={wilk} look={WILK} id="w1" expr="sneaky" gaze={10} holding={<PaintRoller />} handR={[160, -330]} />}
     />
   );
@@ -203,7 +203,7 @@ const Shot1: React.FC = () => {
 const Shot2a: React.FC = () => {
   const { f } = useLocal();
   const hit = cue("sinking") - S.s2a;
-  const cam: Cam = { pos: v3(-2 + f * 0.004, 0.7, 12), target: v3(0, 1.5, -26), fov: 26 };
+  const cam: Cam = { pos: v3(-2 + f * 0.004, 0.7, 12), target: v3(0, 1.8, -45), fov: 32 };
   const t = Math.max(0, f - hit);
   return (
     <AbsoluteFill>
@@ -216,15 +216,15 @@ const Shot2a: React.FC = () => {
           <>
             <Daylight />
             <SeaAndSky frame={f} />
-            <Ship paint="grey" position={[0, -Math.min(0.9, t * 0.006), -26]} rotation={[0, 0.35, Math.min(0.12, t * 0.0012)]} frame={f} smoke />
+            <Ship paint="grey" position={[0, -Math.min(0.9, t * 0.006), -45]} rotation={[0, 0.35, Math.min(0.12, t * 0.0012)]} frame={f} smoke />
             {t > 0 && (
               <>
-                <mesh position={[1.5, interpolate(t, [0, 10, 40], [0, 4, 2.5], { extrapolateRight: "clamp" }), -24]} scale={[1.2, interpolate(t, [0, 10, 40], [0.3, 3.2, 1.6], { extrapolateRight: "clamp" }), 1.2]}>
+                <mesh position={[1.5, interpolate(t, [0, 10, 40], [0, 2.4, 1.6], { extrapolateRight: "clamp" }), -43]} scale={[0.7, interpolate(t, [0, 10, 40], [0.3, 2.2, 1.2], { extrapolateRight: "clamp" }), 0.7]}>
                   <sphereGeometry args={[1, 16, 12]} />
                   <meshStandardMaterial color="#FFFFFF" transparent opacity={interpolate(t, [0, 30, 60], [1, 0.9, 0], { extrapolateRight: "clamp" })} />
                 </mesh>
                 {[0, 1, 2, 3].map((i) => (
-                  <mesh key={i} position={[0.5 - i * 0.5, 3 + ((t / 18 + i * 0.6) % 4), -26]} scale={1 + ((t / 18 + i * 0.6) % 4) * 0.6}>
+                  <mesh key={i} position={[0.5 - i * 0.5, 3 + ((t / 18 + i * 0.6) % 4), -45]} scale={1 + ((t / 18 + i * 0.6) % 4) * 0.6}>
                     <sphereGeometry args={[1, 12, 10]} />
                     <meshStandardMaterial color="#5A5F66" transparent opacity={0.7} />
                   </mesh>
@@ -243,8 +243,8 @@ const Shot2a: React.FC = () => {
 const Shot2b: React.FC = () => {
   const { f } = useLocal();
   const k = ease(f, 0, S.s3 - S.s2b);
-  const cam = lerpCam({ pos: v3(-1, 1.4, 9.6), target: v3(-0.4, 1.7, 0), fov: 58 }, { pos: v3(-0.4, 1.3, 8.8), target: v3(-0.4, 1.7, 0), fov: 58 }, k);
-  const adm = v3(-0.6, 0.6, 4.3);
+  const cam = lerpCam({ pos: v3(-0.6, 1.6, 10.6), target: v3(0, 2.0, -1), fov: 50 }, { pos: v3(-0.2, 1.5, 9.8), target: v3(0, 2.0, -1), fov: 50 }, k);
+  const adm = v3(0, 0.6, 4.4);
   return (
     <World3D
       cam={cam}
@@ -254,13 +254,13 @@ const Shot2b: React.FC = () => {
         <>
           <Daylight />
           <SeaAndSky frame={f} />
-          <Ship paint="grey" position={[-4, 0, -6]} rotation={[0, 0.15, 0]} frame={f} smoke />
+          <Ship paint="grey" position={[-3, 0, -8]} rotation={[0, 0.15, 0]} frame={f} smoke />
           <Ship paint="grey" position={[7, 0, -18]} rotation={[0, -0.25, 0]} frame={f + 30} smoke />
           <Dock />
           <ContactShadow at={adm} />
         </>
       }
-      front={<Crates position={[-2.6, 0.6, 7.4]} rotation={-0.3} />}
+      front={<Crates position={[-2.2, 0.6, 8.4]} rotation={-0.3} />}
       chars={(p) => <At project={p} at={adm} look={BRASS3} id="adm" expr={f > 25 ? "panic" : "neutral"} armsUp={f > 25 ? 0.4 : 0} />}
     />
   );
@@ -367,13 +367,12 @@ const Shot4: React.FC = () => {
 /** 5 · The king's test: a model on a turntable, a periscope, a confident wrong answer. */
 const Shot5: React.FC = () => {
   const { f } = useLocal();
-  const len = S.s6a - S.s5;
   const kingIn = cue("The king") - S.s5;
   const south = cue("South") - S.s5;
   const east = cue("It was pointing") - S.s5;
-  const cam = lerpCam({ pos: v3(1.6, 1.4, 3.6), target: v3(0.6, 0.9, -0.5), fov: 52 }, { pos: v3(-0.2, 1.25, 3.4), target: v3(-0.1, 1.0, -0.2), fov: 56 }, ease(f, kingIn - 20, kingIn + 25));
-  const camEnd = lerpCam(cam, { pos: v3(0.4, 1.3, 3.0), target: v3(0.2, 1.0, -0.3), fov: 54 }, ease(f, east - 10, len));
-  const king = v3(-0.95, 0, 0.55), wilk = v3(1.7, 0, 0.7);
+  const cam = lerpCam({ pos: v3(1.6, 1.4, 3.6), target: v3(0.6, 0.9, -0.5), fov: 52 }, { pos: v3(-0.1, 1.3, 4.0), target: v3(-0.2, 1.0, -0.2), fov: 58 }, ease(f, kingIn - 20, kingIn + 25));
+  const camEnd = lerpCam(cam, { pos: v3(0.25, 1.35, 4.9), target: v3(0.2, 0.95, -0.2), fov: 60 }, ease(f, south - 20, south + 10));
+  const king = v3(-0.85, 0, 0.55), wilk = v3(1.35, 0, 0.75);
   const spin = interpolate(f, [0, kingIn], [-1.2, 0], { extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
   return (
     <World3D
@@ -431,11 +430,11 @@ const Shot6b: React.FC = () => {
   const { f } = useLocal();
   const fire = cue("Get it wrong") - S.s6b;
   const miss = cue("torpedo") - S.s6b;
-  const cam: Cam = { pos: v3(0, 0.7, 12), target: v3(0, 1.4, -24), fov: 28 };
+  const cam: Cam = { pos: v3(0, 0.7, 12), target: v3(0, 1.8, -40), fov: 30 };
   const shipX = interpolate(f, [0, 240], [-5, 3]);
   const tw = interpolate(f, [fire, miss + 12], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   // Torpedo track: from near the camera to where the gunner *thought* the ship would be.
-  const start = v3(0.5, 0.03, 9), aim = v3(shipX - 8, 0.03, -22);
+  const start = v3(0.5, 0.03, 9), aim = v3(shipX - 9, 0.03, -38);
   const head = start.clone().lerp(aim, tw);
   const mid = start.clone().lerp(head, 0.5);
   const len = start.distanceTo(head);
@@ -451,7 +450,7 @@ const Shot6b: React.FC = () => {
           <>
             <Daylight />
             <SeaAndSky frame={f} />
-            <Ship paint={12} position={[shipX, 0, -24]} rotation={[0, 0.5, 0]} frame={f} smoke />
+            <Ship paint={12} position={[shipX, 0, -40]} rotation={[0, 0.5, 0]} frame={f} smoke />
             {tw > 0 && (
               <mesh position={[mid.x, 0.04, mid.z]} rotation={[-Math.PI / 2, 0, -ang]}>
                 <planeGeometry args={[0.35, Math.max(0.01, len)]} />
@@ -488,7 +487,6 @@ const Shot7: React.FC = () => {
           <Dock />
         </>
       }
-      front={<Crates position={[0, 0.6, 7.2]} />}
     />
   );
 };
@@ -525,8 +523,8 @@ const Shot8a: React.FC = () => {
 /** 8b · But the sailors loved it. */
 const Shot8b: React.FC = () => {
   const { f } = useLocal();
-  const cam: Cam = { pos: v3(0.4, 1.3, 9.2 - f * 0.006), target: v3(0, 1.8, 0), fov: 56 };
-  const ps = [v3(-1.6, 0.6, 4.0), v3(0, 0.6, 4.4), v3(1.6, 0.6, 4.0)];
+  const cam: Cam = { pos: v3(0.3, 1.6, 10.6 - f * 0.006), target: v3(0, 2.0, -1), fov: 50 };
+  const ps = [v3(-1.05, 0.6, 4.0), v3(0, 0.6, 4.5), v3(1.05, 0.6, 4.0)];
   const looks = [SAILOR1, SAILOR2, SAILOR3];
   return (
     <World3D
@@ -560,9 +558,9 @@ const Shot9: React.FC = () => {
   const { f } = useLocal();
   const len = DAZZLE_DURATION - S.s9;
   const k = ease(f, 0, len);
-  const cam = lerpCam({ pos: v3(0.6, 1.35, 9.4), target: v3(0, 1.8, 0), fov: 56 }, { pos: v3(1.2, 1.5, 10.5), target: v3(0, 1.9, 0), fov: 56 }, k);
+  const cam = lerpCam({ pos: v3(0.8, 1.6, 11.2), target: v3(0, 2.1, -1), fov: 50 }, { pos: v3(1.4, 1.8, 12.5), target: v3(0, 2.2, -1), fov: 50 }, k);
   const shipX = interpolate(f, [0, len], [1.5, 7]);
-  const wilk = v3(-1.3, 0.6, 4.4);
+  const wilk = v3(-0.35, 0.6, 3.7);
   return (
     <World3D
       cam={cam}
@@ -572,13 +570,13 @@ const Shot9: React.FC = () => {
         <>
           <Daylight />
           <SeaAndSky frame={f} />
-          <Ship paint={12} position={[shipX, 0, -2.5]} frame={f} smoke />
-          <Foam position={[shipX, 0, -2.5]} size={[7.4, 1.8]} frame={f} />
+          <Ship paint={12} position={[shipX, 0, -3]} frame={f} smoke />
+          <Foam position={[shipX, 0, -3]} size={[7.4, 1.8]} frame={f} />
           <Dock />
           <ContactShadow at={wilk} />
         </>
       }
-      front={<Crates position={[2.3, 0.6, 7.6]} rotation={0.4} />}
+      front={<Crates position={[2.0, 0.6, 8.6]} rotation={0.4} />}
       chars={(p) => {
         const w = placeToon(p, wilk);
         return (
@@ -687,7 +685,7 @@ export const DazzleShips: React.FC = () => {
         <Shot6b />
         <Tag text="SPEED?" x={300} y={480} at={cue("speed") - S.s6b} color={POP.yellow} size={60} />
         <Tag text="HEADING?" x={780} y={520} at={cue("direction") - S.s6b} color={POP.yellow} size={60} rotate={4} />
-        <Tag text="10° OFF = MISS" x={540} y={1460} at={cue("ten degrees") - S.s6b} color={POP.red} size={62} rotate={-2} />
+        <Tag text="10° OFF = MISS" x={540} y={1590} at={cue("ten degrees") - S.s6b} color={POP.red} size={62} rotate={-2} />
       </Shot>
       <Shot from={S.s7} to={S.s8a}>
         <Shot7 />
