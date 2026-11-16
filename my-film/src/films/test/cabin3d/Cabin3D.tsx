@@ -1,15 +1,16 @@
-// Style test "3D world": a real 3D captain's cabin built in code with Three.js, with our flat 2D
-// ink-blot characters standing inside it. Background = 3D (lit, shadowed, ink outlines on every edge,
-// slightly blurred); characters = flat SVG drawn on top, sharp.
+// Style test "3D world" (new channel): a real 3D captain's cabin built in code with Three.js, with our
+// flat 2D main character standing inside it. Three layers: blurred room, sharp character, very blurred
+// foreground. 10 seconds: the camera drifts in, a wave hits the ship, his shades fly off, they drop back.
 import React, { useMemo } from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Easing, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { Audio } from "@remotion/media";
 import { ThreeCanvas } from "@remotion/three";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { LineSegments2 } from "three/examples/jsm/lines/LineSegments2.js";
 import { LineSegmentsGeometry } from "three/examples/jsm/lines/LineSegmentsGeometry.js";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
-import { MAIN, Toon } from "../../../characters/toon/Toon";
+import { Expr, Look, MAIN, Toon } from "../../../characters/toon/Toon";
 import { blobTexture, chartTexture, dayTexture, glowTexture, rugTexture, woodTexture } from "./textures";
 
 const W = 1080;
@@ -28,11 +29,19 @@ const PORT = new THREE.Vector3(0.95, 1.95, -2);
 const LANTERN = { x: -0.55, y: 2.25, z: -0.75 };
 
 // ---- Camera ----
+// ---- Timeline (frames at 30 fps, 300 = 10 s) ----
+export const T = { HIT: 120, SHOCK: 122, CALM: 186, DROP: 212, LAND: 226, END: 300 };
+
+/** Camera: a slow eased push-in and sideways drift, plus a short shake when the wave hits. */
 export const cameraAt = (frame: number) => {
-  const t = frame / 30;
+  const k = interpolate(frame, [0, 270], [0, 1], { extrapolateRight: "clamp", easing: Easing.inOut(Easing.cubic) });
+  const shakeAmt = interpolate(frame, [T.HIT, T.HIT + 3, T.HIT + 24], [0, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const sx = Math.sin(frame * 2.1) * 0.03 * shakeAmt;
+  const sy = Math.cos(frame * 2.7) * 0.025 * shakeAmt;
+  const x = -0.08 + 0.18 * k;
   return {
-    pos: new THREE.Vector3(0.1 + t * 0, 0.95, 3.3),
-    target: new THREE.Vector3(0.0, 1.38, -0.8),
+    pos: new THREE.Vector3(x + sx, 1.04 - 0.09 * k + sy, 3.95 - 0.65 * k),
+    target: new THREE.Vector3(x * 0.4, 1.38 + sy * 0.5, -0.8),
     fov: 64,
   };
 };
@@ -130,7 +139,7 @@ const Room: React.FC = () => {
       floor: woodTexture({ base: "#D0935A", planks: 8, seed: 3, repeat: [1, 1.2], vertical: true }),
       back: woodTexture({ base: "#C07A45", planks: 9, seed: 11, repeat: [1.4, 1] }),
       side: woodTexture({ base: "#A9653A", planks: 9, seed: 21, repeat: [1.6, 1] }),
-      beam: woodTexture({ base: "#7E4626", planks: 3, seed: 5 }),
+      beam: woodTexture({ base: "#A0623A", planks: 3, seed: 5 }),
       night: dayTexture(),
     }),
     [],
@@ -267,14 +276,14 @@ const Desk: React.FC<{ frame: number }> = ({ frame }) => {
 };
 
 const Chest: React.FC = () => {
-  const wood = useMemo(() => woodTexture({ base: "#6E3E1E", planks: 4, seed: 15 }), []);
+  const wood = useMemo(() => woodTexture({ base: "#A05A30", planks: 4, seed: 15 }), []);
   const lidGeo = useMemo(() => new THREE.CylinderGeometry(0.26, 0.26, 0.9, 20, 1, false, 0, Math.PI), []);
   return (
     <group position={[-1.15, 0, -1.4]} rotation={[0, 0.3, 0]}>
-      <Box size={[0.9, 0.5, 0.52]} position={[0, 0.25, 0]} color="#7A4522" map={wood} />
+      <Box size={[0.9, 0.5, 0.52]} position={[0, 0.25, 0]} color="#B0683A" map={wood} />
       <group position={[0, 0.5, 0]} rotation={[0, 0, Math.PI / 2]}>
         <mesh geometry={lidGeo} rotation={[0, Math.PI / 2, 0]} castShadow receiveShadow>
-          <meshStandardMaterial color="#7A4522" map={wood} roughness={0.9} />
+          <meshStandardMaterial color="#B0683A" map={wood} roughness={0.9} />
         </mesh>
       </group>
       {[-0.3, 0.3].map((dx) => (
@@ -287,7 +296,9 @@ const Chest: React.FC = () => {
 
 const Lantern: React.FC<{ frame: number }> = ({ frame }) => {
   const glow = useMemo(() => glowTexture("#FFB347"), []);
-  const swing = Math.sin(frame / 22) * 0.12;
+  // Gentle sway, then a big swing after the wave hits that slowly calms down.
+  const kick = frame >= T.HIT ? Math.sin((frame - T.HIT) / 6) * 0.45 * Math.exp(-(frame - T.HIT) / 45) : 0;
+  const swing = Math.sin(frame / 22) * 0.12 + kick;
   const flick = 1 + 0.06 * Math.sin(frame * 0.7) + 0.04 * Math.sin(frame * 1.9);
   const hook = CEIL - 0.22;
   const len = hook - LANTERN.y;
@@ -328,6 +339,23 @@ const Lantern: React.FC<{ frame: number }> = ({ frame }) => {
     </group>
   );
 };
+
+/** A red-and-white life ring on the back wall: a bright splash of colour. */
+const LifeRing: React.FC = () => (
+  <group position={[0.02, 1.5, BACK + 0.1]}>
+    <mesh castShadow>
+      <torusGeometry args={[0.24, 0.075, 16, 48]} />
+      <meshStandardMaterial color="#FFFFFF" roughness={0.6} />
+    </mesh>
+    {[0, 1, 2, 3].map((i) => (
+      <mesh key={i} rotation={[0, 0, (i * Math.PI) / 2 + Math.PI / 8]}>
+        <torusGeometry args={[0.24, 0.08, 16, 12, Math.PI / 4]} />
+        <meshStandardMaterial color="#F2363B" roughness={0.6} />
+      </mesh>
+    ))}
+    <Edges geometry={useMemo(() => new THREE.TorusGeometry(0.24, 0.075, 6, 48), [])} width={5} angle={50} />
+  </group>
+);
 
 /** Wall chart in a frame, on the left of the back wall. */
 const WallChart: React.FC = () => {
@@ -416,7 +444,7 @@ const FrontProps: React.FC = () => {
         <Box size={[0.66, 0.07, 0.54]} position={[0, 0.42, 0]} color="#8A4F26" ink={5} />
         <Box size={[0.66, 0.07, 0.54]} position={[0, 0.06, 0]} color="#8A4F26" ink={5} />
       </group>
-      <Box size={[0.14, 3.2, 0.14]} position={[-0.32, 1.6, 2.4]} color="#7E4626" map={wood} ink={6} />
+      <Box size={[0.14, 3.2, 0.14]} position={[-0.62, 1.6, 2.4]} color="#7E4626" map={wood} ink={6} />
     </group>
   );
 };
@@ -455,12 +483,84 @@ const Scene: React.FC<{ layer: "back" | "front" }> = ({ layer }) => {
       />
       <Room />
       <WallChart />
+      <LifeRing />
       <Desk frame={frame} />
       <Chest />
       <Lantern frame={frame} />
       <Rug />
       <SunBeam frame={frame} />
       <ContactShadow at={HERO} size={1.0} />
+    </>
+  );
+};
+
+/** The main character's acting for the 10-second test. */
+const Hero: React.FC<{ feetX: number; feetY: number; scale: number }> = ({ feetX, feetY, scale }) => {
+  const f = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const pop = (at: number, damping = 9) => spring({ frame: f - at, fps, config: { damping, stiffness: 220 } });
+  let expr: Expr = "sneaky";
+  let look: Look = MAIN;
+  let gaze = 10;
+  let armsUp = 0;
+  if (f >= T.SHOCK && f < T.CALM) {
+    expr = "shock";
+    armsUp = pop(T.SHOCK, 8);
+  } else if (f >= T.CALM && f < T.LAND) {
+    // Shades gone: plain deadpan eyes, looking left and right for them.
+    expr = "neutral";
+    look = { ...MAIN, sunglasses: false };
+    armsUp = 1 - pop(T.CALM, 14);
+    gaze = interpolate(f, [T.CALM, T.CALM + 10, T.CALM + 18, T.DROP], [0, -18, 18, 0], { extrapolateRight: "clamp" });
+  } else if (f >= T.LAND) {
+    gaze = 10;
+  }
+  // Squash and stretch: a jump on the shock, a little bounce when the shades land.
+  const jump = f >= T.SHOCK ? Math.sin(Math.min(1, (f - T.SHOCK) / 12) * Math.PI) * 60 * scale : 0;
+  const landSquash = f >= T.SHOCK + 12 && f < T.SHOCK + 22 ? Math.sin(((f - T.SHOCK - 12) / 10) * Math.PI) * 0.08 : 0;
+  const clinkSquash = f >= T.LAND && f < T.LAND + 10 ? Math.sin(((f - T.LAND) / 10) * Math.PI) * 0.05 : 0;
+  const sq = landSquash + clinkSquash;
+  // The shades falling back down onto his nose.
+  const dropK = interpolate(f, [T.DROP, T.LAND], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.in(Easing.quad) });
+  const eyeY = -476;
+  return (
+    <g>
+      <g transform={`translate(${feetX},${feetY - jump}) scale(${1 + sq},${1 - sq}) translate(${-feetX},${-feetY})`}>
+        <Toon id="hero" x={feetX} y={feetY} scale={scale} look={look} expr={expr} gaze={gaze} armsUp={armsUp} seed={1} />
+      </g>
+      {f >= T.DROP && f < T.LAND && (
+        <g transform={`translate(${feetX},${feetY}) scale(${scale}) translate(${gaze * 0.2},${eyeY - (1 - dropK) * 420}) rotate(${(1 - dropK) * 25})`}>
+          {[-1, 1].map((d) => (
+            <circle key={d} cx={d * 56} cy={0} r={40} fill="#1E1E1E" stroke="#141414" strokeWidth={9} />
+          ))}
+          <path d="M-16,-6 Q0,-16 16,-6" fill="none" stroke="#141414" strokeWidth={10} />
+          <path d="M-86,-14 L-66,-14" stroke="#FFFFFF" strokeWidth={8} strokeLinecap="round" />
+        </g>
+      )}
+    </g>
+  );
+};
+
+/** All the sound, generated in code (scripts/make-sfx.mjs). */
+const Soundtrack: React.FC = () => {
+  const at = (from: number, name: string, volume: number, len = 60) => (
+    <Sequence from={from} durationInFrames={len} layout="none">
+      <Audio src={staticFile(`sfx/${name}.wav`)} volume={volume} />
+    </Sequence>
+  );
+  return (
+    <>
+      <Audio src={staticFile("sfx/waves.wav")} loop volume={(f) => interpolate(f, [0, 20, 280, 300], [0, 0.45, 0.45, 0.3], { extrapolateRight: "clamp" })} />
+      {at(25, "creak", 0.35, 40)}
+      {at(70, "seagull", 0.18, 50)}
+      {at(T.HIT - 2, "splash", 0.7, 45)}
+      {at(T.HIT, "creak", 0.55, 40)}
+      {at(T.SHOCK, "pop", 0.6, 15)}
+      {at(T.SHOCK + 1, "whoosh", 0.45, 25)}
+      {at(T.DROP, "whoosh", 0.25, 20)}
+      {at(T.LAND, "clink", 0.6, 12)}
+      {at(T.LAND + 2, "boing", 0.25, 20)}
+      {at(250, "creak", 0.3, 40)}
     </>
   );
 };
@@ -488,7 +588,7 @@ export const Cabin3D: React.FC = () => {
       {/* MIDDLE layer: the flat 2D characters, in sharp focus */}
       <AbsoluteFill>
         <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
-          <Toon id="hero" x={feet.x} y={feet.y} scale={heroScale} look={MAIN} expr="sneaky" gaze={10} seed={1} />
+          <Hero feetX={feet.x} feetY={feet.y} scale={heroScale} />
         </svg>
       </AbsoluteFill>
       {/* FRONT layer: objects right in front of the lens, heavily blurred */}
@@ -499,6 +599,7 @@ export const Cabin3D: React.FC = () => {
       </AbsoluteFill>
       {/* Warm vignette */}
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 45% 42%, rgba(0,0,0,0) 45%, rgba(40,20,0,0.22) 100%)", pointerEvents: "none" }} />
+      <Soundtrack />
       <div style={{ display: "none" }}>{frame}</div>
     </AbsoluteFill>
   );

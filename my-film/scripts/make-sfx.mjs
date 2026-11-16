@@ -639,6 +639,50 @@ Object.assign(sounds, {
   },
 });
 
+// Ship sounds for the 3D-world style test.
+Object.assign(sounds, {
+  // Sea outside the hull: slow swells of filtered noise, 12 s (loops smoothly).
+  waves() {
+    const len = 12, d = buf(len), f = svf(), g = svf();
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const swell = 0.55 + 0.45 * Math.sin((2 * Math.PI * t) / 4) * Math.sin((2 * Math.PI * t) / 6 + 1);
+      const n = white();
+      d[i] = f(n, 380 + 300 * swell, 0.5).low * (0.4 + 0.8 * swell) + g(n, 2400, 0.6).band * 0.12 * swell * swell;
+    });
+    // crossfade the tail into the head so it loops without a seam
+    const x = Math.round(0.5 * SR);
+    for (let i = 0; i < x; i++) {
+      const a = i / x;
+      d[i] = d[i] * a + d[d.length - x + i] * (1 - a);
+    }
+    return [d.slice(0, d.length - x), 0.7];
+  },
+  // Wooden hull creak: a slow, rough tone wandering in pitch through a bandpass, 1.2 s.
+  creak() {
+    const d = buf(1.2), f = svf();
+    let ph = 0;
+    d.forEach((_, i) => {
+      const t = i / SR;
+      const hz = 95 + 40 * Math.sin(t * 5) + 25 * Math.sin(t * 17);
+      ph += (2 * Math.PI * hz) / SR;
+      const saw = ((ph / (2 * Math.PI)) % 1) * 2 - 1;
+      const grit = rnd() < 0.02 ? white() * 2 : 0;
+      d[i] = f(saw + grit, 700 + 300 * Math.sin(t * 9), 3).band * Math.min(1, t * 8) * Math.min(1, (1.2 - t) * 4);
+    });
+    return [d, 0.55];
+  },
+  // Sunglasses landing back on the nose: a bright little clink, 0.3 s.
+  clink() {
+    const d = buf(0.3);
+    d.forEach((_, i) => {
+      const t = i / SR;
+      d[i] = (Math.sin(2 * Math.PI * 2600 * t) + 0.6 * Math.sin(2 * Math.PI * 3900 * t) + 0.3 * Math.sin(2 * Math.PI * 5400 * t)) * env(t, 0.001, 0.06);
+    });
+    return [d, 0.6];
+  },
+});
+
 console.log(`Writing sound effects to ${OUT}`);
 for (const [name, make] of Object.entries(sounds)) {
   const [data, gain] = make();
