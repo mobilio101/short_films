@@ -51,7 +51,7 @@ export const LogoSheet: React.FC = () => {
   const y1 = 330, y2 = 1010;
   return (
     <AbsoluteFill style={{ background: "#EDEAE4" }}>
-      <svg width={1800} height={2080} viewBox="0 0 1800 2080">
+      <svg width={1800} height={2720} viewBox="0 0 1800 2720">
         <defs>
           <radialGradient id="lamp" cx="50%" cy="30%" r="60%">
             <stop offset="0" stopColor="#FFD58A" stopOpacity={0.95} />
@@ -121,6 +121,19 @@ export const LogoSheet: React.FC = () => {
           {[[1075, 1640, -12], [1325, 1625, 14], [1200, 1585, 0]].map(([x, y, r], i) => (
             <text key={i} x={x} y={y} textAnchor="middle" fontFamily={JUA} fontSize={70} fill="#8B6CFF" transform={`rotate(${r} ${x} ${y})`}>?</text>
           ))}
+        </Avatar>
+
+        {/* ---- Chosen: 한걸음 (one step out of the dark into the light) ---- */}
+        <Avatar cx={900} cy={2330} id="d1" bg="#0B0B10" name="한걸음" font={JUA} nameColor="#1A1A1A">
+          <ellipse cx={1010} cy={2330} rx={230} ry={260} fill="url(#lamp)" />
+          <rect x={680} y={2440} width={440} height={6} fill="#8A8A94" />
+          {[[740, 2437, 0.3], [810, 2437, 0.55]].map(([x, y, o], i) => (
+            <ellipse key={i} cx={x} cy={y} rx={20} ry={9} fill="#F5A623" opacity={o} />
+          ))}
+          <path d="M922,2375 q-8,35 -32,62 M958,2375 q25,35 62,60" stroke="#F5A623" strokeWidth={18} strokeLinecap="round" fill="none" />
+          <g transform="rotate(6 940 2300)">
+            <Hero x={940} y={2235} r={56} brow={0.16} />
+          </g>
         </Avatar>
 
         <text x={900} y={40} textAnchor="middle" fontFamily={LILITA} fontSize={34} fill="#555">3D channel (1–3)  ·  self-discipline channel (4–6)</text>
