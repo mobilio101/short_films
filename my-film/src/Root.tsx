@@ -5,6 +5,7 @@ import { StyledTest } from "./films/test/StyledTest";
 import { PixelTest } from "./films/test/PixelTest";
 import { Emotions } from "./films/test/Emotions";
 import { CharacterStyles } from "./films/test/CharacterStyles";
+import { Cabin3D } from "./films/test/cabin3d/Cabin3D";
 import { CHALK, MEMPHIS, NEON, PAPER, VINTAGE } from "./films/test/styles";
 import { FPS, H, W } from "./components/theme";
 import { GhostArmy, GHOST_ARMY_DURATION } from "./films/ghost-army/GhostArmy";
@@ -32,6 +33,8 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="Test-Neon" component={() => <StyledTest st={NEON} />} {...common} />
       <Composition id="Test-Chalk" component={() => <StyledTest st={CHALK} />} {...common} />
       <Composition id="Test-Memphis" component={() => <StyledTest st={MEMPHIS} />} {...common} />
+      {/* New style experiment: real 3D world, flat 2D characters */}
+      <Composition id="Test-Cabin3D" component={Cabin3D} durationInFrames={300} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-Vintage" component={() => <StyledTest st={VINTAGE} />} {...common} />
     </>
   );
