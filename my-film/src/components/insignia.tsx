@@ -1,6 +1,6 @@
 // Nationality patches so viewers can tell sides apart at a glance.
 // Drawn in the newsprint palette. For WWII Germany we use the Balkenkreuz (the cross on German
-// military vehicles and aircraft), not the swastika: see "Insignia" in CLAUDE.md.
+// military vehicles and aircraft), not the swastika: see "Insignia" in INKREDIBLE.md.
 import React from "react";
 import { M } from "./memphis";
 
