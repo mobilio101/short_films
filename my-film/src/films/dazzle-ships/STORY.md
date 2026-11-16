@@ -1,6 +1,6 @@
 # Dazzle Ships: plan
 
-**Channel:** new channel (rules in `NEW-CHANNEL.md`). **Language:** English. **Voice:** ElevenLabs
+**Channel:** SMIRKMAN (rules in `SMIRKMAN.md`). **Language:** English. **Voice:** ElevenLabs
 Brian. **Length:** about 55–60 s. **Working title:** "Why Britain Painted Its Warships Like Zebras"
 (alternatives: "The Paint Job Designed to Be Hit… and Missed", "The Ships That Hid in Plain Sight").
 

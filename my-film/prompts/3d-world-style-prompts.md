@@ -67,7 +67,7 @@ The narrator speaks about 3.35 words per second.
 
 ## Prompt 3: The script
 
-> Write the script for story #__ using the rulebook and the CLAUDE.md story rules.
+> Write the script for story #__ using the rulebook and the SMIRKMAN.md story rules.
 > - Start with the impossible fact in the first sentence. No intro.
 > - Follow the rulebook's escalation, pivot ("You see…") and payoff ("So…").
 > - Match the rulebook's words per second; about 150–165 words for 60 seconds.

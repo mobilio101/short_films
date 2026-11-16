@@ -29,7 +29,7 @@ const common = { durationInFrames: TEST_DURATION, fps: FPS, width: W, height: H 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
-      {/* New channel (3D world, 2D characters): rules in NEW-CHANNEL.md */}
+      {/* New channel (3D world, 2D characters): SMIRKMAN, rules in SMIRKMAN.md */}
       <Composition id="DazzleShips" component={DazzleShips} durationInFrames={DAZZLE_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="DragonJarKo" component={DragonJarKo} durationInFrames={DRAGON_JAR_KO_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="Apollo13" component={Apollo13} durationInFrames={APOLLO13_DURATION} fps={FPS} width={1080} height={1920} />

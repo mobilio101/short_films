@@ -1,7 +1,9 @@
-# New channel rules: read before every film for this channel
+# SMIRKMAN: channel rules, read before every film for this channel
 
-The channel's name and logo are still to be chosen (working name: "new channel"). These rules are
-separate from Inkredible's (`CLAUDE.md`); nothing from Inkredible's look (Newsprint, ink-blot
+The channel is **SMIRKMAN** (English, tagline "True stories that sound fake"), named after its main
+character. Brand files: `brand/smirkman/avatar.png` and `banner.png` (drawn in
+`src/films/test/brand/Brand.tsx`, compositions `Brand-SmirkmanAvatar`/`Brand-SmirkmanBanner`).
+YouTube settings: `channels/channels.json`. These rules are separate from Inkredible's (`INKREDIBLE.md`); nothing from Inkredible's look (Newsprint, ink-blot
 characters, the ink-drop mascot, Bungee captions) is used here. Approved by the user on 16 Nov 2026
 after the 10-second test `Test-Cabin3D`.
 
@@ -55,7 +57,7 @@ Bright, modern and comic, never muted or vintage.
 ## The main character
 - `MAIN` in `src/characters/toon/Toon.tsx`: a **round head**, **round black sunglasses**, the
   **closed smirk** (lips together, one corner pulled up, a dimple) and **one raised eyebrow**. Cool,
-  cynical, always knows something. Name to be chosen with the channel name.
+  cynical, always knows something. His name is **Smirkman**, like the channel.
 - **His outfit changes every story** (captain, explorer, knight, inventor…), but the face, the shades
   and the smirk never change. Those are how viewers recognise him.
 - **His running gag:** on a big shock his shades fly off his face; he looks around deadpan without
@@ -91,7 +93,7 @@ Bright, modern and comic, never muted or vintage.
 
 ## Rendering
 - **Render full videos on the user's laptop** (NVIDIA RTX 5070 Laptop, 8 GB VRAM). The project is
-  cloned at `C:\claude\short_films` (branch `style-3d-world-prompts`). The user double-clicks
+  cloned at `C:\claude\short_films` (branch `main`). The user double-clicks
   `C:\claude\short_films\render.bat`, which pulls the latest code from GitHub (and runs `npm ci` if
   packages changed), asks for the composition name, renders with `--gl=angle --concurrency=8`, and
   opens the folder with the mp4 (`my-film\out\<name>.mp4`). `render.bat` exists only on the laptop
@@ -112,9 +114,25 @@ Bright, modern and comic, never muted or vintage.
 - Before rendering a video: render stills of key frames and check them for mistakes (objects covering
   faces, characters floating, the camera inside objects).
 
+## Depth (approved after the first Short)
+- `World3D` takes `focus` (metres from the camera): the world beyond it goes on a blurrier, hazier far
+  layer (`farBlur`, default 3.5 px), the world nearer on a sharper layer (`backBlur`). Set it just
+  behind the characters on every shot.
+- Outdoors: strong fog for aerial perspective (sea: `["#CFEBFF", 8, 90]`) and something far away for
+  the fog to fade (the `Coast` in `dazzle-ships/sets.tsx`).
+- Floors that run right up to the camera (planks, tiles) so their lines recede.
+- Cameras arc sideways (not just push in) so foreground, characters and background slide past each
+  other; lens about 56–60°.
+- One or two blurred foreground props near the frame edges on most shots, never over faces or captions.
+- Stubble and beards follow the jaw of each head shape (`Jaw` in `Toon.tsx`).
+
 ## Where things are
 - `src/characters/toon/Toon.tsx`: the character system (`Toon`, `Look`, `CAST`, `MAIN`, `POP`).
-- `src/films/test/cabin3d/`: the reference scene (`Cabin3D.tsx`: 3D room, outlines, layers, sunbeam,
+- `src/films/dazzle-ships/`: the first finished Short and the reference for new ones (`DazzleShips.tsx`
+  shots, `sets.tsx` ship, dock, studio, sub; `words.ts` voice timings; `STORY.md`).
+- `src/world3d/`: shared 3D kit (`kit.tsx`: `World3D`, `Box`, `Cyl`, `Edges`, `Daylight`, `placeToon`;
+  `textures.ts`).
+- `src/films/test/cabin3d/`: the first test scene (`Cabin3D.tsx`: 3D room, outlines, layers, sunbeam,
   camera, timeline and soundtrack; `textures.ts`: textures painted in code). Copy this pattern.
 - `src/films/test/toon/`: character sheets (`Test-ToonSheet`, `Test-SmileSheet`, `Test-ShadesSheet`).
 - `prompts/3d-world-style-prompts.md`: step-by-step prompts for this style.
