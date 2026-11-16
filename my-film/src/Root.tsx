@@ -14,6 +14,7 @@ import { DazzleShips, DAZZLE_DURATION } from "./films/dazzle-ships/DazzleShips";
 import { ShadesSheet } from "./films/test/toon/ShadesSheet";
 import { SmileSheet } from "./films/test/toon/SmileSheet";
 import { JawSheet } from "./films/test/toon/JawSheet";
+import { LogoSheet } from "./films/test/brand/LogoSheet";
 import { CHALK, MEMPHIS, NEON, PAPER, VINTAGE } from "./films/test/styles";
 import { FPS, H, W } from "./components/theme";
 import { GhostArmy, GHOST_ARMY_DURATION } from "./films/ghost-army/GhostArmy";
@@ -44,6 +45,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="Test-Chalk" component={() => <StyledTest st={CHALK} />} {...common} />
       <Composition id="Test-Memphis" component={() => <StyledTest st={MEMPHIS} />} {...common} />
       {/* New style experiment: real 3D world, flat 2D characters */}
+      <Composition id="Test-LogoSheet" component={LogoSheet} durationInFrames={30} fps={FPS} width={1800} height={1400} />
       <Composition id="Test-JawSheet" component={JawSheet} durationInFrames={30} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-SmileSheet" component={SmileSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-ShadesSheet" component={ShadesSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />
