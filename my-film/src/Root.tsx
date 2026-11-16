@@ -45,7 +45,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="Test-Chalk" component={() => <StyledTest st={CHALK} />} {...common} />
       <Composition id="Test-Memphis" component={() => <StyledTest st={MEMPHIS} />} {...common} />
       {/* New style experiment: real 3D world, flat 2D characters */}
-      <Composition id="Test-LogoSheet" component={LogoSheet} durationInFrames={30} fps={FPS} width={1800} height={1400} />
+      <Composition id="Test-LogoSheet" component={LogoSheet} durationInFrames={30} fps={FPS} width={1800} height={2080} />
       <Composition id="Test-JawSheet" component={JawSheet} durationInFrames={30} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-SmileSheet" component={SmileSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-ShadesSheet" component={ShadesSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />

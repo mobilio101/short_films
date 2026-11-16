@@ -3,11 +3,11 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { loadFont } from "@remotion/google-fonts/LilitaOne";
-import { loadFont as loadComic } from "@remotion/google-fonts/ComicNeue";
+import { loadFont as loadJua } from "@remotion/google-fonts/Jua";
 import { INK, MAIN, POP, Toon } from "../../../characters/toon/Toon";
 
 const { fontFamily: LILITA } = loadFont("normal", { weights: ["400"], subsets: ["latin"] });
-const { fontFamily: COMIC } = loadComic("normal", { weights: ["700"], subsets: ["latin"] });
+const { fontFamily: JUA } = loadJua("normal", { weights: ["400"] });
 
 const R = 220; // avatar radius
 const FACE = { ...MAIN, hat: "none" as const };
@@ -51,7 +51,7 @@ export const LogoSheet: React.FC = () => {
   const y1 = 330, y2 = 1010;
   return (
     <AbsoluteFill style={{ background: "#EDEAE4" }}>
-      <svg width={1800} height={1400} viewBox="0 0 1800 1400">
+      <svg width={1800} height={2080} viewBox="0 0 1800 2080">
         <defs>
           <radialGradient id="lamp" cx="50%" cy="30%" r="60%">
             <stop offset="0" stopColor="#FFD58A" stopOpacity={0.95} />
@@ -78,19 +78,19 @@ export const LogoSheet: React.FC = () => {
         </Avatar>
 
         {/* ---- Self-discipline channel ---- */}
-        <Avatar cx={xs[0]} cy={y2} id="b1" bg="#0B0B10" name="4 · ONE LIGHT." font={COMIC} nameColor="#1A1A1A">
+        <Avatar cx={xs[0]} cy={y2} id="b1" bg="#0B0B10" name="4 · 작은 불빛" font={JUA} nameColor="#1A1A1A">
           <ellipse cx={xs[0]} cy={y2 + 20} rx={210} ry={240} fill="url(#lamp)" />
           <path d={`M${xs[0] - 50},${y2 - 150} L${xs[0] + 50},${y2 - 150} L${xs[0] + 80},${y2 - 95} L${xs[0] - 80},${y2 - 95} Z`} fill="#2A2A33" stroke="#8A8A94" strokeWidth={4} />
           <line x1={xs[0]} y1={y2 - 230} x2={xs[0]} y2={y2 - 150} stroke="#8A8A94" strokeWidth={4} />
           <Hero x={xs[0]} y={y2 + 70} r={78} />
         </Avatar>
-        <Avatar cx={xs[1]} cy={y2} id="b2" bg="#0B0B10" name="5 · 3 AM." font={COMIC} nameColor="#1A1A1A">
+        <Avatar cx={xs[1]} cy={y2} id="b2" bg="#0B0B10" name="5 · 새벽 세 시" font={JUA} nameColor="#1A1A1A">
           <rect x={xs[1] - 120} y={y2 - 175} width={240} height={110} rx={18} fill="#15151D" stroke="#8A8A94" strokeWidth={4} />
           <text x={xs[1]} y={y2 - 92} textAnchor="middle" fontFamily="monospace" fontWeight={700} fontSize={84} fill="#FF3B3B">3:00</text>
           <circle cx={xs[1]} cy={y2 + 100} r={170} fill="#FF3B3B" opacity={0.08} />
           <Hero x={xs[1]} y={y2 + 85} r={92} brow={-0.15} />
         </Avatar>
-        <Avatar cx={xs[2]} cy={y2} id="b3" bg="#15151D" name="6 · SHADOW & ME" font={COMIC} nameColor="#1A1A1A">
+        <Avatar cx={xs[2]} cy={y2} id="b3" bg="#15151D" name="6 · 그림자와 나" font={JUA} nameColor="#1A1A1A">
           <g filter="url(#vglow)">
             <circle cx={xs[2] + 70} cy={y2 - 40} r={135} fill="none" stroke="#8B6CFF" strokeWidth={14} />
           </g>
@@ -100,6 +100,27 @@ export const LogoSheet: React.FC = () => {
             <path key={d} d={`M${xs[2] + 70 + d * 70},${y2 - 45} q${-d * 25},12 ${-d * 50},2`} stroke="#8B6CFF" strokeWidth={10} fill="none" strokeLinecap="round" />
           ))}
           <Hero x={xs[2] - 70} y={y2 + 90} r={80} brow={0.05} />
+        </Avatar>
+
+        {/* ---- The user's own name ideas ---- */}
+        <Avatar cx={600} cy={1690} id="c1" bg="#0B0B10" name="7 · 게으른 나" font={JUA} nameColor="#1A1A1A">
+          <rect x={360} y={1745} width={480} height={200} rx={40} fill="#2A2A55" />
+          <rect x={360} y={1700} width={150} height={70} rx={30} fill="#3A3A70" />
+          <circle cx={560} cy={1640} r={120} fill="#7FB2FF" opacity={0.18} />
+          <g transform="rotate(-90 520 1690)">
+            <Hero x={520} y={1690} r={70} brow={-0.02} />
+          </g>
+          <rect x={585} y={1600} width={44} height={74} rx={8} fill="#BFE0FF" stroke="#8A8A94" strokeWidth={3} transform="rotate(-20 607 1637)" />
+          <text x={665} y={1625} fontFamily={JUA} fontSize={46} fill="#8B6CFF">z</text>
+          <text x={705} y={1585} fontFamily={JUA} fontSize={60} fill="#8B6CFF">Z</text>
+        </Avatar>
+        <Avatar cx={1200} cy={1690} id="c2" bg="#0B0B10" name="8 · 나 어떡해" font={JUA} nameColor="#1A1A1A">
+          <ellipse cx={1200} cy={1640} rx={190} ry={210} fill="url(#lamp)" opacity={0.7} />
+          <Hero x={1200} y={1730} r={95} brow={-0.35} />
+          <path d="M1290,1650 q14,24 0,34 q-14,-10 0,-34 Z" fill="#7FD3FF" />
+          {[[1075, 1640, -12], [1325, 1625, 14], [1200, 1585, 0]].map(([x, y, r], i) => (
+            <text key={i} x={x} y={y} textAnchor="middle" fontFamily={JUA} fontSize={70} fill="#8B6CFF" transform={`rotate(${r} ${x} ${y})`}>?</text>
+          ))}
         </Avatar>
 
         <text x={900} y={40} textAnchor="middle" fontFamily={LILITA} fontSize={34} fill="#555">3D channel (1–3)  ·  self-discipline channel (4–6)</text>
