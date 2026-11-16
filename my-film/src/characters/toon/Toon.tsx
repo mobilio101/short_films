@@ -46,6 +46,12 @@ export type Look = {
   hatColor2?: string;
   /** Black sunglasses. In shock or panic they pop up onto the forehead. */
   sunglasses?: boolean;
+  /** Shape of the shades. */
+  shades?: "wayfarer" | "round" | "aviator" | "visor";
+  /** Lens colour (default black). */
+  lens?: string;
+  /** Which sneaky smile to use for the "sneaky" expression. */
+  smile?: "toothy" | "closed" | "cheshire" | "half";
 };
 
 // ---- Head geometry: centre (0, -470) ----
@@ -137,7 +143,7 @@ const Hat: React.FC<{ l: Look }> = ({ l }) => {
   }
 };
 
-const Face: React.FC<{ l: Look; e: Expr; look: number; blink: boolean; frame: number }> = ({ l, e, look, blink, frame }) => {
+const Face: React.FC<{ l: Look; e: Expr; look: number; blink: boolean; frame: number; part?: "all" | "brows" | "noBrows" }> = ({ l, e, look, blink, frame, part = "all" }) => {
   const L = look;
   const ey = HEAD_Y - 6;
   const ex = l.head === "triangle" ? 56 : 52;
@@ -221,16 +227,60 @@ const Face: React.FC<{ l: Look; e: Expr; look: number; blink: boolean; frame: nu
     case "smug":
       mouth = <path d={`M${L - 30},${my + 6} Q${L + 14},${my + 18} ${L + 44},${my - 18}`} fill="none" stroke={INK} strokeWidth={10} strokeLinecap="round" />;
       break;
-    case "sneaky":
-      // A wide, lopsided, cynical grin: one corner pulled way up, a row of teeth.
-      mouth = (
-        <g>
-          <path d={`M${L - 58},${my - 2} Q${L - 10},${my + 40} ${L + 66},${my - 34} Q${L + 10},${my + 4} ${L - 58},${my - 2} Z`} fill={INK} {...ol} strokeWidth={7} />
-          <path d={`M${L - 48},${my} Q${L - 8},${my + 14} ${L + 56},${my - 28} Q${L + 6},${my + 2} ${L - 48},${my} Z`} fill={POP.white} />
-          <path d={`M${L + 62},${my - 34} q14,-6 18,-20`} fill="none" stroke={INK} strokeWidth={7} strokeLinecap="round" />
-        </g>
-      );
+    case "sneaky": {
+      const kind = l.smile ?? "toothy";
+      if (kind === "closed") {
+        // Lips pressed together, one corner pulled up, a dimple: the quiet "I know something".
+        mouth = (
+          <g>
+            <path d={`M${L - 46},${my + 4} Q${L + 6},${my + 22} ${L + 58},${my - 22}`} fill="none" stroke={INK} strokeWidth={11} strokeLinecap="round" />
+            <path d={`M${L - 52},${my - 6} L${L - 44},${my + 6}`} stroke={INK} strokeWidth={8} strokeLinecap="round" />
+            <path d={`M${L + 70},${my - 30} q8,10 0,22`} fill="none" stroke={INK} strokeWidth={7} strokeLinecap="round" />
+          </g>
+        );
+      } else if (kind === "cheshire") {
+        // Very wide grin, ear to ear, two rows of teeth.
+        mouth = (
+          <g>
+            <path d={`M${L - 96},${my - 14} Q${L},${my + 92} ${L + 96},${my - 14} Q${L},${my + 24} ${L - 96},${my - 14} Z`} fill={POP.white} {...ol} strokeWidth={8} />
+            <path d={`M${L - 88},${my - 6} Q${L},${my + 60} ${L + 88},${my - 6}`} fill="none" stroke={INK} strokeWidth={4} />
+            {[-60, -36, -12, 12, 36, 60].map((x) => (
+              <line key={x} x1={L + x} y1={my + 22 - Math.abs(x) * 0.25} x2={L + x} y2={my + 58 - Math.abs(x) * 0.4} stroke={INK} strokeWidth={4} />
+            ))}
+            {[-1, 1].map((d) => (
+              <path key={d} d={`M${L + d * 96},${my - 14} q${d * 10},-6 ${d * 14},-18`} fill="none" stroke={INK} strokeWidth={7} strokeLinecap="round" />
+            ))}
+          </g>
+        );
+      } else if (kind === "half") {
+        // Left side flat and closed, right side open in a toothy sneer.
+        mouth = (
+          <g>
+            <path d={`M${L - 56},${my + 6} L${L - 6},${my + 6}`} stroke={INK} strokeWidth={11} strokeLinecap="round" />
+            <path d={`M${L - 10},${my + 6} L${L + 76},${my - 34} Q${L + 66},${my + 46} ${L - 10},${my + 6} Z`} fill={INK} {...ol} strokeWidth={7} />
+            <path d={`M${L + 2},${my + 4} L${L + 68},${my - 26} L${L + 64},${my - 10} L${L + 4},${my + 14} Z`} fill={POP.white} />
+            {[20, 38, 54].map((x) => (
+              <line key={x} x1={L + x} y1={my - 4 - (x - 20) * 0.45} x2={L + x + 1} y2={my + 8 - (x - 20) * 0.42} stroke={INK} strokeWidth={3} />
+            ))}
+            <path d={`M${L + 76},${my - 34} q10,-4 14,-16`} fill="none" stroke={INK} strokeWidth={7} strokeLinecap="round" />
+          </g>
+        );
+      } else {
+        // Toothy smirk: a wide D-shaped grin tilted up on one side, top row of teeth, tongue.
+        mouth = (
+          <g>
+            <path d={`M${L - 62},${my - 2} L${L + 70},${my - 32} Q${L + 30},${my + 78} ${L - 62},${my - 2} Z`} fill={INK} {...ol} strokeWidth={7} />
+            <path d={`M${L - 48},${my - 2} L${L + 56},${my - 22} L${L + 52},${my - 6} L${L - 42},${my + 10} Z`} fill={POP.white} />
+            {[-20, 4, 28].map((x) => (
+              <line key={x} x1={L + x} y1={my - 6 - (x + 20) * 0.18} x2={L + x + 1} y2={my + 6 - (x + 20) * 0.16} stroke={INK} strokeWidth={3} />
+            ))}
+            <ellipse cx={L + 8} cy={my + 30} rx={24} ry={10} fill={POP.pink} />
+            <path d={`M${L + 70},${my - 32} q10,-4 14,-16`} fill="none" stroke={INK} strokeWidth={7} strokeLinecap="round" />
+          </g>
+        );
+      }
       break;
+    }
     default:
       mouth = <path d={`M${L - 24},${my + 4} L${L + 24},${my + 2}`} stroke={INK} strokeWidth={10} strokeLinecap="round" />;
   }
@@ -241,8 +291,19 @@ const Face: React.FC<{ l: Look; e: Expr; look: number; blink: boolean; frame: nu
         const cx = d * (ex + 4) + (popped ? 0 : L);
         return (
           <g key={`g${d}`}>
-            <path d={`M${cx - 50},${ey - 30} L${cx + 50},${ey - 30} L${cx + 46},${ey + 14} Q${cx + 40},${ey + 34} ${cx},${ey + 34} Q${cx - 40},${ey + 34} ${cx - 46},${ey + 14} Z`} fill={INK} {...ol} strokeWidth={6} />
-            <path d={`M${cx - 30},${ey - 16} L${cx - 12},${ey - 16}`} stroke={POP.white} strokeWidth={8} strokeLinecap="round" opacity={0.9} />
+            {(l.shades ?? "wayfarer") === "wayfarer" && (
+              <path d={`M${cx - 50},${ey - 30} L${cx + 50},${ey - 30} L${cx + 46},${ey + 14} Q${cx + 40},${ey + 34} ${cx},${ey + 34} Q${cx - 40},${ey + 34} ${cx - 46},${ey + 14} Z`} fill={l.lens ?? INK} {...ol} strokeWidth={7} />
+            )}
+            {l.shades === "round" && <circle cx={cx} cy={ey} r={40} fill={l.lens ?? INK} {...ol} strokeWidth={9} />}
+            {l.shades === "aviator" && (
+              <path d={`M${cx - 48},${ey - 28} L${cx + 48},${ey - 28} Q${cx + 52},${ey + 10} ${cx + 22},${ey + 34} Q${cx},${ey + 44} ${cx - 26},${ey + 30} Q${cx - 54},${ey + 6} ${cx - 48},${ey - 28} Z`} fill={l.lens ?? INK} stroke="#C9A227" strokeWidth={7} strokeLinejoin="round" />
+            )}
+            {l.shades === "visor" && d < 0 && (
+              <path d={`M${-ex - 58 + L},${ey - 30} L${ex + 58 + L},${ey - 30} Q${ex + 62 + L},${ey + 20} ${ex + 30 + L},${ey + 28} L${-ex - 30 + L},${ey + 28} Q${-ex - 62 + L},${ey + 20} ${-ex - 58 + L},${ey - 30} Z`} fill={l.lens ?? INK} {...ol} strokeWidth={7} />
+            )}
+            {(l.shades !== "visor" || d < 0) && (
+              <path d={`M${cx - 30},${ey - 14} L${cx - 10},${ey - 14}`} stroke={POP.white} strokeWidth={8} strokeLinecap="round" opacity={0.9} />
+            )}
           </g>
         );
       })}
@@ -253,13 +314,20 @@ const Face: React.FC<{ l: Look; e: Expr; look: number; blink: boolean; frame: nu
     </g>
   ) : null;
   const hideEyes = l.sunglasses && !popped;
+  if (part === "brows")
+    return (
+      <g>
+        {brow(-1)}
+        {brow(1)}
+      </g>
+    );
   return (
     <g>
       {!hideEyes && eye(-1)}
       {!hideEyes && eye(1)}
       {shades}
-      {brow(-1)}
-      {brow(1)}
+      {part === "all" && brow(-1)}
+      {part === "all" && brow(1)}
       {mouth}
       {(e === "panic" || e === "shock") && (
         <path transform={`translate(${130 + L},${-560 + (frame % 24) * 1.2})`} d="M0,0 C-16,26 -16,44 0,46 C16,44 16,26 0,0 Z" fill={POP.sky} {...ol} strokeWidth={5} />
@@ -345,8 +413,10 @@ export const Toon: React.FC<{
         <g>
           {l.hat === "none" && <Hair l={l} />}
           <path d={headPath(l.head)} fill={l.skin} {...ol} />
-          <Face l={l} e={expr} look={gaze} blink={blink} frame={f} />
+          <Face l={l} e={expr} look={gaze} blink={blink} frame={f} part={l.hat !== "none" ? "noBrows" : "all"} />
           <Hat l={l} />
+          {/* Eyebrows float on top of the hat brim (cartoon convention) so the acting always shows. */}
+          {l.hat !== "none" && <Face l={l} e={expr} look={gaze} blink={blink} frame={f} part="brows" />}
           {l.sunglasses && (expr === "shock" || expr === "panic") && (
             // Shock: the sunglasses fly off and spin above the head.
             <g transform={`translate(${175 + Math.sin(f / 6) * 6},${headTop(l.head) - 110}) rotate(${-28 + Math.sin(f / 5) * 10})`}>
