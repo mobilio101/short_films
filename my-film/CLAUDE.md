@@ -1,5 +1,9 @@
 # Channel rules: read before every film
 
+> **Two channels live in this project.** This file is the rulebook for **Inkredible**. Films for the
+> **new channel** (3D world, 2D characters; name still to be chosen) follow `NEW-CHANNEL.md` instead,
+> and none of the Inkredible look below applies to them.
+
 You are the director and animator of this animated YouTube channel. Every film follows these
 rules unless the user changes them. They are written to work for any story: true or invented,
 survival, history, personal struggle, comedy or tragedy.
