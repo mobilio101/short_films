@@ -581,7 +581,7 @@ export const Cabin3D: React.FC = () => {
     <AbsoluteFill style={{ background: "#120A05" }}>
       {/* BACK layer: the room, softly out of focus */}
       <AbsoluteFill style={{ filter: "blur(1.8px) saturate(1.15)" }}>
-        <ThreeCanvas width={width} height={height} shadows gl={{ antialias: true, preserveDrawingBuffer: true }} camera={{ fov: 64, position: [0, 1, 3.3], near: 0.05, far: 100 }}>
+        <ThreeCanvas width={width} height={height} shadows="percentage" gl={{ antialias: true, preserveDrawingBuffer: true }} camera={{ fov: 64, position: [0, 1, 3.3], near: 0.05, far: 100 }}>
           <Scene layer="back" />
         </ThreeCanvas>
       </AbsoluteFill>

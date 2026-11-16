@@ -90,10 +90,25 @@ Bright, modern and comic, never muted or vintage.
 - No music unless it's generated in code.
 
 ## Rendering
-- Cloud machine (no graphics card): add `--gl=swangle --browser-executable=/opt/pw-browsers/chromium-1243/chrome-linux64/chrome`.
-  About 3.5 s per frame: a 10-second test takes about 18 minutes, a 60-second Short about 2 hours.
-- On the user's PC with a graphics card: `--gl=angle`, with Windows Graphics settings set to "High
-  performance" for Claude and Remotion's Chrome. Use this for full Shorts.
+- **Render full videos on the user's laptop** (NVIDIA RTX 5070 Laptop, 8 GB VRAM). The project is
+  cloned at `C:\claude\short_films` (branch `style-3d-world-prompts`). The user double-clicks
+  `C:\claude\short_films\render.bat`, which pulls the latest code from GitHub (and runs `npm ci` if
+  packages changed), asks for the composition name, renders with `--gl=angle --concurrency=8`, and
+  opens the folder with the mp4 (`my-film\out\<name>.mp4`). `render.bat` exists only on the laptop
+  (not in git). Windows Graphics settings have Remotion's `chrome-headless-shell.exe` set to
+  "High performance".
+- **Measured speed** of `Test-Cabin3D` (10 s, 1080×1920): laptop `--gl=angle` about **16 s**
+  (concurrency 4: 18 s, **8: 16.6 s, steadiest**, 12: 16–20 s, 16: 17.6 s; `--gl=vulkan` 17 s);
+  laptop software rendering (`--gl=swangle`) 194 s; this cloud machine about **18 minutes**. So a
+  60-second Short takes about 1–2 minutes on the laptop and about 2 hours in the cloud.
+- **So the workflow is:** build and check stills here in the cloud (`--gl=swangle
+  --browser-executable=/opt/pw-browsers/chromium-1243/chrome-linux64/chrome`, about 10 s per still),
+  commit and push, then the user renders the video on the laptop and shares it back (Google Drive).
+  Render short cloud videos only when the laptop isn't available.
+- Never ask the user to edit project files on the laptop: local edits make `render.bat`'s `git pull`
+  fail.
+- Shadows use `shadows="percentage"` (PCF). three.js removed PCFSoftShadowMap; the remaining
+  `THREE.Clock` warnings in the render log come from React Three Fiber and are harmless.
 - Before rendering a video: render stills of key frames and check them for mistakes (objects covering
   faces, characters floating, the camera inside objects).
 
