@@ -1,0 +1,15 @@
+{
+  "film": "mincemeat",
+  "composition": "Mincemeat",
+  "channel": "inkredible",
+  "title": "The Dead Man Who Tricked Hitler",
+  "renderedAt": "2026-11-17T08:05:04.293Z",
+  "file": "C:\\Claude\\short_films\\my-film\\out\\robot\\mincemeat.mp4",
+  "renderSeconds": 153,
+  "durationSeconds": 60.01,
+  "loudnessLUFS": -17.76,
+  "drive": {
+    "status": "waiting for Drive setup"
+  },
+  "upload": "waiting for channel"
+}
