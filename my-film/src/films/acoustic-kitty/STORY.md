@@ -1,4 +1,4 @@
-# Acoustic Kitty: in production (user said "go" on 17 Nov 2026)
+# Acoustic Kitty: stills approved (17 Nov 2026), waiting for the laptop render
 
 **Channel:** SMIRKMAN (rules in `SMIRKMAN.md`). **Language:** English. **Voice:** ElevenLabs Brian.
 **Length:** about 55–60 s. **Topic claimed in:** `channels/TOPICS.md`. **Folder:** `src/films/acoustic-kitty/`.
@@ -105,3 +105,14 @@ laptop render.
 - **Sound:** existing generated library only (roomtone, hum, static beds; pop, stamp, coins, boing, whoosh,
   clink, type, slam, shimmer). Voice at 0.92; peak of voice + loud effects mixed in ffmpeg: about -1.0 dB.
 - Fact-check of the full Wikipedia and History.com pages is still open (see above).
+
+## Upload info (stills approved by the user, 17 Nov 2026)
+- **Render order:** `upload.json` in this folder (composition `AcousticKitty`, channel `smirkman`, 57 s).
+  The robot's `queue/` doesn't exist yet; 총괄 copies the file there when it does. Until then render by hand
+  with `render.bat` → `AcousticKitty`.
+- **Title (47 chars):** What Happens If the CIA Turns a Cat Into a Spy?
+- **Description, tags, privacy:** in `upload.json` (private until the user publishes). The description
+  says nothing about what happened to the cat.
+- **Captions:** `captions.en.srt` (English, from the voice's word timings).
+- **Still open:** reading the full Wikipedia and History.com pages (blocked from the cloud). Re-check the
+  YouTube search for the topic before publishing.
