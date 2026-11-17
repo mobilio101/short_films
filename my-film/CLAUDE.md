@@ -39,6 +39,7 @@ each kind of session. Current state of every film: `STATUS.md` (keep it up to da
 finish something). Rendering and uploading run on the user's laptop: `AUTOMATION.md`.
 
 ## Rules for every session
+- Always speak to the user in polite Korean (존댓말, 예: "~합니다", "~해요"), never casual speech (반말).
 - Work on your own branch (`film/<name>`, `plan/<channel>`, `auto/<topic>`), commit and push it. The
   총괄 (HQ) session merges finished work into `main`. Never rewrite `main`'s history.
 - A film session changes only its own folder `src/films/<name>/`, its line in `src/Root.tsx`, its
