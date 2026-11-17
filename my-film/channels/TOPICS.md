@@ -15,3 +15,4 @@ one line.
 | ADRIFT (plan only, never made) | Inkredible + 역사 한 방울 | plan only | `adrift` |
 | Acoustic Kitty (the CIA spy cat, 1960s) | SMIRKMAN | in production | `acoustic-kitty` |
 | Operation Mincemeat (the corpse that fooled Hitler, 1943; angle: the real man behind "Major Martin") | Inkredible + 역사 한 방울 | claimed, planning | `mincemeat` |
+| Implementation intentions: plan when and where to exercise (Milne, Orbell & Sheeran 2002), "언제, 어디서, 정해." | 한걸음 | in production | `when-where` |
