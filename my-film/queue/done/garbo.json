@@ -1,0 +1,17 @@
+{
+  "film": "garbo",
+  "composition": "Garbo",
+  "channel": "inkredible",
+  "title": "The Spy Who Invented 27 Spies",
+  "renderedAt": "2026-11-17T16:36:39.993Z",
+  "file": "C:\\Claude\\short_films\\my-film\\out\\robot\\garbo.mp4",
+  "renderSeconds": 158,
+  "durationSeconds": 60.01,
+  "loudnessLUFS": -16.63,
+  "drive": {
+    "status": "done",
+    "link": "https://drive.google.com/file/d/1DaKo0NyB9Of8FAjHohV9g8U5NEixXXFn/view?usp=drivesdk",
+    "at": "2026-11-17T16:36:44.131Z"
+  },
+  "upload": "waiting for channel"
+}
