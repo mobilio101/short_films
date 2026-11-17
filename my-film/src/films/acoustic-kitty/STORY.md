@@ -110,7 +110,7 @@ laptop render.
 - **Render order:** `upload.json` in this folder (composition `AcousticKitty`, channel `smirkman`, 57 s).
   The robot's `queue/` doesn't exist yet; 총괄 copies the file there when it does. Until then render by hand
   with `render.bat` → `AcousticKitty`.
-- **Title (47 chars):** What Happens If the CIA Turns a Cat Into a Spy?
+- **Title (43 chars):** The CIA Cat That Almost Spied on the Soviets (changed by the user after the YouTube re-check)
 - **Description, tags, privacy:** in `upload.json` (private until the user publishes). The description
   says nothing about what happened to the cat.
 - **Captions:** `captions.en.srt` (English, from the voice's word timings).
@@ -156,5 +156,6 @@ Read in full: Wikipedia "Acoustic Kitty" and History.com "When the CIA Learned C
   built on the cat's death: our film leaves the fate out, so the angle is clearly different.
 - Risk: our title "What Happens If the CIA Turns a Cat Into a Spy?" is close to many small Shorts'
   titles. Suggested to the user: "The CIA's Spy Cat Wouldn't Take Orders" (from the plan's alternatives).
-  Waiting for the user's choice; `upload.json` not changed.
+  The user chose their own title (17 Nov): **"The CIA Cat That Almost Spied on the Soviets"** (43 chars),
+  now in `upload.json`.
 - The "surgeons" wording: user said to go ahead as is (17 Nov).
