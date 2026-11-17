@@ -122,3 +122,22 @@ seagull, soft low tone for the sad beat. Existing: whoosh, pop, impact, step, cl
   drops to silence on "Major Martin is dead" and returns with the fisherman.
 - Left out as planned: Seraph's release date, Churchill's telegram, the chained briefcase (the
   briefcase is never chained), the fisherman's name, the cause of death.
+
+## Upload info (stills approved by the user)
+
+- **Title:** The Dead Man Who Tricked Hitler
+- **Description:**
+
+  A dead man fooled Hitler, and nobody knew his name for more than fifty years.
+  In 1943 British intelligence gave a body the identity of "Major William Martin", with a fiancée's
+  photo, love letters and secret papers, and let it wash ashore in Spain. Germany believed the Allies
+  would land in Greece and Sardinia; in July they landed in Sicily. The man was Glyndwr Michael, a
+  homeless Welshman who died in London.
+
+  Sources: Wikipedia (Operation Mincemeat); History.co.uk; National WWII Museum; Britannica
+
+  #history #shorts #truestory
+- **Tags:** history, history shorts, true story, animated history, history facts, inkredible,
+  operation mincemeat, ww2 deception, glyndwr michael, major william martin, sicily 1943
+- **Real photo:** none.
+- **Render:** composition `Mincemeat`, 1800 frames, 1080×1920, 30 fps (laptop).
