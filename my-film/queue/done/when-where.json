@@ -1,0 +1,17 @@
+{
+  "film": "when-where",
+  "composition": "WhenWhere",
+  "channel": "step",
+  "title": "언제, 어디서, 정해. (운동 꾸준히 하는 법)",
+  "renderedAt": "2026-11-17T10:29:56.591Z",
+  "file": "C:\\Claude\\short_films\\my-film\\out\\robot\\when-where.mp4",
+  "renderSeconds": 160,
+  "durationSeconds": 51.01,
+  "loudnessLUFS": -22.65,
+  "drive": {
+    "status": "done",
+    "link": "https://drive.google.com/file/d/1IvQRYOB_WPVKskm3uhubFZOgEPGVwtKX/view?usp=drivesdk",
+    "at": "2026-11-17T10:30:00.975Z"
+  },
+  "upload": "waiting for channel"
+}
