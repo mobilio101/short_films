@@ -36,7 +36,11 @@ Learned from studying successful Shorts channels (Nov 2026). Check all five befo
 ## How the work is split
 Read `SESSIONS.md`: which session does what, how sessions hand work over, and the start message for
 each kind of session. Current state of every film: `STATUS.md` (keep it up to date when you start or
-finish something). Rendering and uploading run on the user's laptop: `AUTOMATION.md`.
+finish something). Rendering and uploading run on the user's laptop by a robot: `AUTOMATION.md`.
+**To get a film rendered, a film session writes its render order `queue/<film>.json` (format:
+`queue/README.md`) in the same push as the upload info, and tells 총괄; once 총괄 merges it into `main`,
+the laptop robot renders it, copies it to Google Drive and uploads it as private. Sessions never render
+full videos in the cloud and never write `queue/done/` or `queue/failed/` (only the robot does).**
 
 ## Rules for every session
 - Always speak to the user in polite Korean (존댓말, 예: "~합니다", "~해요"), never casual speech (반말).

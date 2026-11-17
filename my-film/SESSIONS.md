@@ -28,7 +28,7 @@ lists the repository; if not, archive it and create it again.
 - When the user picks a topic, 총괄 (or the planning session) creates the film session with the
   start message below, moves the topic to "In production" in the backlog and adds a row to `STATUS.md`.
 - Film sessions work on `film/<name>`; when the user approves the stills they write the upload info,
-  push, and tell 총괄. 총괄 merges into `main`, which the laptop robot renders and uploads.
+  push (including the render order `queue/<film>.json`, see `queue/README.md`), and tell 총괄. 총괄 merges into `main`, which the laptop robot renders and uploads.
 
 ## Start messages (copy into a new session)
 **총괄**

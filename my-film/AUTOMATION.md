@@ -2,7 +2,7 @@
 
 Goal (the user's): run everything from an iPhone, 100% remote. Cloud sessions make the films; the
 user's Windows laptop renders them on its GPU and uploads them to YouTube automatically.
-**Status: designed, not built yet.** The 자동화 (automation) session builds it.
+**Status (17 Nov 2026): robot built and running on the laptop** (`scripts/robot/`, order format in `queue/README.md`). Rendering works; Google Drive copy and YouTube upload wait for the Google Cloud setup (`client_secret.json`) and for the channels (`add-channel.bat <channel>`).
 
 ## Design (agreed with the user, 16 Nov 2026)
 ```
