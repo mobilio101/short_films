@@ -147,3 +147,14 @@ Read in full: Wikipedia "Acoustic Kitty" and History.com "When the CIA Learned C
 - **One small wording issue:** both sources say *a* (veterinary) surgeon did the operation; the voice says
   "surgeons". Reported to the user; not changed (changing it means re-recording the voice).
 - Both pages tell the taxi story; the film still says and shows nothing about the cat's fate.
+
+## YouTube re-check (17 Nov 2026, before publishing)
+- Long videos: Weird History (about 160K views, 7 years old), Megaprojects (47K), Dark Files (29K), smaller ones.
+- Shorts: many small channels on the same story (mostly under 2K views; titles like "The CIA Turned a
+  Cat Into a Spy", "The CIA Put a Microphone Inside a Cat", "Acoustic Kitty: the CIA's spy cat that
+  didn't care"). One big Short: "How The CIA Took An Innocent Cat's Life" (about 819K views), which is
+  built on the cat's death: our film leaves the fate out, so the angle is clearly different.
+- Risk: our title "What Happens If the CIA Turns a Cat Into a Spy?" is close to many small Shorts'
+  titles. Suggested to the user: "The CIA's Spy Cat Wouldn't Take Orders" (from the plan's alternatives).
+  Waiting for the user's choice; `upload.json` not changed.
+- The "surgeons" wording: user said to go ahead as is (17 Nov).
