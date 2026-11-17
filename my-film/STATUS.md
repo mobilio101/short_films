@@ -13,7 +13,7 @@ Update this when a film starts, changes stage or is published. Stages: 기획 �
 | 역사 한 방울 | 용 항아리 (Dragon Jar) | `src/films/dragon-jar-ko` | 완성 (업로드 전) | https://claude.ai/artifact/9L3PGGTc1SDemFpnL1vhLG |
 | 역사 한 방울 | 고스트 아미 (Ghost Army, 한국어판) | `src/films/ghost-army-ko` | 중단 (이미 만든 주제, 사용자 결정) | 아직 없음 |
 | SMIRKMAN | Dazzle Ships | `src/films/dazzle-ships` | 렌더 대기 | 아직 없음: 깊이 강화와 수염 수정 후 노트북 렌더 필요 |
-| SMIRKMAN | Acoustic Kitty | `src/films/acoustic-kitty` | 렌더 대기 (수정본 사진 승인됨, 0e9845a 이후 버전으로 다시 렌더). 업로드 정보 upload.json | 아직 없음 |
+| SMIRKMAN | Acoustic Kitty | `src/films/acoustic-kitty` | 수정본 렌더 완료 (로봇, 17 Nov), 유튜브 업로드는 채널 연결 대기. 사실 확인 완료 | 아직 없음 |
 | 한걸음 | 10초 시험 (Test-Hangeoleum) | `src/films/test-hangeoleum` | 형식 승인됨 (17 Nov 2026) | 시험용, 업로드 안 함 |
 | 한걸음 | 언제, 어디서, 정해. | `src/films/when-where` | 렌더 대기 (사진 승인됨, 업로드 정보 upload.json, 주문서 queue/when-where.json) | 아직 없음 |
 

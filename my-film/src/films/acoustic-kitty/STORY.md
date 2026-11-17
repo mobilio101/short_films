@@ -132,3 +132,18 @@ User: characters looked like they were floating or only half there, not grounded
   the report-shot pair stand clear in front of the furniture, inside the frame. Every character spot was
   checked against the desk, table, bench and cabinets.
 Fixed stills approved by the user (17 Nov 2026). The video needs a new laptop render (0e9845a or later).
+
+## Full-page fact-check (17 Nov 2026, after en.wikipedia.org and www.history.com were allowed)
+Read in full: Wikipedia "Acoustic Kitty" and History.com "When the CIA Learned Cats Make Bad Spies"
+(Becky Little, updated 28 May 2025).
+- 1960s CIA project (Directorate of Science & Technology), aimed at the Kremlin and Soviet embassies: OK.
+- Microphone in the ear canal, transmitter at the base of the skull, wire/antenna in the fur: OK.
+- About $20 million (Victor Marchetti): OK, the script only says "millions".
+- First mission: two men on a bench in a park outside the Soviet embassy in Washington (Wikipedia);
+  History.com says two men sitting on a bench in the park: OK ("Soviet compound" = the embassy grounds).
+- Trainable for short distances; the closing memo quote "the environmental and security factors ... it
+  would not be practical" is word for word in Wikipedia (CIA memo "Views on Trained Cats Use", March 1967): OK.
+- Cancelled 1967, disclosed 2001: OK.
+- **One small wording issue:** both sources say *a* (veterinary) surgeon did the operation; the voice says
+  "surgeons". Reported to the user; not changed (changing it means re-recording the voice).
+- Both pages tell the taxi story; the film still says and shows nothing about the cat's fate.
