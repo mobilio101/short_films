@@ -4,6 +4,7 @@ Planning sessions add ideas here with sources; the user picks. Format per idea:
 `- **Title idea**: one-line hook. Why it fits. Sources: link; link`
 
 ## In production
+- 고스트 아미 (Ghost Army, 한국어판): 브랜치 film/ghost-army-ko
 
 ## Ideas
 - **The Corpse That Fooled Hitler** (Operation Mincemeat, 1943): British spies dressed a dead man as a fake Royal Marines major, floated him ashore in Spain with fake invasion plans, and Hitler believed it. Fits: strong hook, clear hero (Montagu, "Major Martin"), twist ending (the real man was a homeless Welshman, Glyndwr Michael, named only in 1996). Sources differ on his cause of death; say "died in London" only. Sources: https://www.nationalww2museum.org/war/articles/secret-agents-secret-armies-operation-mincemeat ; https://the-past.com/feature/the-corpse-that-fooled-hitler/ ; https://www.history.co.uk/article/operation-mincemeat YouTube check (Nov 2026): many videos and at least 2 Shorts exist; channel sizes not checked. Needs a different angle, e.g. told from the dead man's side (the real man, named in 1996).
@@ -14,7 +15,7 @@ Planning sessions add ideas here with sources; the user picks. Format per idea:
 - (All five above are also meant to be retold natively in Korean; the Myeongnyang and Hangul stories are Korean history and fit 역사 한 방울 best.)
 
 ## Done
-- 용 항아리 (Dragon Jar, Korean version)
+- 용 항아리 (Dragon Jar, Korean version): https://claude.ai/artifact/9L3PGGTc1SDemFpnL1vhLG
 
 ## From Inkredible (can be retold in Korean)
 Ghost Army, Garbo, Apollo 13 — retell natively in Korean, never translate.

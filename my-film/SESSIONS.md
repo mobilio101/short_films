@@ -14,8 +14,17 @@ message: it picks up from the files.
 | **자동화** | Build the laptop robot and Codex instructions (`AUTOMATION.md`) | Opus | Until the robot works |
 | **제작 · <film>** | One film: `STORY.md`, voice, animation, stills, upload info, render order | Opus | One film, then close |
 
+## Creating a session (총괄 and planning sessions)
+Always attach the repository, or the new session starts with an empty folder and can't read any rules.
+Call `create_session` with **`source_url: "https://github.com/mobilio101/short_films"`** and
+**`source_revision: "main"`**, plus `title`, `prompt` and (for planning) `model: "claude-sonnet-5-5"`.
+Never leave `source_url` out. After creating it, check with `get_session` that `session_context.sources`
+lists the repository; if not, archive it and create it again.
+
 ## Hand-over rules
-- Planning sessions only edit their channel's `BACKLOG.md` (branch `plan/<channel>`).
+- Planning sessions only edit their channel's `BACKLOG.md` and, when the user picks a topic,
+  `channels/TOPICS.md` (branch `plan/<channel>`). Before proposing, read `TOPICS.md` and the other
+  channels' backlogs so no two channels end up with the same topic.
 - When the user picks a topic, 총괄 (or the planning session) creates the film session with the
   start message below, moves the topic to "In production" in the backlog and adds a row to `STATUS.md`.
 - Film sessions work on `film/<name>`; when the user approves the stills they write the upload info,

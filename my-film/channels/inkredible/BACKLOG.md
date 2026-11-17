@@ -13,7 +13,7 @@ Planning sessions add ideas here with sources; the user picks. Format per idea:
 - **The Alphabet Made in Secret** (Hangul, 1443 to 1446): King Sejong invents a new script for ordinary people while scholars object (Choe Manri's petition, 1444). Fits: single clear inventor, opposition, a payoff you can see (every letter shaped like the mouth). Check first: how secret it was and who helped is debated (Korean sources disagree); keep to what both sides agree on. Sources: https://en.wikipedia.org/wiki/Ch%27oe_Malli ; https://www.korean.go.kr/eng_hangeul/setting/002.html ; https://languagelog.ldc.upenn.edu/nll/?p=69269 YouTube check: many explainers and Shorts, mostly teaching Hangul; fewer drama versions. Angle: the opposition and the secret work, not the letter design.
 
 ## Done
-- Ghost Army
-- Dragon Jar
-- Garbo
-- Apollo 13
+- Ghost Army (The Army Made of Balloons): https://claude.ai/artifact/GQi5TFa8pWZgdCxnU6urMR
+- Dragon Jar: https://claude.ai/artifact/AWcgzCoDy3E2PVukJcaTvg
+- Garbo (Agent Garbo): https://claude.ai/artifact/17MYjqnc3iTsDmDDNmgoty
+- Apollo 13: https://claude.ai/artifact/SfZ7S4LRjzkTNfEwPvDHhX

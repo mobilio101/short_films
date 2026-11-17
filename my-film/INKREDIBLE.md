@@ -61,6 +61,9 @@ designer, brand or show.
   the invention or event was, and how it ended.
 
 
+- **Topics:** check `channels/TOPICS.md` first; Inkredible and 역사 한 방울 share their topics
+  (one line in the list), and no other channel may use them.
+
 ## Format
 - YouTube Shorts / TikTok: vertical 1080×1920, 30 fps.
 - Length 60 seconds by default (1800 frames). 30 or 45 seconds only when asked.
@@ -258,6 +261,9 @@ selected by `ACTIVE_PALETTE`); the other palettes there are retired experiments.
 - Travel (walking far, sailing, drifting): the background scrolls past in parallax layers.
 - Shot length: a new shot every 2 to 3 seconds; montage shots about 1 second. Nothing holds
   still for more than 4 seconds.
+
+- **Intro:** the first 2 seconds are 2–3 fast cuts (each under 1 s): the most striking image, a face,
+  a close-up object, with a push-in. Then the normal 2–3 second shots.
 
 ## Sound
 - Every sound is generated in code by `scripts/make-sfx.mjs` (oscillators, noise and filters,
