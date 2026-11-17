@@ -31,16 +31,16 @@ blocked); the facts above come from search summaries of those pages and from Men
 SOFREP. Before the user approves stills, read the full pages if the network allows, or ask to allow
 `en.wikipedia.org` and `www.history.com`.
 
-## Script (about 170 words, about 52 s at Brian's pace)
+## Script (about 175 words, about 53 s at Brian's pace)
 What happens if the CIA turns a cat into a spy? In the nineteen sixties, they found out.
 The target was the Soviets. The problem was getting close. But a cat can go anywhere, and nobody
 looks twice. So surgeons hid a microphone in its ear, a transmitter at the base of its skull, and an
-antenna in its fur. Years of work. Millions of dollars.
+antenna in its fur. Millions of dollars.
 Then came the first mission. A park in Washington, outside a Soviet compound. Two men on a bench. The
 cat had one job: listen.
 But the cat didn't care.
 You see, the CIA could train it to walk short distances. It could not make it want to. A cat does
-what a cat wants. And what a cat wants is not a secret mission.
+what a cat wants.
 So the agents wrote their final report. Quote: "It would not be practical." In nineteen sixty-seven,
 the project was cancelled.
 What happened to the cat? Stories differ. One says a taxi. A former officer says it lived a long,
