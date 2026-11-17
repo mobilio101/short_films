@@ -4,6 +4,12 @@ Planning sessions add ideas here with sources; the user picks. Format per idea:
 `- **Title idea**: one-line hook. Why it fits. Sources: link; link`
 
 ## In production
+- **언제, 어디서, 정해.** (picked by the user 17 Nov 2026, folder `when-where`; film session starts once the format test is approved): "운동하겠다는 마음만으로는 왜 안 될까?" In a study, people who only got
+  motivated did not exercise more; people who also wrote down when and where they would exercise
+  did, by a lot. The hero writes "화요일 7시, 공원" on a sticky note and the shadow loses his
+  favourite word "나중에". (Don't quote a percentage until checked in the full paper.) Sources:
+  https://doi.org/10.1348/135910702169420 (Milne, Orbell & Sheeran 2002, British Journal of Health
+  Psychology 7(2):163-184); https://cancercontrol.cancer.gov/brp/research/constructs/implementation-intentions
 
 ## Ideas
 Added 17 Nov 2026 by the 한걸음 planning session. Checked against `channels/TOPICS.md` and the other
@@ -34,11 +40,5 @@ the format test (`Test-Hangeoleum`) is approved.
   no health claims. Sources: https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2014.00611/text
   (Kroese et al. 2014, Frontiers in Psychology 5:611);
   https://research-portal.uu.nl/en/publications/bedtime-procrastination-introducing-a-new-area-of-procrastination/
-- **언제, 어디서, 정해.**: "운동하겠다는 마음만으로는 왜 안 될까?" In a study, people who only got
-  motivated did not exercise more; people who also wrote down when and where they would exercise
-  did, by a lot. The hero writes "화요일 7시, 공원" on a sticky note and the shadow loses his
-  favourite word "나중에". (Don't quote a percentage until checked in the full paper.) Sources:
-  https://doi.org/10.1348/135910702169420 (Milne, Orbell & Sheeran 2002, British Journal of Health
-  Psychology 7(2):163-184); https://cancercontrol.cancer.gov/brp/research/constructs/implementation-intentions
 
 ## Done
