@@ -110,3 +110,15 @@ seagull, soft low tone for the sad beat. Existing: whoosh, pop, impact, step, cl
 3. Mute test: red-and-cream newsprint look, ink-drop mascot, red character on a paper cut-out world.
 4. Fast intro: three cuts under one second each (shot 1).
 5. Hook as a question in the first sentence: "Who tricked Hitler, and never even knew it?"
+
+## Production notes (built)
+
+- Voice: ElevenLabs Brian, `eleven_v3`, stability 0 (the most energetic of three takes), pauses over
+  0.45 s trimmed, sped up 1.1× → 57.5 s. File `public/voice/mincemeat.mp3`; timings in `words.ts`.
+- Film: `Mincemeat.tsx`, composition `Mincemeat` (1800 frames). 19 shots cut on the word timings; the
+  first 2 seconds are three cuts (sea, briefcase, question-mark man) each under 1 s with a push-in.
+- Counter top left: APRIL 1943 → MAY 1943 (papers reach Germany) → JULY 1943 → YEAR 1943…1996.
+- Sounds: only the existing code-made library (`public/sfx`); no shared code changed. The room tone
+  drops to silence on "Major Martin is dead" and returns with the fisherman.
+- Left out as planned: Seraph's release date, Churchill's telegram, the chained briefcase (the
+  briefcase is never chained), the fisherman's name, the cause of death.
