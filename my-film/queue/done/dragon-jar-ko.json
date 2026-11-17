@@ -1,0 +1,17 @@
+{
+  "film": "dragon-jar-ko",
+  "composition": "DragonJarKo",
+  "channel": "drop",
+  "title": "아무도 못 느낀 지진을 느낀 항아리",
+  "renderedAt": "2026-11-17T16:30:55.264Z",
+  "file": "C:\\Claude\\short_films\\my-film\\out\\robot\\dragon-jar-ko.mp4",
+  "renderSeconds": 175,
+  "durationSeconds": 69.01,
+  "loudnessLUFS": -15.85,
+  "drive": {
+    "status": "done",
+    "link": "https://drive.google.com/file/d/1yk48E0weK4m50SiWCpEF8iyCCpU0MbDo/view?usp=drivesdk",
+    "at": "2026-11-17T16:30:59.343Z"
+  },
+  "upload": "waiting for channel"
+}
