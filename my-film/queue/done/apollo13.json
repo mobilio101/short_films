@@ -1,0 +1,17 @@
+{
+  "film": "apollo13",
+  "composition": "Apollo13",
+  "channel": "inkredible",
+  "title": "The Duct Tape That Saved Three Astronauts",
+  "renderedAt": "2026-11-17T16:27:42.676Z",
+  "file": "C:\\Claude\\short_films\\my-film\\out\\robot\\apollo13.mp4",
+  "renderSeconds": 161,
+  "durationSeconds": 60.01,
+  "loudnessLUFS": -16.02,
+  "drive": {
+    "status": "done",
+    "link": "https://drive.google.com/file/d/16P8clZkKGaTo7S8WP5T3mQkMJIwBhoQY/view?usp=drivesdk",
+    "at": "2026-11-17T16:27:47.290Z"
+  },
+  "upload": "waiting for channel"
+}
