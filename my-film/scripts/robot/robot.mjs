@@ -216,10 +216,10 @@ async function render(order) {
 
   const loud = await run(
     "npx",
-    ["remotion", "ffmpeg", "-hide_banner", "-nostats", "-i", out, "-af", "ebur128=framelog=quiet", "-f", "null", "-"],
+    ["remotion", "ffmpeg", "-hide_banner", "-nostats", "-i", out, "-vn", "-af", "loudnorm=print_format=json", "-f", "null", "-"],
     { cwd: FILM_DIR, shell: true },
   );
-  const m = [...(loud.err + loud.out).matchAll(/I:\s+(-?[\d.]+) LUFS/g)].pop();
+  const m = (loud.err + loud.out).match(/"input_i"\s*:\s*"(-?[\d.]+)"/);
   const lufs = m ? Number(m[1]) : null;
   log(`Rendered ${order.film} in ${seconds} s, length ${duration.toFixed(2)} s, loudness ${lufs ?? "?"} LUFS`);
   return { file: out, renderSeconds: seconds, durationSeconds: Number(duration.toFixed(2)), loudnessLUFS: lufs };
