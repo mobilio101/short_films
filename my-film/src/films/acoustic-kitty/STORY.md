@@ -1,4 +1,4 @@
-# Acoustic Kitty: plan (waiting for the user's "go")
+# Acoustic Kitty: in production (user said "go" on 17 Nov 2026)
 
 **Channel:** SMIRKMAN (rules in `SMIRKMAN.md`). **Language:** English. **Voice:** ElevenLabs Brian.
 **Length:** about 55–60 s. **Topic claimed in:** `channels/TOPICS.md`. **Folder:** `src/films/acoustic-kitty/`.
@@ -85,3 +85,23 @@ No intro, no call to action.
 When the user says "go": record the voice, write `words.ts`, build `AcousticKitty.tsx` (copy the
 `dazzle-ships` pattern), add the line to `src/Root.tsx` and `STATUS.md`, check stills, hand over for the
 laptop render.
+
+## Production notes (17 Nov 2026)
+- **Voice:** ElevenLabs Brian (`eleven_v3`, stability 0.5, emotion tags), 174 words. Raw 64.1 s, pauses
+  trimmed and sped up 1.13x with `scripts/fit-voice.py`: speech ends at 56.0 s. `public/voice/acoustic-kitty.mp3`,
+  word timings in `words.ts`. Composition `AcousticKitty`, 1710 frames (57 s).
+- **Shots as built** (`AcousticKitty.tsx`, sets in `sets.tsx`): 0a cat's eye in a spy lens (park) → 0b mic in
+  the ear (lab) → 0c Smirkman's glint (office) → 1 office, the CAT file slides across the desk → 2 lab, MIC /
+  TRANSMITTER / ANTENNA labels → 3 files and cash pile up → 4a park, two men on the bench, the compound behind,
+  the cat walks in → 4b listening van → 5a hard cut: the cat yawns and **turns its back** (it never walks
+  away) → 5b shades fly off, deadpan, clink back → 6 split screen CAN WALK / WON'T LISTEN → 7a final report,
+  NOT PRACTICAL stamp → 7b the file goes into the drawer, CANCELLED 1967 → 8 Smirkman by the window with the
+  closed KITTY file (a photo of the cat clipped on it), closing smirk.
+- **Changed from the plan to keep the cat's fate unsaid:** the last shot no longer shows the cat asleep on a
+  windowsill (that would hint it lived); the cat appears only during the project, and in 5a it turns its
+  back instead of trotting away (no street, no road anywhere in the park).
+- **The cat** is drawn film-locally in `Cat.tsx` (poses sit / walk / lick / back / yawn) because the shared
+  kit has no cat yet; asked 총괄 whether to wait for a shared cat or keep this one.
+- **Sound:** existing generated library only (roomtone, hum, static beds; pop, stamp, coins, boing, whoosh,
+  clink, type, slam, shimmer). Voice at 0.92; peak of voice + loud effects mixed in ffmpeg: about -1.0 dB.
+- Fact-check of the full Wikipedia and History.com pages is still open (see above).
