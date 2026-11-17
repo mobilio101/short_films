@@ -1,0 +1,15 @@
+{
+  "film": "dazzle-ships",
+  "composition": "DazzleShips",
+  "channel": "smirkman",
+  "title": "Why Britain Painted Its Warships Like Zebras",
+  "renderedAt": "2026-11-17T08:02:16.607Z",
+  "file": "C:\\Claude\\short_films\\my-film\\out\\robot\\dazzle-ships.mp4",
+  "renderSeconds": 230,
+  "durationSeconds": 58.28,
+  "loudnessLUFS": -20.48,
+  "drive": {
+    "status": "waiting for Drive setup"
+  },
+  "upload": "waiting for channel"
+}
