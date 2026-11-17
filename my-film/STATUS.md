@@ -11,7 +11,7 @@ Update this when a film starts, changes stage or is published. Stages: 기획 �
 | Inkredible | Apollo 13 | `src/films/apollo13` | 완성 (업로드 전) | https://claude.ai/artifact/SfZ7S4LRjzkTNfEwPvDHhX |
 | 역사 한 방울 | 용 항아리 (Dragon Jar) | `src/films/dragon-jar-ko` | 완성 (업로드 전) | https://claude.ai/artifact/9L3PGGTc1SDemFpnL1vhLG |
 | SMIRKMAN | Dazzle Ships | `src/films/dazzle-ships` | 렌더 대기 | 아직 없음: 깊이 강화와 수염 수정 후 노트북 렌더 필요 |
-| 한걸음 | — | — | 형식 확정 전 | 10초 시험 영상 먼저 |
+| 한걸음 | 10초 시험 (Test-Hangeoleum) | `src/films/test-hangeoleum` | 사진 승인 대기 | 형식 확정 전: 사용자 확인 중 |
 
 ## Channels
 | Channel | YouTube channel created? | Brand files |
