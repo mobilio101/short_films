@@ -33,14 +33,22 @@ Step 1: Robot code (my-film\scripts\robot\robot.mjs, Node, no AI):
  - Never run two renders at once. Survive errors: one failed film must not stop the others.
 Step 2: Start-up. Register the robot in Windows Task Scheduler to start at log-on, restart on
  failure, and keep the laptop awake while plugged in. Test by rebooting.
+NOTE: the YouTube channels do NOT exist yet; I will create them later. So the robot must work before
+ that: render every order, but if the order's channel has no OAuth token yet, do not upload and do not
+ fail: keep the mp4 in out\ and the Drive copy, and write queue\done\<film>.json with
+ "upload": "waiting for channel". When I add a channel later, running the robot again must upload
+ those waiting films. Give me one simple command or double-click file to authorize a new channel
+ (add-channel.bat <channel id>).
 Step 3 [USER]: Google Cloud. Create one Google Cloud project, enable YouTube Data API v3 and Google
- Drive API, make an OAuth consent screen, then authorize each YouTube channel (they are brand
- accounts under one Google account) in my logged-in Chrome. Click "Allow" for me; ask me only for
+ Drive API, make an OAuth consent screen, then set up the authorization for the channels that exist (none yet: only the Drive copy and the
+ consent screen are needed now; each YouTube channel is authorized later with add-channel.bat, in my
+ logged-in Chrome). Click "Allow" for me; ask me only for
  Google's phone confirmation. Tell me when Google's audit is needed (uploads stay private until
  then; that is fine) and help me apply.
 Step 4: Test with one film. Put a copy of my-film\src\films\acoustic-kitty\upload.json into
- queue\acoustic-kitty.json, adapt it to the order format, and run the robot once: render, private
- upload to the SMIRKMAN channel, Drive copy, done-file. Show me the private YouTube link.
+ queue\acoustic-kitty.json, adapt it to the order format, and run the robot once: render, Drive copy,
+ done-file with "upload": "waiting for channel". Show me the mp4 (Drive link). If a channel exists
+ by then, also do the private upload and show me the link.
  Then write my-film\queue\README.md (the order format) and report what works and what does not.
 ```
 
