@@ -10,7 +10,7 @@ Update this when a film starts, changes stage or is published. Stages: 기획 �
 | Inkredible | Garbo | `src/films/garbo` | 완성 (업로드 전) | https://claude.ai/artifact/17MYjqnc3iTsDmDDNmgoty |
 | Inkredible | Apollo 13 | `src/films/apollo13` | 완성 (업로드 전) | https://claude.ai/artifact/SfZ7S4LRjzkTNfEwPvDHhX |
 | 역사 한 방울 | 용 항아리 (Dragon Jar) | `src/films/dragon-jar-ko` | 완성 (업로드 전) | https://claude.ai/artifact/9L3PGGTc1SDemFpnL1vhLG |
-| 역사 한 방울 | 고스트 아미 (Ghost Army, 한국어판) | `src/films/ghost-army-ko` | 사진 승인 대기 | 아직 없음 (스틸 승인 후 추가) |
+| 역사 한 방울 | 고스트 아미 (Ghost Army, 한국어판) | `src/films/ghost-army-ko` | 중단 (이미 만든 주제, 사용자 결정) | 없음: 브랜치 `film/ghost-army-ko`에 기록만 보관 |
 | SMIRKMAN | Dazzle Ships | `src/films/dazzle-ships` | 렌더 대기 | 아직 없음: 깊이 강화와 수염 수정 후 노트북 렌더 필요 |
 | 한걸음 | — | — | 형식 확정 전 | 10초 시험 영상 먼저 |
 
