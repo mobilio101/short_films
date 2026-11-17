@@ -1,7 +1,9 @@
 # 언제, 어디서, 정해. (한걸음)
 
 - Channel: 한걸음 (rules in `HANGEOLEUM.md`; format reference `src/films/test-hangeoleum/`, approved 17 Nov 2026).
-- Folder `src/films/when-where`, branch `film/when-where`. Stage: 대본 승인 대기.
+- Folder `src/films/when-where`, branch `film/when-where`. Stage: 사진 승인 대기 (script approved with "go").
+- Voice: ElevenLabs Brian, `eleven_multilingual_v2`, speed 0.92, stability 0.5 (same as the approved test), one clip per
+  line in `public/voice/when-where/`; word timings in `words.ts`. Film length 1530 frames (51 s), composition `WhenWhere`.
 - Struggle: just showing up / exercise. One small step: write one line, "요일, 시간, 장소".
 - Length goal: about 50 s (1080×1920, 30 fps). Voice: an approved Korean voice from `INKREDIBLE.md`,
   calmer and slower than the history films (tested with the user after "go").
