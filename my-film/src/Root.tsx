@@ -14,6 +14,7 @@ import { DazzleShips, DAZZLE_DURATION } from "./films/dazzle-ships/DazzleShips";
 import { AcousticKitty, ACOUSTIC_KITTY_DURATION } from "./films/acoustic-kitty/AcousticKitty";
 import { ShadesSheet } from "./films/test/toon/ShadesSheet";
 import { SmileSheet } from "./films/test/toon/SmileSheet";
+import { CatSheet } from "./films/test/toon/CatSheet";
 import { JawSheet } from "./films/test/toon/JawSheet";
 import { LogoSheet } from "./films/test/brand/LogoSheet";
 import { SmirkmanAvatar, SmirkmanBanner, StepAvatar, StepBanner } from "./films/test/brand/Brand";
@@ -55,6 +56,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="Test-LogoSheet" component={LogoSheet} durationInFrames={30} fps={FPS} width={1800} height={2720} />
       <Composition id="Test-JawSheet" component={JawSheet} durationInFrames={30} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-SmileSheet" component={SmileSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />
+      <Composition id="Test-CatSheet" component={CatSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-ShadesSheet" component={ShadesSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-CaptainCompare" component={CaptainCompare} durationInFrames={60} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-ToonSheet" component={ToonSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />

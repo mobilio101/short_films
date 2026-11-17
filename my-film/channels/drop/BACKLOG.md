@@ -4,7 +4,6 @@ Planning sessions add ideas here with sources; the user picks. Format per idea:
 `- **Title idea**: one-line hook. Why it fits. Sources: link; link`
 
 ## In production
-- 고스트 아미 (Ghost Army, 한국어판): 브랜치 film/ghost-army-ko
 
 ## Ideas
 
