@@ -5,11 +5,9 @@ about fighting the lazy, scrolling, procrastinating self. Chosen by the user on 
 Brand: `brand/hangeoleum/avatar.png` and `banner.png` (drawn in `src/films/test/brand/Brand.tsx`).
 YouTube settings: `channels/channels.json`.
 
-> **Status: format not yet confirmed.** This channel began as the project's very first idea (a
-> 16:9, 2–3 minute film with no voiceover; see the `Test` composition and the first version of the
-> rules in git commit `4a8c718`). It is now a **Korean vertical Shorts** channel. Before the first
-> real film, build a 10-second test (`Test-Hangeoleum`) in the format below, show it to the user and
-> wait for approval. Update this file with whatever the user decides.
+> **Status: format confirmed by the user on 17 Nov 2026** with the 10-second test `Test-Hangeoleum`
+> (`src/films/test-hangeoleum/`): vertical Korean Shorts, split screen 게으른 나 (top) / 한걸음 나
+> (bottom), the look and colours below. Use the test as the reference for every film.
 
 Reference channels are for feel only. Never copy their characters, art, titles or layouts.
 
@@ -21,7 +19,7 @@ Reference channels are for feel only. Never copy their characters, art, titles o
 - Honest and warm, never preachy. The viewer should think "that's me", then get one small, concrete
   step they can take today (the channel name is the promise: one step).
 
-## Format (proposed, confirm with the test)
+## Format (confirmed 17 Nov 2026)
 - Vertical 1080×1920, 30 fps, about 45–60 seconds. Korean narration, captions, code-made sound.
 - Safe area as in `INKREDIBLE.md` (nothing important within 250 px of the bottom, 160 px of the right
   edge, 200 px of the top).

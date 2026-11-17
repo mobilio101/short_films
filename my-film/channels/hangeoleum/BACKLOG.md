@@ -4,7 +4,7 @@ Planning sessions add ideas here with sources; the user picks. Format per idea:
 `- **Title idea**: one-line hook. Why it fits. Sources: link; link`
 
 ## In production
-- **언제, 어디서, 정해.** (picked by the user 17 Nov 2026, folder `when-where`; film session starts once the format test is approved): "운동하겠다는 마음만으로는 왜 안 될까?" In a study, people who only got
+- **언제, 어디서, 정해.** (picked by the user 17 Nov 2026, folder `when-where`; format approved, film session started): "운동하겠다는 마음만으로는 왜 안 될까?" In a study, people who only got
   motivated did not exercise more; people who also wrote down when and where they would exercise
   did, by a lot. The hero writes "화요일 7시, 공원" on a sticky note and the shadow loses his
   favourite word "나중에". (Don't quote a percentage until checked in the full paper.) Sources:
@@ -15,8 +15,8 @@ Planning sessions add ideas here with sources; the user picks. Format per idea:
 Added 17 Nov 2026 by the 한걸음 planning session. Checked against `channels/TOPICS.md` and the other
 channels' backlogs: no overlap (the other channels only have history topics). Quick web search found
 no Korean Short with the same story angle, but these are common self-help subjects, so each film must
-be our own story (split screen 게으른 나 / 한걸음 나), never a "study says" lecture. Not to be made until
-the format test (`Test-Hangeoleum`) is approved.
+be our own story (split screen 게으른 나 / 한걸음 나), never a "study says" lecture. Format test approved
+17 Nov 2026.
 
 - **딱 5분만.**: "할 일 앞에서 왜 갑자기 청소가 하고 싶어질까?" Putting off is about escaping a bad
   feeling now, not about time; the shadow offers relief, the hero opens the file for five minutes.
