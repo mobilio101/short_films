@@ -131,4 +131,4 @@ User: characters looked like they were floating or only half there, not grounded
   shot moved past the end of the desk to the window (he stood behind the desk before); the scientist and
   the report-shot pair stand clear in front of the furniture, inside the frame. Every character spot was
   checked against the desk, table, bench and cabinets.
-The video needs a new laptop render.
+Fixed stills approved by the user (17 Nov 2026). The video needs a new laptop render (0e9845a or later).
