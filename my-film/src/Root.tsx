@@ -11,8 +11,10 @@ import { ComicSheet } from "./films/test/chibi/ComicSheet";
 import { ToonSheet } from "./films/test/toon/ToonSheet";
 import { CaptainCompare } from "./films/test/toon/CaptainCompare";
 import { DazzleShips, DAZZLE_DURATION } from "./films/dazzle-ships/DazzleShips";
+import { AcousticKitty, ACOUSTIC_KITTY_DURATION } from "./films/acoustic-kitty/AcousticKitty";
 import { ShadesSheet } from "./films/test/toon/ShadesSheet";
 import { SmileSheet } from "./films/test/toon/SmileSheet";
+import { CatSheet } from "./films/test/toon/CatSheet";
 import { JawSheet } from "./films/test/toon/JawSheet";
 import { LogoSheet } from "./films/test/brand/LogoSheet";
 import { SmirkmanAvatar, SmirkmanBanner, StepAvatar, StepBanner } from "./films/test/brand/Brand";
@@ -24,6 +26,7 @@ import { Garbo, GARBO_DURATION } from "./films/garbo/Garbo";
 import { Apollo13, APOLLO13_DURATION } from "./films/apollo13/Apollo13";
 import { DragonJarKo, DRAGON_JAR_KO_DURATION } from "./films/dragon-jar-ko/DragonJarKo";
 import { TestHangeoleum, TEST_HANGEOLEUM_DURATION } from "./films/test-hangeoleum/TestHangeoleum";
+import { Mincemeat, MINCEMEAT_DURATION } from "./films/mincemeat/Mincemeat";
 
 const common = { durationInFrames: TEST_DURATION, fps: FPS, width: W, height: H };
 
@@ -31,8 +34,10 @@ export const RemotionRoot: React.FC = () => {
   return (
     <>
       {/* New channel (3D world, 2D characters): SMIRKMAN, rules in SMIRKMAN.md */}
+      <Composition id="AcousticKitty" component={AcousticKitty} durationInFrames={ACOUSTIC_KITTY_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="DazzleShips" component={DazzleShips} durationInFrames={DAZZLE_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="DragonJarKo" component={DragonJarKo} durationInFrames={DRAGON_JAR_KO_DURATION} fps={FPS} width={1080} height={1920} />
+      <Composition id="Mincemeat" component={Mincemeat} durationInFrames={MINCEMEAT_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="Apollo13" component={Apollo13} durationInFrames={APOLLO13_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="Garbo" component={Garbo} durationInFrames={GARBO_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="DragonJar" component={DragonJar} durationInFrames={DRAGON_JAR_DURATION} fps={FPS} width={1080} height={1920} />
@@ -56,6 +61,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="Test-LogoSheet" component={LogoSheet} durationInFrames={30} fps={FPS} width={1800} height={2720} />
       <Composition id="Test-JawSheet" component={JawSheet} durationInFrames={30} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-SmileSheet" component={SmileSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />
+      <Composition id="Test-CatSheet" component={CatSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-ShadesSheet" component={ShadesSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-CaptainCompare" component={CaptainCompare} durationInFrames={60} fps={FPS} width={1080} height={1920} />
       <Composition id="Test-ToonSheet" component={ToonSheet} durationInFrames={60} fps={FPS} width={1080} height={1920} />

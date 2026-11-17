@@ -13,3 +13,5 @@ one line.
 | Apollo 13 | Inkredible + 역사 한 방울 | EN done | `apollo13` |
 | Dazzle camouflage ships (WWI) | SMIRKMAN | done, render pending | `dazzle-ships` |
 | ADRIFT (plan only, never made) | Inkredible + 역사 한 방울 | plan only | `adrift` |
+| Acoustic Kitty (the CIA spy cat, 1960s) | SMIRKMAN | in production | `acoustic-kitty` |
+| Operation Mincemeat (the corpse that fooled Hitler, 1943; angle: the real man behind "Major Martin") | Inkredible + 역사 한 방울 | claimed, planning | `mincemeat` |

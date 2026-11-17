@@ -1,0 +1,28 @@
+{
+  "film": "acoustic-kitty",
+  "composition": "AcousticKitty",
+  "channel": "smirkman",
+  "durationSeconds": 57,
+  "title": "What Happens If the CIA Turns a Cat Into a Spy?",
+  "description": "In the 1960s, the CIA hid a microphone, a transmitter and an antenna inside a cat to spy on the Soviets.\nIts first mission was two men on a park bench in Washington. The cat had other plans.\n\nSources: Wikipedia (\"Acoustic Kitty\", citing the declassified CIA memo released in 2001); History.com; Mental Floss; WETA Boundary Stones; HowStuffWorks\n\n#facts #history #shorts",
+  "tags": [
+    "weird facts",
+    "true story",
+    "fun facts",
+    "did you know",
+    "strange history",
+    "smirkman",
+    "acoustic kitty",
+    "cia spy cat",
+    "cold war",
+    "cia",
+    "spy cat"
+  ],
+  "category": "Education",
+  "language": "en",
+  "madeForKids": false,
+  "captions": "my-film/src/films/acoustic-kitty/captions.en.srt",
+  "privacy": "private",
+  "publishAt": null,
+  "note": "Render order for the laptop robot (copy of src/films/acoustic-kitty/upload.json)."
+}
