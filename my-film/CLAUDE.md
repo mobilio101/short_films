@@ -14,6 +14,25 @@ Korean, and share results as images or playable videos, never localhost links.
 YouTube settings (descriptions, keywords, title and tag rules) for all four: `channels/channels.json`.
 Brand files: `brand/`.
 
+## Must-haves for every film (all channels)
+Learned from studying successful Shorts channels (Nov 2026). Check all five before the user approves stills.
+1. **Be ourselves, never a copy.** YouTube groups look-alike videos and shows copies to almost no one,
+   and since July 2025 it treats mass-produced, repetitive videos as "inauthentic content", which can
+   cost the **whole channel** its monetisation. Every film needs its own research, sources, script and
+   scenes; never reuse a template with the words swapped. Learn from reference channels, never copy
+   their topics, titles, scenes or thumbnails.
+2. **One topic, one channel.** Before proposing a topic, check `channels/TOPICS.md` and search YouTube
+   for it: if a big channel already made the same video, only go ahead with a clearly different angle.
+   When the user picks a topic, claim it in `TOPICS.md` at once. Channels never share a topic, even
+   when they are worked on at the same time. **The one exception: Inkredible (English) and
+   역사 한 방울 (Korean) share topics**: the Korean film is written natively and recut, never translated.
+3. **The mute test.** Mute the film and hide the channel name: would a viewer still know which channel
+   it is? If not, strengthen the channel's signature (character, look, recurring gag, sound) first.
+4. **Fast intro.** The first 2 seconds hold 2–3 cuts, each under 1 second, with the camera moving
+   toward the subject, under the first line of narration. Then the channel's normal pace. (The first
+   seconds decide whether viewers swipe away, YouTube's main Shorts signal.)
+5. **Hook as a question** in the first sentence. "What happens if…?" is a strong form.
+
 ## How the work is split
 Read `SESSIONS.md`: which session does what, how sessions hand work over, and the start message for
 each kind of session. Current state of every film: `STATUS.md` (keep it up to date when you start or

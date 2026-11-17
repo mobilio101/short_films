@@ -66,6 +66,11 @@ Reference channels are for feel only. Never copy their characters, art, titles o
 - Advice must be sensible and safe. No medical or mental-health claims; for serious topics
   (depression, self-harm) do not make a film without asking the user.
 
+- **Intro:** even on this calm channel the first 2 seconds are 2–3 fast cuts (alarm, phone glow,
+  tired face). After that the pace slows down.
+- A split screen of 게으른 나 and 한걸음 나 side by side suits this channel.
+- Topics: check `channels/TOPICS.md` first and claim the topic when the user picks it.
+
 ## Sound and voice
 - Every sound generated in code (`scripts/make-sfx.mjs`). Quiet room tone, a ticking clock, the phone
   buzz, footsteps; no music unless generated in code.
