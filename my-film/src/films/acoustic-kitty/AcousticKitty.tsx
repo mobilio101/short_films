@@ -184,34 +184,42 @@ const SpyLens: React.FC = () => {
 };
 
 /** Draw a Toon standing at a 3D spot. */
-const At: React.FC<{ project: Project; at: THREE.Vector3; look: Look; id: string; h?: number; phones?: boolean; cut?: THREE.Vector3 } & Omit<React.ComponentProps<typeof Toon>, "x" | "y" | "scale" | "look" | "id">> = ({
+const At: React.FC<{ project: Project; at: THREE.Vector3; look: Look; id: string; h?: number; phones?: boolean } & Omit<React.ComponentProps<typeof Toon>, "x" | "y" | "scale" | "look" | "id">> = ({
   project,
   at,
   look,
   id,
   h = 1.6,
   phones,
-  cut,
   ...rest
 }) => {
   const p = placeToon(project, at, h);
-  const body = (
+  return (
     <>
+      <GroundShadow project={project} at={at} id={`t-${id}`} />
       <Toon id={id} x={p.x} y={p.y} scale={p.scale} look={look} {...rest} />
       {phones && <Headphones x={p.x} y={p.y} s={p.scale} />}
     </>
   );
-  if (!cut) return body;
-  // Standing behind a desk or table: hide what is below the furniture's front top edge.
-  const cy = project(cut).y;
+};
+
+/** A soft dark ellipse on the ground under a character, projected with the shot's camera, so feet touch the floor. */
+const GroundShadow: React.FC<{ project: Project; at: THREE.Vector3; rx?: number; rz?: number; id: string; dark?: number }> = ({ project, at, rx = 0.36, rz = 0.2, id, dark = 0.34 }) => {
+  const c = project(at);
+  const a = project(at.clone().add(v3(rx, 0, 0))), b = project(at.clone().add(v3(-rx, 0, 0)));
+  const n = project(at.clone().add(v3(0, 0, rz))), fz = project(at.clone().add(v3(0, 0, -rz)));
+  const RX = Math.hypot(a.x - b.x, a.y - b.y) / 2;
+  const RY = Math.max(4, Math.abs(n.y - fz.y) / 2);
   return (
     <g>
       <defs>
-        <clipPath id={`cut-${id}`}>
-          <rect x={-2000} y={-2000} width={6000} height={cy + 2000} />
-        </clipPath>
+        <radialGradient id={`gs-${id}`}>
+          <stop offset="0%" stopColor="#1a0f08" stopOpacity={dark} />
+          <stop offset="60%" stopColor="#1a0f08" stopOpacity={dark * 0.75} />
+          <stop offset="100%" stopColor="#1a0f08" stopOpacity={0} />
+        </radialGradient>
       </defs>
-      <g clipPath={`url(#cut-${id})`}>{body}</g>
+      <ellipse cx={c.x} cy={c.y} rx={RX} ry={RY} fill={`url(#gs-${id})`} />
     </g>
   );
 };
@@ -235,19 +243,24 @@ const Headphones: React.FC<{ x: number; y: number; s: number }> = ({ x, y, s }) 
 /** Draw the cat sitting/walking at a 3D spot. */
 const CatAt: React.FC<{ project: Project; at: THREE.Vector3; pose?: CatPose; expr?: CatExpr; mic?: boolean; antenna?: boolean; flip?: boolean }> = ({ project, at, ...rest }) => {
   const p = placeCat(project, at);
-  return <Cat x={p.x} y={p.y} scale={p.scale} {...rest} />;
+  const walk = rest.pose === "walk";
+  return (
+    <>
+      <GroundShadow project={project} at={walk ? at.clone().add(v3(0, 0, 0)) : at} rx={walk ? 0.3 : 0.2} rz={walk ? 0.1 : 0.13} id={`c-${at.x.toFixed(2)}-${at.z.toFixed(2)}`} dark={0.4} />
+      <Cat x={p.x} y={p.y} scale={p.scale} {...rest} />
+    </>
+  );
 };
 
 /** A man sitting on the park bench reading a newspaper: the Toon above the hem, with sitting legs drawn in 3D. */
 const Sitter: React.FC<{ project: Project; at: THREE.Vector3; look: Look; id: string; expr?: React.ComponentProps<typeof Toon>["expr"]; gaze?: number; paper?: boolean }> = ({ project, at, look, id, expr = "neutral", gaze = 0, paper = true }) => {
-  // Body origin lifted so the shirt hem sits on the seat (seat top 0.48 m).
-  const origin = at.clone().add(v3(0, 0.13, 0));
+  // Seat top 0.32 m: the Toon's shirt hem (0.35 m above its feet) rests on it.
+  const origin = at.clone().add(v3(0, SEAT - 0.35, 0));
   const p = placeToon(project, origin);
-  const hipY = 0.48;
   const legs = [-1, 1].map((d) => {
-    const hip = project(at.clone().add(v3(d * 0.07, hipY - 0.04, -0.05)));
-    const knee = project(at.clone().add(v3(d * 0.1, hipY + 0.03, 0.4)));
-    const foot = project(at.clone().add(v3(d * 0.1, 0.05, 0.45)));
+    const hip = project(at.clone().add(v3(d * 0.06, SEAT + 0.02, 0)));
+    const knee = project(at.clone().add(v3(d * 0.1, SEAT + 0.03, 0.26)));
+    const foot = project(at.clone().add(v3(d * 0.11, 0.0, 0.3)));
     return { d, hip, knee, foot };
   });
   const w = 11 * p.scale;
@@ -258,12 +271,11 @@ const Sitter: React.FC<{ project: Project; at: THREE.Vector3; look: Look; id: st
           <rect x={p.x - 1000} y={p.y - 2000} width={2000} height={2000 - 150 * p.scale} />
         </clipPath>
       </defs>
+      <GroundShadow project={project} at={at.clone().add(v3(0, 0, 0.28))} rx={0.3} rz={0.14} id={`sit-sh-${id}`} />
       {legs.map(({ d, hip, knee, foot }) => (
         <g key={d}>
-          <path d={`M${knee.x},${knee.y} L${foot.x},${foot.y}`} fill="none" stroke={INK} strokeWidth={w} strokeLinecap="round" />
-          <path d={`M${hip.x},${hip.y} L${knee.x},${knee.y}`} fill="none" stroke={INK} strokeWidth={w * 5.2} strokeLinecap="round" />
-          <path d={`M${hip.x},${hip.y} L${knee.x},${knee.y}`} fill="none" stroke={TROUSERS} strokeWidth={w * 3.8} strokeLinecap="round" />
-          <ellipse cx={foot.x + d * 10 * p.scale} cy={foot.y} rx={34 * p.scale} ry={17 * p.scale} fill={look.shoes} stroke={INK} strokeWidth={6 * p.scale} />
+          <path d={`M${hip.x},${hip.y} L${knee.x},${knee.y} L${foot.x},${foot.y - 12 * p.scale}`} fill="none" stroke={INK} strokeWidth={w} strokeLinecap="round" strokeLinejoin="round" />
+          <ellipse cx={foot.x + d * 12 * p.scale} cy={foot.y - 12 * p.scale} rx={34 * p.scale} ry={17 * p.scale} fill={look.shoes} stroke={INK} strokeWidth={6 * p.scale} />
         </g>
       ))}
       <g clipPath={`url(#sit-${id})`}>
@@ -273,7 +285,8 @@ const Sitter: React.FC<{ project: Project; at: THREE.Vector3; look: Look; id: st
   );
 };
 
-const TROUSERS = "#3A3F45";
+/** Bench seat height in the park (see `Bench` in sets.tsx). */
+const SEAT = 0.32;
 
 /** A folded newspaper held at the chest (centred on the right hand). */
 const Newspaper: React.FC = () => (
@@ -329,10 +342,8 @@ const OfficeFront: React.FC<{ side?: number }> = ({ side = 1 }) => (
   </>
 );
 
-const BOSS_SPOT = v3(-0.35, 0, -1.65);
+const BOSS_SPOT = v3(-0.55, 0, -0.05);
 const AGENT_SPOT = v3(0.8, 0, 0.3);
-/** Front top edge of the desk at x: characters behind the desk are hidden below it. */
-const deskEdge = (x: number) => v3(x, DESK_TOP, -0.4);
 
 /** 0c · Intro cut 3: Smirkman's raised eyebrow and smirk, fast push-in. */
 const Shot0c: React.FC = () => {
@@ -389,7 +400,7 @@ const Shot1: React.FC = () => {
       front={<OfficeFront />}
       chars={(p) => (
         <>
-          <At project={p} at={BOSS_SPOT} cut={deskEdge(BOSS_SPOT.x)} look={BOSS} id="b1" expr={f > cue("close") - S.s1 ? "smug" : "neutral"} gaze={10} />
+          <At project={p} at={BOSS_SPOT} look={BOSS} id="b1" expr={f > cue("close") - S.s1 ? "smug" : "neutral"} gaze={10} />
           <At project={p} at={AGENT_SPOT} look={AGENT} id="a1" expr="sneaky" gaze={-10} />
         </>
       )}
@@ -405,7 +416,7 @@ const Shot3: React.FC = () => {
   const mil = cue("Millions") - S.s3;
   const folders = 2 + Math.floor(clamp01(f, 0, mil) * 10);
   const cash = Math.floor(clamp01(f, mil, mil + 30) * 9);
-  const boss = v3(0.15, 0, -1.7);
+  const boss = v3(0.72, 0, 0.0);
   return (
     <World3D
       cam={cam}
@@ -419,7 +430,7 @@ const Shot3: React.FC = () => {
           <ContactShadow at={boss} />
         </>
       }
-      chars={(p) => <At project={p} at={boss} cut={deskEdge(boss.x)} look={BOSS} id="b3" expr={f > mil ? "panic" : "neutral"} gaze={12} armsUp={f > mil ? 0.6 : 0} />}
+      chars={(p) => <At project={p} at={boss} look={BOSS} id="b3" expr={f > mil ? "panic" : "neutral"} gaze={12} armsUp={f > mil ? 0.6 : 0} />}
     />
   );
 };
@@ -437,8 +448,10 @@ const Report: React.FC = () => {
 const Shot7a: React.FC = () => {
   const { f } = useLocal();
   const len = S.s7b - S.s7a;
-  const cam = lerpCam({ pos: v3(0.05, 1.7, 0.2), target: v3(0, 0.78, -0.72), fov: 48 }, { pos: v3(0.6, 1.3, 3.6), target: v3(0.2, 1.0, -0.9), fov: 58 }, ease(f, 30, len - 20));
-  const boss = BOSS_SPOT;
+  const cam = lerpCam({ pos: v3(0.05, 1.7, 0.2), target: v3(0, 0.78, -0.72), fov: 48 }, { pos: v3(0.05, 1.3, 4.8), target: v3(0.0, 0.95, -0.9), fov: 58 }, ease(f, 30, len - 20));
+  // Standing at the two ends of the desk, out of the way of the camera that rises off the report.
+  const boss = v3(-1.1, 0, -0.05);
+  const agent = v3(1.1, 0, 0.0);
   return (
     <World3D
       cam={cam}
@@ -452,13 +465,13 @@ const Shot7a: React.FC = () => {
             <Report />
           </Office>
           <ContactShadow at={boss} />
-          <ContactShadow at={AGENT_SPOT} />
+          <ContactShadow at={agent} />
         </>
       }
       chars={(p) => (
         <>
-          <At project={p} at={boss} cut={deskEdge(boss.x)} look={BOSS} id="b7" expr={f > cue("practical") - S.s7a ? "smug" : "neutral"} gaze={10} />
-          <At project={p} at={AGENT_SPOT} look={AGENT} id="a7" expr="sneaky" gaze={-10} />
+          <At project={p} at={boss} look={BOSS} id="b7" expr={f > cue("practical") - S.s7a ? "smug" : "neutral"} gaze={10} />
+          <At project={p} at={agent} look={AGENT} id="a7" expr="sneaky" gaze={-10} />
         </>
       )}
     />
@@ -499,8 +512,9 @@ const Shot7b: React.FC = () => {
 const Shot8: React.FC = () => {
   const { f } = useLocal();
   const len = ACOUSTIC_KITTY_DURATION - S.s8;
-  const spot = v3(1.2, 0, -1.6);
-  const cam = lerpCam({ pos: v3(0.2, 1.3, 2.6), target: v3(1.2, 1.25, -1.6), fov: 56 }, { pos: v3(1.0, 1.25, 0.6), target: v3(1.2, 1.05, -1.6), fov: 54 }, ease(f, 0, len));
+  // Past the end of the desk (desk ends at x 1.1), in front of the window: nothing between him and the camera.
+  const spot = v3(1.9, 0, -1.5);
+  const cam = lerpCam({ pos: v3(0.9, 1.3, 2.7), target: v3(1.9, 1.25, -1.5), fov: 56 }, { pos: v3(1.75, 1.25, 0.7), target: v3(1.9, 1.05, -1.5), fov: 54 }, ease(f, 0, len));
   return (
     <World3D
       cam={cam}
@@ -555,14 +569,14 @@ const Shot0b: React.FC = () => {
 };
 
 const labCam = (f: number, len: number) =>
-  lerpCam({ pos: v3(-0.7, 1.45, 2.7), target: v3(0.3, 1.15, -0.2), fov: 54 }, { pos: v3(0.7, 1.4, 2.1), target: v3(0.3, 1.18, -0.2), fov: 54 }, ease(f, 0, len + DIS));
+  lerpCam({ pos: v3(0.0, 1.3, 3.9), target: v3(0.5, 0.9, 0.1), fov: 56 }, { pos: v3(0.75, 1.25, 3.5), target: v3(0.55, 0.92, 0.1), fov: 56 }, ease(f, 0, len + DIS));
 
 /** 2 · The lab: the cat on the table, the scientist with tiny tools; the three spy parts pop up. */
 const Shot2: React.FC = () => {
   const { f } = useLocal();
   const len = S.s3 - S.s2;
   const cam = labCam(f, len);
-  const sci = v3(0.62, 0, -0.75);
+  const sci = v3(1.1, 0, 0.65);
   const mic = f >= cue("microphone") - S.s2;
   const ant = f >= cue("antenna") - S.s2;
   return (
@@ -586,7 +600,7 @@ const Shot2: React.FC = () => {
       }
       chars={(p) => (
         <>
-          <At project={p} at={sci} cut={v3(sci.x, TABLE, 0.42)} look={SCI} id="s2" expr={mic ? "grin" : "sneaky"} gaze={-12} handL={[-170, -330]} handR={[120, -300]} />
+          <At project={p} at={sci} look={SCI} id="s2" expr={mic ? "grin" : "sneaky"} gaze={-12} handL={[-170, -330]} handR={[120, -300]} />
           <CatAt project={p} at={CAT_TABLE} mic={mic} antenna={ant} />
         </>
       )}
@@ -700,7 +714,7 @@ const ParkLight: React.FC = () => <Daylight sun={[6, 10, 5]} sunColor="#FFF1D2" 
 const PARK_BG = "#CFEBFF";
 const PARK_FOG: [string, number, number] = ["#CFEBFF", 6, 45];
 const CAT_PARK = v3(0.25, 0, -0.3);
-const MEN = [v3(-0.45, 0, -0.95), v3(0.5, 0, -0.95)];
+const MEN = [v3(-0.45, 0, -1.02), v3(0.5, 0, -1.02)];
 
 /** 0a · Intro cut 1: the cat's eye through a spy lens, pushing in. */
 const Shot0a: React.FC = () => {
@@ -773,7 +787,7 @@ const Shot4aTags: React.FC = () => (
   <>
     <Tag text="WASHINGTON, D.C." x={540} y={300} at={cue("Washington") - S.s4a} size={58} />
     <Tag text="SOVIET COMPOUND" x={560} y={420} at={cue("compound") - S.s4a} color={POP.red} size={50} rotate={3} />
-    <Tag text="2 MEN, 1 BENCH" x={540} y={1180} at={cue("Two men") - S.s4a} color={POP.yellow} size={52} rotate={-3} />
+    <Tag text="2 MEN, 1 BENCH" x={540} y={560} at={cue("Two men") - S.s4a} color={POP.yellow} size={52} rotate={-3} />
   </>
 );
 

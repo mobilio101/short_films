@@ -293,20 +293,20 @@ export const Cash: React.FC<{ position: P3; n: number; rotation?: number }> = ({
   </group>
 );
 
-/** A park bench: wooden slats on black iron legs. Faces +z. */
+/** A park bench: wooden slats on black iron legs, seat at 0.32 m to suit the Toon's short legs. Faces +z. */
 export const Bench: React.FC<{ position: P3; rotation?: number }> = ({ position, rotation = 0 }) => (
   <group position={position} rotation={[0, rotation, 0]}>
     {[0, 1, 2].map((i) => (
-      <Box key={i} size={[2.0, 0.05, 0.12]} position={[0, 0.46, -0.16 + i * 0.15]} color="#E2843A" ink={3.5} />
+      <Box key={i} size={[2.0, 0.05, 0.12]} position={[0, 0.3, -0.16 + i * 0.15]} color="#E2843A" ink={3.5} />
     ))}
     {[0, 1].map((i) => (
-      <Box key={`b${i}`} size={[2.0, 0.1, 0.04]} position={[0, 0.66 + i * 0.16, -0.27]} rotation={[-0.15, 0, 0]} color="#E2843A" ink={3.5} />
+      <Box key={`b${i}`} size={[2.0, 0.1, 0.04]} position={[0, 0.52 + i * 0.16, -0.27]} rotation={[-0.15, 0, 0]} color="#E2843A" ink={3.5} />
     ))}
     {[-0.85, 0.85].map((x) => (
       <group key={x}>
-        <Box size={[0.06, 0.46, 0.06]} position={[x, 0.23, 0.12]} color="#1F2328" ink={2} />
-        <Box size={[0.06, 0.9, 0.06]} position={[x, 0.45, -0.24]} color="#1F2328" ink={2} />
-        <Box size={[0.06, 0.06, 0.42]} position={[x, 0.5, -0.04]} color="#1F2328" ink={2} />
+        <Box size={[0.06, 0.3, 0.06]} position={[x, 0.15, 0.12]} color="#1F2328" ink={2} />
+        <Box size={[0.06, 0.76, 0.06]} position={[x, 0.38, -0.24]} color="#1F2328" ink={2} />
+        <Box size={[0.06, 0.06, 0.42]} position={[x, 0.36, -0.04]} color="#1F2328" ink={2} />
       </group>
     ))}
   </group>

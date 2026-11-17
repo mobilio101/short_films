@@ -116,3 +116,19 @@ laptop render.
 - **Captions:** `captions.en.srt` (English, from the voice's word timings).
 - **Still open:** reading the full Wikipedia and History.com pages (blocked from the cloud). Re-check the
   YouTube search for the topic before publishing.
+
+## Fix after the first laptop render (17 Nov 2026)
+User: characters looked like they were floating or only half there, not grounded. Fixed:
+- No one stands behind furniture any more (the boss behind the desk and the scientist behind the table
+  were clipped at the edge, which read as a floating head or a man standing on the desk). Everyone now
+  stands on the floor, full body, beside or in front of the furniture.
+- A soft dark ground shadow, projected with each shot's camera, under every character and the cat.
+- The park bench seat is lowered to 0.32 m to suit the Toon's short legs, so the two men really sit:
+  shirt hem on the seat, short thighs, shins down to shoes flat on the ground.
+- The report shot: the boss and Smirkman stand at the two ends of the desk so the camera rising off the
+  report never passes through them.
+- Second pass (user circled the old lab shot and saw legs over the desk at the end): Smirkman's last
+  shot moved past the end of the desk to the window (he stood behind the desk before); the scientist and
+  the report-shot pair stand clear in front of the furniture, inside the frame. Every character spot was
+  checked against the desk, table, bench and cabinets.
+Fixed stills approved by the user (17 Nov 2026). The video needs a new laptop render (0e9845a or later).
