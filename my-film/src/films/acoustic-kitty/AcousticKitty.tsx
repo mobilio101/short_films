@@ -9,7 +9,8 @@ import * as THREE from "three";
 import { makeCues } from "../../components/shortkit";
 import { INK, Look, MAIN, POP, Toon } from "../../characters/toon/Toon";
 import { Cam, ContactShadow, Daylight, Project, World3D, lerpCam, placeToon, v3 } from "../../world3d/kit";
-import { Cat, CatEyes, CatPose, placeCat } from "./Cat";
+import { CatExpr } from "../../characters/toon/ToonCat";
+import { CAT_SPOTS, Cat, CatPose, placeCat } from "./Cat";
 import { Bush, DESK_TOP, Folder, Lab, LampPost, Office, Park, TABLE, Van, paperTexture } from "./sets";
 import { WORDS } from "./words";
 
@@ -232,7 +233,7 @@ const Headphones: React.FC<{ x: number; y: number; s: number }> = ({ x, y, s }) 
 };
 
 /** Draw the cat sitting/walking at a 3D spot. */
-const CatAt: React.FC<{ project: Project; at: THREE.Vector3; pose?: CatPose; eyes?: CatEyes; gaze?: number; yawn?: number; mic?: boolean; antenna?: boolean; flip?: boolean }> = ({ project, at, ...rest }) => {
+const CatAt: React.FC<{ project: Project; at: THREE.Vector3; pose?: CatPose; expr?: CatExpr; mic?: boolean; antenna?: boolean; flip?: boolean }> = ({ project, at, ...rest }) => {
   const p = placeCat(project, at);
   return <Cat x={p.x} y={p.y} scale={p.scale} {...rest} />;
 };
@@ -299,7 +300,7 @@ const CatFile: React.FC = () => (
     <rect x={20} y={-112} width={100} height={110} fill={POP.white} stroke={INK} strokeWidth={6} transform="rotate(6 70 -57)" />
     <rect x={30} y={-102} width={80} height={76} fill="#BFE6F2" transform="rotate(6 70 -57)" />
     <g transform="rotate(6 70 -57)">
-      <Cat x={70} y={-20} scale={0.24} pose="sit" eyes="bored" />
+      <Cat x={70} y={-20} scale={0.22} pose="sit" />
     </g>
     <path d="M60,-126 L60,-96" stroke="#9AA6B2" strokeWidth={8} strokeLinecap="round" />
   </g>
@@ -548,7 +549,7 @@ const Shot0b: React.FC = () => {
           <Lab frame={f} />
         </>
       }
-      chars={(p) => <CatAt project={p} at={CAT_TABLE} eyes="side" mic antenna={false} />}
+      chars={(p) => <CatAt project={p} at={CAT_TABLE} mic antenna={false} />}
     />
   );
 };
@@ -586,7 +587,7 @@ const Shot2: React.FC = () => {
       chars={(p) => (
         <>
           <At project={p} at={sci} cut={v3(sci.x, TABLE, 0.42)} look={SCI} id="s2" expr={mic ? "grin" : "sneaky"} gaze={-12} handL={[-170, -330]} handR={[120, -300]} />
-          <CatAt project={p} at={CAT_TABLE} eyes={f > cue("nobody") - S.s2 && f < cue("surgeons") - S.s2 ? "side" : "bored"} mic={mic} antenna={ant} />
+          <CatAt project={p} at={CAT_TABLE} mic={mic} antenna={ant} />
         </>
       )}
     />
@@ -608,7 +609,7 @@ const LabLabels: React.FC = () => {
     return { x: ((v.x + 1) / 2) * 1080, y: ((1 - v.y) / 2) * 1920 };
   }, CAT_TABLE);
   const at = (ux: number, uy: number) => ({ x: p.x + ux * p.scale, y: p.y + uy * p.scale });
-  const ear = at(-64, -268), skull = at(40, -200), fur = at(60, -360);
+  const ear = at(CAT_SPOTS.ear.x, CAT_SPOTS.ear.y), skull = at(CAT_SPOTS.skull.x, CAT_SPOTS.skull.y), fur = at(CAT_SPOTS.antenna.x, CAT_SPOTS.antenna.y);
   const Line: React.FC<{ a: { x: number; y: number }; b: { x: number; y: number }; from: number }> = ({ a, b, from }) =>
     f >= from ? <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={INK} strokeWidth={7} strokeDasharray="14 10" /> : null;
   const tMic = cue("microphone") - S.s2, tTx = cue("transmitter") - S.s2, tAnt = cue("antenna") - S.s2;
@@ -633,7 +634,7 @@ const LabLabels: React.FC = () => {
   );
 };
 
-/** 6 · Split screen. Left: the cat CAN walk to the X. Right: it won't listen, it licks its paw. */
+/** 6 · Split screen. Left: the cat CAN walk to the X. Right: it won't listen, it just yawns at the scientist. */
 const Half: React.FC<{ side: "L" | "R"; children: React.ReactNode }> = ({ side, children }) => (
   <div style={{ position: "absolute", top: 0, left: side === "L" ? 0 : 540, width: 540, height: 1920, overflow: "hidden" }}>
     <div style={{ position: "absolute", top: 0, left: -270, width: 1080, height: 1920 }}>{children}</div>
@@ -663,7 +664,7 @@ const Shot6: React.FC = () => {
               <ContactShadow at={catL} size={0.5} />
             </>
           }
-          chars={(p) => <CatAt project={p} at={catL} pose={wk < 1 ? "walk" : "sit"} eyes="bored" />}
+          chars={(p) => <CatAt project={p} at={catL} pose={wk < 1 ? "walk" : "sit"} />}
         />
       </Half>
       <Half side="R">
@@ -682,7 +683,7 @@ const Shot6: React.FC = () => {
           chars={(p) => (
             <>
               <At project={p} at={sci} look={SCI} id="s6" expr={f > nope ? "angry" : "neutral"} gaze={12} handR={[200, -230 + Math.sin(f / 4) * 20]} />
-              <CatAt project={p} at={catR} pose={f > wants ? "back" : "lick"} eyes="closed" />
+              <CatAt project={p} at={catR} expr={f > nope + 6 && f < wants ? "yawn" : "neutral"} />
             </>
           )}
         />
@@ -719,7 +720,7 @@ const Shot0a: React.FC = () => {
             <Park frame={f} />
           </>
         }
-        chars={(p) => <CatAt project={p} at={CAT_PARK} eyes="side" />}
+        chars={(p) => <CatAt project={p} at={CAT_PARK} />}
       />
       <SpyLens />
     </AbsoluteFill>
@@ -760,7 +761,7 @@ const Shot4a: React.FC = () => {
         <>
           <Sitter project={p} at={MEN[0]} look={MAN1} id="m1" gaze={6} />
           <Sitter project={p} at={MEN[1]} look={MAN2} id="m2" gaze={-6} />
-          {f >= walkIn - 10 && <CatAt project={p} at={cat} pose={wk < 1 ? "walk" : "sit"} eyes="bored" />}
+          {f >= walkIn - 10 && <CatAt project={p} at={cat} pose={wk < 1 ? "walk" : "sit"} />}
         </>
       )}
     />
@@ -776,11 +777,10 @@ const Shot4aTags: React.FC = () => (
   </>
 );
 
-/** 5a · Hard cut: the cat yawns, then turns its back on the bench. */
+/** 5a · Hard cut: the cat gives the mission one big yawn. */
 const Shot5a: React.FC = () => {
   const { f } = useLocal();
   const cam: Cam = { pos: v3(0.3, 0.5, 1.45 - f * 0.008), target: v3(0.22, 0.42, -0.6), fov: 50 };
-  const yawn = Math.sin(clamp01(f, 0, 14) * Math.PI);
   return (
     <World3D
       cam={cam}
@@ -798,7 +798,7 @@ const Shot5a: React.FC = () => {
         <>
           <Sitter project={p} at={MEN[0]} look={MAN1} id="m5a" gaze={8} />
           <Sitter project={p} at={MEN[1]} look={MAN2} id="m5b" gaze={-8} />
-          <CatAt project={p} at={CAT_PARK} pose={f < 14 ? "yawn" : "back"} yawn={yawn} eyes="closed" />
+          <CatAt project={p} at={CAT_PARK} expr={f < 18 ? "yawn" : "neutral"} />
         </>
       )}
     />

@@ -93,15 +93,15 @@ laptop render.
 - **Shots as built** (`AcousticKitty.tsx`, sets in `sets.tsx`): 0a cat's eye in a spy lens (park) → 0b mic in
   the ear (lab) → 0c Smirkman's glint (office) → 1 office, the CAT file slides across the desk → 2 lab, MIC /
   TRANSMITTER / ANTENNA labels → 3 files and cash pile up → 4a park, two men on the bench, the compound behind,
-  the cat walks in → 4b listening van → 5a hard cut: the cat yawns and **turns its back** (it never walks
+  the cat walks in → 4b listening van → 5a hard cut: the cat gives one big yawn (it never walks
   away) → 5b shades fly off, deadpan, clink back → 6 split screen CAN WALK / WON'T LISTEN → 7a final report,
   NOT PRACTICAL stamp → 7b the file goes into the drawer, CANCELLED 1967 → 8 Smirkman by the window with the
   closed KITTY file (a photo of the cat clipped on it), closing smirk.
 - **Changed from the plan to keep the cat's fate unsaid:** the last shot no longer shows the cat asleep on a
-  windowsill (that would hint it lived); the cat appears only during the project, and in 5a it turns its
-  back instead of trotting away (no street, no road anywhere in the park).
-- **The cat** is drawn film-locally in `Cat.tsx` (poses sit / walk / lick / back / yawn) because the shared
-  kit has no cat yet; asked 총괄 whether to wait for a shared cat or keep this one.
+  windowsill (that would hint it lived); the cat appears only during the project, and in 5a it only yawns instead of trotting away (no street, no road anywhere in the park).
+- **The cat** is the shared `ToonCat` (look `CAT_SPY`, added by 총괄 on 17 Nov). `Cat.tsx` only adds the
+  tiny ear microphone. The shared cat has no lick or turn-away pose, so 5a is a big yawn and the "WON'T
+  LISTEN" side of the split screen is a bored stare and a yawn. The `sleep` face is never used.
 - **Sound:** existing generated library only (roomtone, hum, static beds; pop, stamp, coins, boing, whoosh,
   clink, type, slam, shimmer). Voice at 0.92; peak of voice + loud effects mixed in ffmpeg: about -1.0 dB.
 - Fact-check of the full Wikipedia and History.com pages is still open (see above).
