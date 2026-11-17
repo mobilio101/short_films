@@ -74,6 +74,14 @@ Bright, modern and comic, never muted or vintage.
   sign-off, no call to action; end cleanly so the Short loops.
 - Death and cruelty are shown by suggestion, never graphically.
 
+- **Never look like Ricks Clips.** We share a genre with it (2D characters, 3D worlds, strange true
+  facts, "Why…" titles), so the difference must be obvious: never use its topics or titles (list in
+  `research/ricks-clips-report.md`, and search its channel before choosing), and every film shows
+  Smirkman's signature moments: the smirk and raised brow, the shades flying off on the big shock and
+  dropping back with a *clink*, and his closing smirk to camera.
+- Hooks can also be "What happens if…?" (e.g. "What happens if you paint a warship like a zebra?").
+- Split-screen comparisons work well (the grey ship next to the dazzle ship).
+
 ## Format and pace
 - Vertical 1080×1920, 30 fps, about 55–60 seconds.
 - Voiceover of about 165–185 words, fast and steady (about 3.3 words per second), with no dead air.
@@ -82,6 +90,9 @@ Bright, modern and comic, never muted or vintage.
 - Captions: one or two words at a time, big, white with a black outline, in the middle of the screen
   (inside the safe area: nothing important within 250 px of the bottom, 160 px of the right, 200 px
   of the top). The caption font will be chosen with the branding.
+
+- **Intro:** the first 2 seconds are 2–3 fast cuts (each under 1 s) with the camera pushing in, e.g.
+  close-up detail → Smirkman's smirk and glint → the wide shot. Our free 3D camera is our edge here.
 
 ## Sound
 - Every sound effect is generated in code by `scripts/make-sfx.mjs` (run `npm run sfx`). Never

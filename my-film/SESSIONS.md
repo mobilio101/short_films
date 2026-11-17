@@ -15,7 +15,9 @@ message: it picks up from the files.
 | **제작 · <film>** | One film: `STORY.md`, voice, animation, stills, upload info, render order | Opus | One film, then close |
 
 ## Hand-over rules
-- Planning sessions only edit their channel's `BACKLOG.md` (branch `plan/<channel>`).
+- Planning sessions only edit their channel's `BACKLOG.md` and, when the user picks a topic,
+  `channels/TOPICS.md` (branch `plan/<channel>`). Before proposing, read `TOPICS.md` and the other
+  channels' backlogs so no two channels end up with the same topic.
 - When the user picks a topic, 총괄 (or the planning session) creates the film session with the
   start message below, moves the topic to "In production" in the backlog and adds a row to `STATUS.md`.
 - Film sessions work on `film/<name>`; when the user approves the stills they write the upload info,
