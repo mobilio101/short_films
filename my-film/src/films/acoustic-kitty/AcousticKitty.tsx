@@ -450,8 +450,8 @@ const Shot7a: React.FC = () => {
   const len = S.s7b - S.s7a;
   const cam = lerpCam({ pos: v3(0.05, 1.7, 0.2), target: v3(0, 0.78, -0.72), fov: 48 }, { pos: v3(0.05, 1.3, 4.8), target: v3(0.0, 0.95, -0.9), fov: 58 }, ease(f, 30, len - 20));
   // Standing at the two ends of the desk, out of the way of the camera that rises off the report.
-  const boss = v3(-1.2, 0, -0.45);
-  const agent = v3(1.2, 0, -0.4);
+  const boss = v3(-1.1, 0, -0.05);
+  const agent = v3(1.1, 0, 0.0);
   return (
     <World3D
       cam={cam}
@@ -512,8 +512,9 @@ const Shot7b: React.FC = () => {
 const Shot8: React.FC = () => {
   const { f } = useLocal();
   const len = ACOUSTIC_KITTY_DURATION - S.s8;
-  const spot = v3(1.2, 0, -1.6);
-  const cam = lerpCam({ pos: v3(0.2, 1.3, 2.6), target: v3(1.2, 1.25, -1.6), fov: 56 }, { pos: v3(1.0, 1.25, 0.6), target: v3(1.2, 1.05, -1.6), fov: 54 }, ease(f, 0, len));
+  // Past the end of the desk (desk ends at x 1.1), in front of the window: nothing between him and the camera.
+  const spot = v3(1.9, 0, -1.5);
+  const cam = lerpCam({ pos: v3(0.9, 1.3, 2.7), target: v3(1.9, 1.25, -1.5), fov: 56 }, { pos: v3(1.75, 1.25, 0.7), target: v3(1.9, 1.05, -1.5), fov: 54 }, ease(f, 0, len));
   return (
     <World3D
       cam={cam}
@@ -568,14 +569,14 @@ const Shot0b: React.FC = () => {
 };
 
 const labCam = (f: number, len: number) =>
-  lerpCam({ pos: v3(-0.1, 1.3, 3.6), target: v3(0.45, 0.9, 0.1), fov: 56 }, { pos: v3(0.9, 1.25, 3.0), target: v3(0.45, 0.92, 0.1), fov: 56 }, ease(f, 0, len + DIS));
+  lerpCam({ pos: v3(0.0, 1.3, 3.9), target: v3(0.5, 0.9, 0.1), fov: 56 }, { pos: v3(0.75, 1.25, 3.5), target: v3(0.55, 0.92, 0.1), fov: 56 }, ease(f, 0, len + DIS));
 
 /** 2 · The lab: the cat on the table, the scientist with tiny tools; the three spy parts pop up. */
 const Shot2: React.FC = () => {
   const { f } = useLocal();
   const len = S.s3 - S.s2;
   const cam = labCam(f, len);
-  const sci = v3(0.95, 0, 0.45);
+  const sci = v3(1.1, 0, 0.65);
   const mic = f >= cue("microphone") - S.s2;
   const ant = f >= cue("antenna") - S.s2;
   return (

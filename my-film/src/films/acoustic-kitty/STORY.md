@@ -127,4 +127,8 @@ User: characters looked like they were floating or only half there, not grounded
   shirt hem on the seat, short thighs, shins down to shoes flat on the ground.
 - The report shot: the boss and Smirkman stand at the two ends of the desk so the camera rising off the
   report never passes through them.
+- Second pass (user circled the old lab shot and saw legs over the desk at the end): Smirkman's last
+  shot moved past the end of the desk to the window (he stood behind the desk before); the scientist and
+  the report-shot pair stand clear in front of the furniture, inside the frame. Every character spot was
+  checked against the desk, table, bench and cabinets.
 The video needs a new laptop render.
