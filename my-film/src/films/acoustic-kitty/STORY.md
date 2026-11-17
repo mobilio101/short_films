@@ -59,7 +59,7 @@ No intro, no call to action.
 - **CIA boss:** square head, grey suit, thick glasses-free brow, hands on hips.
 - **The scientist:** inverted-triangle head, white coat, a tiny soldering iron.
 - **The cat:** a flat 2D cartoon cat (orange and white), a tiny antenna in its fur. *Needs a cat in the
-  character kit; if `src/characters/toon/` has none, ask 总括 (HQ) before adding one. Shared code is not
+  character kit; if `src/characters/toon/` has none, ask 총괄 (HQ) before adding one. Shared code is not
   changed by film sessions.*
 - **Two men on a bench:** square heads, hats, newspapers (no flags or insignia; "Soviet" shown by a
   red-and-grey building sign only).
