@@ -23,6 +23,7 @@ import { DragonJar, DRAGON_JAR_DURATION } from "./films/dragon-jar/DragonJar";
 import { Garbo, GARBO_DURATION } from "./films/garbo/Garbo";
 import { Apollo13, APOLLO13_DURATION } from "./films/apollo13/Apollo13";
 import { DragonJarKo, DRAGON_JAR_KO_DURATION } from "./films/dragon-jar-ko/DragonJarKo";
+import { GhostArmyKo, GHOST_ARMY_KO_DURATION } from "./films/ghost-army-ko/GhostArmyKo";
 
 const common = { durationInFrames: TEST_DURATION, fps: FPS, width: W, height: H };
 
@@ -31,6 +32,7 @@ export const RemotionRoot: React.FC = () => {
     <>
       {/* New channel (3D world, 2D characters): SMIRKMAN, rules in SMIRKMAN.md */}
       <Composition id="DazzleShips" component={DazzleShips} durationInFrames={DAZZLE_DURATION} fps={FPS} width={1080} height={1920} />
+      <Composition id="GhostArmyKo" component={GhostArmyKo} durationInFrames={GHOST_ARMY_KO_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="DragonJarKo" component={DragonJarKo} durationInFrames={DRAGON_JAR_KO_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="Apollo13" component={Apollo13} durationInFrames={APOLLO13_DURATION} fps={FPS} width={1080} height={1920} />
       <Composition id="Garbo" component={Garbo} durationInFrames={GARBO_DURATION} fps={FPS} width={1080} height={1920} />

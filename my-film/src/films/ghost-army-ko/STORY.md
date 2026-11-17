@@ -83,3 +83,25 @@
 3. **소리 끄고 봐도 우리 채널:** 신문지 크림색·검정·빨강, 잉크 방울 캐릭터, 마스코트, 연도 카운터, 빨간 라벨.
 4. **빠른 인트로:** 첫 2초에 1초 미만 컷 3개(바퀴 → 들어 올림 → 놀란 얼굴), 모두 줌인, 첫 문장 아래.
 5. **질문형 첫 문장:** "군인 네 명이 탱크를 번쩍 들어 옮긴다면, 믿으시겠습니까?"
+
+## 제작 기록 (go 이후)
+- 목소리: ElevenLabs Brian `eleven_v3`, 안정도 0.5, 감정 태그 `[excited]` `[deadpan]` `[dramatic]` `[curious]`.
+  원본 67.6초 → 긴 쉼 0.6초 줄이고 1.18배속 (`scripts/fit-voice.py … ghost-army-ko 57 0.45`), 말은 57.0초에 끝남.
+  파일: `public/voice/ghost-army-ko.mp3`, 타이밍: `words.ts`.
+- 길이 60초 (1800프레임). 코드: `GhostArmyKo.tsx`, 컴포지션 `GhostArmyKo`.
+- 첫 2초: 0–0.9초 (힘쓰는 군인 넷) → 0.9–1.6초 (탱크 번쩍) → 1.6초부터 (놀란 마을 사람 + 마스코트), 모두 줌인.
+- 소리 섞기: 목소리 0.9, 배경 0.1. 오디오만 렌더해서 확인: 최고 -2.0 dB, 평균 -19.7 dB (기준 -1 dB 아래).
+- 새 효과음 없음 (기존 `make-sfx.mjs` 소리만 사용: boing, pump, engine, static, puff, paddle, stamp, slam, creak 등).
+- 실제 사진: `public/photos/dvids-8301726-medal.jpg` (이미 CREDITS.md에 있음), 화면 아래 출처 표시.
+
+## 업로드 정보 (역사 한 방울)
+- 제목: 탱크를 번쩍 든 미군의 정체
+- 설명:
+  군인 네 명이 탱크를 번쩍 들어 옮긴다면, 믿으시겠습니까?
+  1944년 노르망디, 자전거를 타던 프랑스 사람 둘이 본 이 장면의 비밀은 고무풍선이었습니다. 화가와 디자이너, 음향 기술자 약 1,100명이 모인 미군 '유령 부대'(제23 본부 특수부대)는 고무 탱크와 가짜 소리, 가짜 무전으로 독일군을 속였고, 1945년 3월 라인강에서는 고무 차량 600대로 두 개 사단을 흉내 냈습니다. 이 이야기는 50년 넘게 비밀이었고, 2024년 노병들은 미국 의회 금메달을 받았습니다.
+
+  사진: U.S. Army photo by Henry Villarama (DVIDS). 미 국방부나 미 육군이 이 채널을 후원하거나 보증하는 것은 아닙니다.
+  참고 자료: Smithsonian Magazine "When an Army of Artists Fooled Hitler"; Ghost Army Legacy Project (ghostarmy.org); National WWII Museum "The Ghost Army: Canvas and Camouflage"; Military Times (2024.3.21)
+
+  #역사 #쇼츠 #실화
+- 태그: 역사, 역사 쇼츠, 실화, 세계사, 역사 이야기, 역사 상식, 유령 부대, 고스트 아미, 2차 세계대전, 노르망디, 고무 탱크
