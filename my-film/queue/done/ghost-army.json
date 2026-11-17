@@ -1,0 +1,17 @@
+{
+  "film": "ghost-army",
+  "composition": "GhostArmy",
+  "channel": "inkredible",
+  "title": "The Army Made of Balloons",
+  "renderedAt": "2026-11-17T16:39:35.105Z",
+  "file": "C:\\Claude\\short_films\\my-film\\out\\robot\\ghost-army.mp4",
+  "renderSeconds": 159,
+  "durationSeconds": 60.01,
+  "loudnessLUFS": -16.4,
+  "drive": {
+    "status": "done",
+    "link": "https://drive.google.com/file/d/1S7JVvAsq64v0fsck8MfrLp6wu5HiGqgb/view?usp=drivesdk",
+    "at": "2026-11-17T16:39:39.707Z"
+  },
+  "upload": "waiting for channel"
+}

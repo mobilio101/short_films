@@ -26,6 +26,7 @@ import { Garbo, GARBO_DURATION } from "./films/garbo/Garbo";
 import { Apollo13, APOLLO13_DURATION } from "./films/apollo13/Apollo13";
 import { DragonJarKo, DRAGON_JAR_KO_DURATION } from "./films/dragon-jar-ko/DragonJarKo";
 import { TestHangeoleum, TEST_HANGEOLEUM_DURATION } from "./films/test-hangeoleum/TestHangeoleum";
+import { WhenWhere, WHEN_WHERE_DURATION } from "./films/when-where/WhenWhere";
 import { Mincemeat, MINCEMEAT_DURATION } from "./films/mincemeat/Mincemeat";
 
 const common = { durationInFrames: TEST_DURATION, fps: FPS, width: W, height: H };
@@ -44,6 +45,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="GhostArmy" component={GhostArmy} durationInFrames={GHOST_ARMY_DURATION} fps={FPS} width={1080} height={1920} />
       {/* 한걸음: 10-second format test (HANGEOLEUM.md) */}
       <Composition id="Test-Hangeoleum" component={TestHangeoleum} durationInFrames={TEST_HANGEOLEUM_DURATION} fps={30} width={1080} height={1920} />
+      <Composition id="WhenWhere" component={WhenWhere} durationInFrames={WHEN_WHERE_DURATION} fps={30} width={1080} height={1920} />
       <Composition id="Test" component={TestFilm} {...common} />
       {/* Style experiments: same 10 seconds, five different looks */}
       <Composition id="Test-CharacterStyles" component={CharacterStyles} durationInFrames={240} fps={FPS} width={1080} height={1920} />

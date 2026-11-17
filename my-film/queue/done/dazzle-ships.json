@@ -9,7 +9,9 @@
   "durationSeconds": 58.28,
   "loudnessLUFS": -20.48,
   "drive": {
-    "status": "waiting for Drive setup"
+    "status": "done",
+    "link": "https://drive.google.com/file/d/1IKunV7_GjtAnFLgNpEJsXw_ATojgevD8/view?usp=drivesdk",
+    "at": "2026-11-17T10:01:01.227Z"
   },
   "upload": "waiting for channel"
 }

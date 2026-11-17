@@ -15,7 +15,7 @@ Update this when a film starts, changes stage or is published. Stages: 기획 �
 | SMIRKMAN | Dazzle Ships | `src/films/dazzle-ships` | 렌더 대기 | 아직 없음: 깊이 강화와 수염 수정 후 노트북 렌더 필요 |
 | SMIRKMAN | Acoustic Kitty | `src/films/acoustic-kitty` | 수정본 렌더 완료 (로봇, 17 Nov), 유튜브 업로드는 채널 연결 대기. 사실 확인 완료 | 아직 없음 |
 | 한걸음 | 10초 시험 (Test-Hangeoleum) | `src/films/test-hangeoleum` | 형식 승인됨 (17 Nov 2026) | 시험용, 업로드 안 함 |
-| 한걸음 | 언제, 어디서, 정해. | `src/films/when-where` | 기획 (제작 세션 시작, STORY.md 작성 중) | 아직 없음 |
+| 한걸음 | 언제, 어디서, 정해. | `src/films/when-where` | 렌더 대기 (사진 승인됨, 업로드 정보 upload.json, 주문서 queue/when-where.json) | 아직 없음 |
 
 ## Channels
 | Channel | YouTube channel created? | Brand files |

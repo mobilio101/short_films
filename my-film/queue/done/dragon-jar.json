@@ -1,0 +1,17 @@
+{
+  "film": "dragon-jar",
+  "composition": "DragonJar",
+  "channel": "inkredible",
+  "title": "The Jar That Felt an Earthquake No One Felt",
+  "renderedAt": "2026-11-17T16:33:46.837Z",
+  "file": "C:\\Claude\\short_films\\my-film\\out\\robot\\dragon-jar.mp4",
+  "renderSeconds": 156,
+  "durationSeconds": 60.01,
+  "loudnessLUFS": -16.45,
+  "drive": {
+    "status": "done",
+    "link": "https://drive.google.com/file/d/1iTgp0wtETrwNax32fEu9NZPjDmxWqRda/view?usp=drivesdk",
+    "at": "2026-11-17T16:33:50.953Z"
+  },
+  "upload": "waiting for channel"
+}

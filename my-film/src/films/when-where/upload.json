@@ -1,0 +1,27 @@
+{
+  "film": "when-where",
+  "composition": "WhenWhere",
+  "channel": "step",
+  "durationSeconds": 51,
+  "title": "언제, 어디서, 정해. (운동 꾸준히 하는 법)",
+  "description": "운동하겠다고 마음먹고도, 이번 주도 그냥 지나간 적 있죠?\n오늘의 한 걸음: 메모 한 장에 딱 한 줄, \"요일, 시간, 장소\"를 적어 보세요. 예) 화요일 일곱 시, 공원.\n\n한 연구에서 운동이 왜 좋은지 설명만 들은 사람들은 마음은 커졌지만 운동을 더 하지는 않았고, 언제 어디서 운동할지 계획까지 세운 사람들은 실제로 운동을 더 했어요.\n\n출처: Milne, Orbell & Sheeran (2002), British Journal of Health Psychology 7(2):163-184, https://doi.org/10.1348/135910702169420\n\n#자기계발 #동기부여 #쇼츠",
+  "tags": [
+    "자기계발",
+    "동기부여",
+    "습관",
+    "미루기",
+    "루틴",
+    "갓생",
+    "운동 습관",
+    "운동 꾸준히 하는 법",
+    "실행 의도",
+    "계획 세우기",
+    "운동 동기부여"
+  ],
+  "category": "Howto & Style",
+  "language": "ko",
+  "madeForKids": false,
+  "captions": "my-film/src/films/when-where/captions.ko.srt",
+  "privacy": "private",
+  "publishAt": null
+}
