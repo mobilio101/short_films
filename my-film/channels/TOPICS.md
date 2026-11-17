@@ -13,3 +13,4 @@ one line.
 | Apollo 13 | Inkredible + 역사 한 방울 | EN done | `apollo13` |
 | Dazzle camouflage ships (WWI) | SMIRKMAN | done, render pending | `dazzle-ships` |
 | ADRIFT (plan only, never made) | Inkredible + 역사 한 방울 | plan only | `adrift` |
+| Acoustic Kitty (the CIA spy cat, 1960s) | SMIRKMAN | planning | `acoustic-kitty` |
